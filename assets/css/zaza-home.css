@@ -2,6 +2,11 @@ body.zaza-modal-lock {
 	overflow: hidden;
 }
 
+body.home .wp-site-blocks > header.wp-block-template-part:first-child,
+body.front-page .wp-site-blocks > header.wp-block-template-part:first-child {
+	display: none;
+}
+
 .zaza-home,
 .zaza-entry-popups,
 .zaza-header {

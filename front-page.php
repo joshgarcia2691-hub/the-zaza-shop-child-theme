@@ -432,33 +432,30 @@ $zaza_products = zaza_home_get_products( 8 );
 /*
  * Editable hero banner slides.
  *
- * Replace the empty image values below with full Media Library image URLs after
- * uploading final banner artwork, for example:
- * 'image' => 'https://thezazaclub.com/wp-content/uploads/2026/hero-vape.jpg',
- *
+ * Replace image values below with updated Media Library URLs as hero artwork changes.
  * Leave image empty to use the WooCommerce/WordPress placeholder fallback.
  */
 $zaza_hero_slides = array(
 	array(
-		'image'        => '',
-		'kicker'       => esc_html__( 'New Drop', 'child-theme' ),
-		'title'        => esc_html__( 'THC Vape', 'child-theme' ),
-		'button_label' => esc_html__( 'Shop Now', 'child-theme' ),
-		'button_url'   => zaza_home_nav_url( 'product-category/thc-vape/' ),
-	),
-	array(
-		'image'        => '',
+		'image'        => 'https://thezazaclub.com/wp-content/uploads/2026/05/ZAZA_Web_Slider_3.0_4g_DESKTOP_ALT.jpg',
 		'kicker'       => '',
-		'title'        => esc_html__( 'New Arrivals', 'child-theme' ),
-		'button_label' => esc_html__( 'Browse Now', 'child-theme' ),
-		'button_url'   => zaza_home_shop_collection_url( 'date' ),
+		'title'        => '',
+		'button_label' => esc_html__( 'Get Deal', 'child-theme' ),
+		'button_url'   => 'https://thezazaclub.com/product-category/flower/',
 	),
 	array(
-		'image'        => '',
-		'kicker'       => esc_html__( 'Top Picks', 'child-theme' ),
-		'title'        => esc_html__( 'Best Sellers', 'child-theme' ),
-		'button_label' => esc_html__( 'Shop Favorites', 'child-theme' ),
-		'button_url'   => zaza_home_shop_collection_url( 'popularity' ),
+		'image'        => 'https://thezazaclub.com/wp-content/uploads/2026/05/ZAZA_Web_Slider_3.0_Gummies_Desktop.jpg',
+		'kicker'       => '',
+		'title'        => '',
+		'button_label' => esc_html__( 'Shop Gummies', 'child-theme' ),
+		'button_url'   => 'https://thezazaclub.com/product-category/edibles/',
+	),
+	array(
+		'image'        => 'https://thezazaclub.com/wp-content/uploads/2026/05/ZAZA_Web_Littles.jpg',
+		'kicker'       => '',
+		'title'        => '',
+		'button_label' => esc_html__( 'Shop Littles', 'child-theme' ),
+		'button_url'   => 'https://thezazaclub.com/product-category/smalls/',
 	),
 );
 
