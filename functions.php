@@ -63,20 +63,29 @@ function zaza_child_hide_parent_theme_title() {
 	}
 	?>
 	<style id="zaza-parent-title-cleanup">
-		body.home .wp-site-blocks > header.wp-block-template-part:first-child,
-		body.front-page .wp-site-blocks > header.wp-block-template-part:first-child,
-		body.tax-product_cat .wp-site-blocks > header.wp-block-template-part:first-child,
-		body.product_cat .wp-site-blocks > header.wp-block-template-part:first-child,
-		body.home .wp-site-blocks > .wp-block-template-part:first-child,
-		body.front-page .wp-site-blocks > .wp-block-template-part:first-child,
-		body.tax-product_cat .wp-site-blocks > .wp-block-template-part:first-child,
-		body.product_cat .wp-site-blocks > .wp-block-template-part:first-child,
-		body.home header.wp-block-template-part .wp-block-site-title,
-		body.front-page header.wp-block-template-part .wp-block-site-title,
-		body.tax-product_cat header.wp-block-template-part .wp-block-site-title,
-		body.product_cat header.wp-block-template-part .wp-block-site-title {
+		<?php if ( is_front_page() ) : ?>
+		.wp-site-blocks > header.wp-block-template-part:first-child,
+		.wp-site-blocks > .wp-block-template-part:first-child {
 			display: none !important;
 		}
+		<?php endif; ?>
+
+		.wp-site-blocks header .wp-block-site-title,
+		.wp-site-blocks header .wp-block-site-title a,
+		.wp-site-blocks .wp-block-template-part .wp-block-site-title,
+		.wp-site-blocks .wp-block-template-part .wp-block-site-title a,
+		.wp-site-blocks > .wp-block-site-title,
+		.wp-site-blocks > .wp-block-site-title a {
+			display: none !important;
+			visibility: hidden !important;
+		}
+
+		<?php if ( is_front_page() ) : ?>
+		.wp-site-blocks .wp-block-post-title:first-child,
+		.wp-site-blocks > main .wp-block-post-title:first-child {
+			display: none !important;
+		}
+		<?php endif; ?>
 	</style>
 	<?php
 }
