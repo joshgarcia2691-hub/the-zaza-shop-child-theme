@@ -1,0 +1,696 @@
+<?php
+/**
+ * Custom front page for The Zaza Club.
+ *
+ * Template is intentionally self-contained and WooCommerce-aware. It reads
+ * product and category data when available and falls back gracefully when the
+ * store is still being populated.
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+if ( ! function_exists( 'zaza_home_placeholder_image' ) ) {
+	/**
+	 * Get a placeholder image URL.
+	 *
+	 * @return string
+	 */
+	function zaza_home_placeholder_image() {
+		if ( function_exists( 'wc_placeholder_img_src' ) ) {
+			return wc_placeholder_img_src( 'full' );
+		}
+
+		return includes_url( 'images/media/default.png' );
+	}
+}
+
+if ( ! function_exists( 'zaza_home_shop_url' ) ) {
+	/**
+	 * Resolve the WooCommerce shop URL with a fallback.
+	 *
+	 * @return string
+	 */
+	function zaza_home_shop_url() {
+		if ( function_exists( 'wc_get_page_id' ) ) {
+			$shop_page_id = wc_get_page_id( 'shop' );
+
+			if ( $shop_page_id && 0 < $shop_page_id ) {
+				$shop_url = get_permalink( $shop_page_id );
+
+				if ( $shop_url ) {
+					return $shop_url;
+				}
+			}
+		}
+
+		return home_url( '/shop/' );
+	}
+}
+
+if ( ! function_exists( 'zaza_home_get_products' ) ) {
+	/**
+	 * Get featured products first, then recent products if none are featured.
+	 *
+	 * @param int $limit Product count.
+	 * @return WC_Product[]
+	 */
+	function zaza_home_get_products( $limit = 8 ) {
+		if ( ! function_exists( 'wc_get_products' ) ) {
+			return array();
+		}
+
+		$featured_products = wc_get_products(
+			array(
+				'status'   => 'publish',
+				'limit'    => $limit,
+				'featured' => true,
+				'orderby'  => 'menu_order',
+				'order'    => 'ASC',
+			)
+		);
+
+		if ( is_array( $featured_products ) && ! empty( $featured_products ) ) {
+			return $featured_products;
+		}
+
+		$recent_products = wc_get_products(
+			array(
+				'status'  => 'publish',
+				'limit'   => $limit,
+				'orderby' => 'date',
+				'order'   => 'DESC',
+			)
+		);
+
+		return is_array( $recent_products ) ? $recent_products : array();
+	}
+}
+
+if ( ! function_exists( 'zaza_home_product_image_url' ) ) {
+	/**
+	 * Get a product image URL or a placeholder.
+	 *
+	 * @param WC_Product $product Product object.
+	 * @param string     $size    Image size.
+	 * @return string
+	 */
+	function zaza_home_product_image_url( $product, $size = 'large' ) {
+		if ( is_object( $product ) && method_exists( $product, 'get_image_id' ) ) {
+			$image_id = $product->get_image_id();
+
+			if ( $image_id ) {
+				$image_url = wp_get_attachment_image_url( $image_id, $size );
+
+				if ( $image_url ) {
+					return $image_url;
+				}
+			}
+		}
+
+		return zaza_home_placeholder_image();
+	}
+}
+
+if ( ! function_exists( 'zaza_home_prepare_hero_slides' ) ) {
+	/**
+	 * Normalize editable hero banner slides and provide image fallbacks.
+	 *
+	 * @param array[] $slides Hero slide definitions.
+	 * @return array[]
+	 */
+	function zaza_home_prepare_hero_slides( $slides ) {
+		$prepared_slides = array();
+
+		foreach ( $slides as $slide ) {
+			if ( ! is_array( $slide ) ) {
+				continue;
+			}
+
+			$prepared_slides[] = array(
+				'image'       => ! empty( $slide['image'] ) ? $slide['image'] : zaza_home_placeholder_image(),
+				'eyebrow'     => isset( $slide['eyebrow'] ) ? $slide['eyebrow'] : '',
+				'headline'    => isset( $slide['headline'] ) ? $slide['headline'] : '',
+				'subheadline' => isset( $slide['subheadline'] ) ? $slide['subheadline'] : '',
+				'button_text' => isset( $slide['button_text'] ) ? $slide['button_text'] : '',
+				'button_url'  => ! empty( $slide['button_url'] ) ? $slide['button_url'] : zaza_home_shop_url(),
+			);
+		}
+
+		if ( empty( $prepared_slides ) ) {
+			$prepared_slides[] = array(
+				'image'       => zaza_home_placeholder_image(),
+				'eyebrow'     => esc_html__( 'Featured Drop', 'child-theme' ),
+				'headline'    => esc_html__( 'Curated Goods for the Club', 'child-theme' ),
+				'subheadline' => esc_html__( 'Premium picks for adults 21+ where permitted.', 'child-theme' ),
+				'button_text' => esc_html__( 'Shop Now', 'child-theme' ),
+				'button_url'  => zaza_home_shop_url(),
+			);
+		}
+
+		return $prepared_slides;
+	}
+}
+
+if ( ! function_exists( 'zaza_home_get_categories' ) ) {
+	/**
+	 * Get visible WooCommerce product categories.
+	 *
+	 * @param int $limit Category count.
+	 * @return WP_Term[]
+	 */
+	function zaza_home_get_categories( $limit = 6 ) {
+		if ( ! taxonomy_exists( 'product_cat' ) ) {
+			return array();
+		}
+
+		$exclude = array();
+		$default = get_option( 'default_product_cat' );
+
+		if ( $default ) {
+			$exclude[] = (int) $default;
+		}
+
+		$terms = get_terms(
+			array(
+				'taxonomy'   => 'product_cat',
+				'hide_empty' => true,
+				'number'     => $limit,
+				'orderby'    => 'name',
+				'order'      => 'ASC',
+				'exclude'    => $exclude,
+			)
+		);
+
+		if ( is_wp_error( $terms ) || ! is_array( $terms ) ) {
+			return array();
+		}
+
+		return $terms;
+	}
+}
+
+if ( ! function_exists( 'zaza_home_nav_url' ) ) {
+	/**
+	 * Build a temporary fallback URL for the homepage nav.
+	 *
+	 * @param string $path Relative path.
+	 * @return string
+	 */
+	function zaza_home_nav_url( $path ) {
+		return home_url( '/' . ltrim( $path, '/' ) );
+	}
+}
+
+if ( ! function_exists( 'zaza_home_shop_collection_url' ) ) {
+	/**
+	 * Build a dynamic shop collection URL for temporary fallback nav items.
+	 *
+	 * @param string $orderby WooCommerce catalog orderby value.
+	 * @return string
+	 */
+	function zaza_home_shop_collection_url( $orderby ) {
+		return add_query_arg( 'orderby', rawurlencode( $orderby ), zaza_home_shop_url() );
+	}
+}
+
+if ( ! function_exists( 'zaza_home_render_fallback_nav' ) ) {
+	/**
+	 * Render a temporary fallback nav until a WordPress menu is assigned.
+	 *
+	 * @return void
+	 */
+	function zaza_home_render_fallback_nav() {
+		$nav_items = array(
+			array(
+				'label' => esc_html__( 'Join The Club', 'child-theme' ),
+				'url'   => zaza_home_nav_url( 'join-the-club/' ),
+			),
+			array(
+				'label' => esc_html__( 'New Arrivals', 'child-theme' ),
+				'url'   => zaza_home_shop_collection_url( 'date' ),
+			),
+			array(
+				'label' => esc_html__( 'Best Sellers', 'child-theme' ),
+				'url'   => zaza_home_shop_collection_url( 'popularity' ),
+			),
+			array(
+				'label' => esc_html__( 'Flower', 'child-theme' ),
+				'url'   => zaza_home_nav_url( 'product-category/flower/' ),
+			),
+			array(
+				'label' => esc_html__( 'Bulk', 'child-theme' ),
+				'url'   => zaza_home_nav_url( 'product-category/bulk/' ),
+			),
+			array(
+				'label' => esc_html__( 'Organic Exotic', 'child-theme' ),
+				'url'   => zaza_home_nav_url( 'product-category/organic-exotic/' ),
+			),
+			array(
+				'label' => esc_html__( 'Smalls', 'child-theme' ),
+				'url'   => zaza_home_nav_url( 'product-category/smalls/' ),
+			),
+			array(
+				'label' => esc_html__( 'Edibles', 'child-theme' ),
+				'url'   => zaza_home_nav_url( 'product-category/edibles/' ),
+			),
+			array(
+				'label' => esc_html__( 'Pre Rolls', 'child-theme' ),
+				'url'   => zaza_home_nav_url( 'product-category/pre-rolls/' ),
+			),
+			array(
+				'label' => esc_html__( 'Concentrates', 'child-theme' ),
+				'url'   => zaza_home_nav_url( 'product-category/concentrates/' ),
+			),
+			array(
+				'label'    => esc_html__( 'THC Vape', 'child-theme' ),
+				'url'      => zaza_home_nav_url( 'product-category/thc-vape/' ),
+				'children' => array(
+					array(
+						'label' => esc_html__( 'All Whole Melts', 'child-theme' ),
+						'url'   => zaza_home_nav_url( 'product-category/all-whole-melts/' ),
+					),
+					array(
+						'label' => esc_html__( 'Muha Meds', 'child-theme' ),
+						'url'   => zaza_home_nav_url( 'product-category/muha-meds/' ),
+					),
+					array(
+						'label' => esc_html__( 'Boutique Switch', 'child-theme' ),
+						'url'   => zaza_home_nav_url( 'product-category/boutique-switch/' ),
+					),
+					array(
+						'label' => esc_html__( 'Hit Stick', 'child-theme' ),
+						'url'   => zaza_home_nav_url( 'product-category/hit-stick/' ),
+					),
+				),
+			),
+			array(
+				'label'    => esc_html__( 'Accessories', 'child-theme' ),
+				'url'      => zaza_home_nav_url( 'product-category/accessories/' ),
+				'children' => array(
+					array(
+						'label' => esc_html__( 'Lighters', 'child-theme' ),
+						'url'   => zaza_home_nav_url( 'product-category/lighters/' ),
+					),
+					array(
+						'label' => esc_html__( 'Rolling Trays', 'child-theme' ),
+						'url'   => zaza_home_nav_url( 'product-category/rolling-trays/' ),
+					),
+					array(
+						'label' => esc_html__( 'Papers', 'child-theme' ),
+						'url'   => zaza_home_nav_url( 'product-category/papers/' ),
+					),
+					array(
+						'label' => esc_html__( 'Other Accessories', 'child-theme' ),
+						'url'   => zaza_home_nav_url( 'product-category/other-accessories/' ),
+					),
+				),
+			),
+		);
+		?>
+		<ul class="zaza-nav-menu zaza-nav-menu--fallback">
+			<?php foreach ( $nav_items as $item ) : ?>
+				<?php $has_children = ! empty( $item['children'] ); ?>
+				<li class="zaza-nav-menu__item<?php echo $has_children ? ' zaza-dropdown menu-item-has-children' : ''; ?>">
+					<a href="<?php echo esc_url( $item['url'] ); ?>"><?php echo esc_html( $item['label'] ); ?></a>
+					<?php if ( $has_children ) : ?>
+						<ul class="sub-menu zaza-dropdown__menu">
+							<?php foreach ( $item['children'] as $child ) : ?>
+								<li class="zaza-dropdown__item">
+									<a href="<?php echo esc_url( $child['url'] ); ?>"><?php echo esc_html( $child['label'] ); ?></a>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
+				</li>
+			<?php endforeach; ?>
+		</ul>
+		<?php
+	}
+}
+
+if ( ! function_exists( 'zaza_home_render_product_card' ) ) {
+	/**
+	 * Render a WooCommerce product card.
+	 *
+	 * @param WC_Product $product Product object.
+	 * @return void
+	 */
+	function zaza_home_render_product_card( $product ) {
+		if ( ! is_object( $product ) || ! method_exists( $product, 'get_id' ) ) {
+			return;
+		}
+
+		$product_id   = $product->get_id();
+		$product_name = $product->get_name();
+		$product_url  = get_permalink( $product_id );
+		$product_url  = $product_url ? $product_url : zaza_home_shop_url();
+		$image_html   = $product->get_image(
+			'woocommerce_thumbnail',
+			array(
+				'class'   => 'zaza-product-card__image',
+				'loading' => 'lazy',
+			)
+		);
+		$button_classes = array(
+			'zaza-button',
+			'zaza-button--dark',
+			'zaza-product-card__button',
+			'button',
+			'product_type_' . sanitize_html_class( $product->get_type() ),
+		);
+
+		if ( $product->is_purchasable() && $product->is_in_stock() ) {
+			$button_classes[] = 'add_to_cart_button';
+		}
+
+		if ( $product->supports( 'ajax_add_to_cart' ) && $product->is_purchasable() && $product->is_in_stock() ) {
+			$button_classes[] = 'ajax_add_to_cart';
+		}
+		?>
+		<article class="zaza-product-card">
+			<a class="zaza-product-card__media" href="<?php echo esc_url( $product_url ); ?>" aria-label="<?php echo esc_attr( $product_name ); ?>">
+				<?php echo wp_kses_post( $image_html ); ?>
+			</a>
+			<div class="zaza-product-card__body">
+				<h3 class="zaza-product-card__title">
+					<a href="<?php echo esc_url( $product_url ); ?>"><?php echo esc_html( $product_name ); ?></a>
+				</h3>
+				<div class="zaza-product-card__price">
+					<?php echo wp_kses_post( $product->get_price_html() ); ?>
+				</div>
+				<a
+					href="<?php echo esc_url( $product->add_to_cart_url() ); ?>"
+					data-quantity="1"
+					data-product_id="<?php echo esc_attr( $product_id ); ?>"
+					data-product_sku="<?php echo esc_attr( $product->get_sku() ); ?>"
+					class="<?php echo esc_attr( implode( ' ', array_filter( $button_classes ) ) ); ?>"
+					aria-label="<?php echo esc_attr( sprintf( '%s: %s', $product->add_to_cart_text(), $product_name ) ); ?>"
+					rel="nofollow"
+				>
+					<?php echo esc_html( $product->add_to_cart_text() ); ?>
+				</a>
+			</div>
+		</article>
+		<?php
+	}
+}
+
+if ( ! function_exists( 'zaza_home_render_category_card' ) ) {
+	/**
+	 * Render a WooCommerce product category card.
+	 *
+	 * @param WP_Term $term Product category term.
+	 * @return void
+	 */
+	function zaza_home_render_category_card( $term ) {
+		if ( ! is_object( $term ) || empty( $term->term_id ) ) {
+			return;
+		}
+
+		$thumbnail_id = get_term_meta( $term->term_id, 'thumbnail_id', true );
+		$image_url    = $thumbnail_id ? wp_get_attachment_image_url( $thumbnail_id, 'large' ) : '';
+		$image_url    = $image_url ? $image_url : zaza_home_placeholder_image();
+		$term_link    = get_term_link( $term );
+
+		if ( is_wp_error( $term_link ) ) {
+			$term_link = zaza_home_shop_url();
+		}
+		?>
+		<a class="zaza-category-card" href="<?php echo esc_url( $term_link ); ?>">
+			<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url("%s");', esc_url_raw( $image_url ) ) ); ?>"></span>
+			<span class="zaza-category-card__body">
+				<span class="zaza-category-card__title"><?php echo esc_html( $term->name ); ?></span>
+				<span class="zaza-category-card__cta"><?php echo esc_html__( 'Shop Category', 'child-theme' ); ?></span>
+			</span>
+		</a>
+		<?php
+	}
+}
+
+$zaza_products = zaza_home_get_products( 8 );
+
+/*
+ * Editable hero banner slides.
+ *
+ * Replace the empty image values below with full Media Library image URLs after
+ * uploading final banner artwork, for example:
+ * 'image' => 'https://thezazaclub.com/wp-content/uploads/2026/hero-vape.jpg',
+ *
+ * Leave image empty to use the WooCommerce/WordPress placeholder fallback.
+ */
+$zaza_hero_slides = array(
+	array(
+		'image'       => '',
+		'eyebrow'     => esc_html__( 'Featured Drop', 'child-theme' ),
+		'headline'    => esc_html__( 'THC Vape Collection', 'child-theme' ),
+		'subheadline' => esc_html__( 'Premium picks for adults 21+ where permitted.', 'child-theme' ),
+		'button_text' => esc_html__( 'Shop Now', 'child-theme' ),
+		'button_url'  => zaza_home_nav_url( 'product-category/thc-vape/' ),
+	),
+	array(
+		'image'       => '',
+		'eyebrow'     => esc_html__( 'New Arrivals', 'child-theme' ),
+		'headline'    => esc_html__( 'Fresh Finds for the Club', 'child-theme' ),
+		'subheadline' => esc_html__( 'Browse the newest additions to the shop.', 'child-theme' ),
+		'button_text' => esc_html__( 'See What Is New', 'child-theme' ),
+		'button_url'  => zaza_home_shop_collection_url( 'date' ),
+	),
+	array(
+		'image'       => '',
+		'eyebrow'     => esc_html__( 'Best Sellers', 'child-theme' ),
+		'headline'    => esc_html__( 'Customer Favorites', 'child-theme' ),
+		'subheadline' => esc_html__( 'Explore popular picks and rotating featured items.', 'child-theme' ),
+		'button_text' => esc_html__( 'Browse Favorites', 'child-theme' ),
+		'button_url'  => zaza_home_shop_collection_url( 'popularity' ),
+	),
+);
+
+$zaza_slides     = zaza_home_prepare_hero_slides( $zaza_hero_slides );
+$zaza_categories = zaza_home_get_categories( 6 );
+$zaza_promo_img  = ! empty( $zaza_products ) ? zaza_home_product_image_url( reset( $zaza_products ), 'full' ) : zaza_home_placeholder_image();
+
+get_header();
+?>
+
+<div class="zaza-entry-popups" aria-live="polite">
+	<div class="zaza-modal zaza-age-modal" data-zaza-age-modal role="dialog" aria-modal="true" aria-labelledby="zaza-age-title" hidden>
+		<div class="zaza-modal__panel zaza-modal__panel--age">
+			<p class="zaza-modal__eyebrow"><?php echo esc_html__( 'Age Verification', 'child-theme' ); ?></p>
+			<h2 id="zaza-age-title" class="zaza-modal__title"><?php echo esc_html__( 'Adults 21+ Only', 'child-theme' ); ?></h2>
+			<p class="zaza-modal__copy"><?php echo esc_html__( 'Please confirm you are at least 21 years old to continue browsing The Zaza Club.', 'child-theme' ); ?></p>
+			<div class="zaza-modal__actions">
+				<button class="zaza-button zaza-button--dark" type="button" data-zaza-age-accept><?php echo esc_html__( "I'm over 21", 'child-theme' ); ?></button>
+				<button class="zaza-button zaza-button--light" type="button" data-zaza-age-deny><?php echo esc_html__( "I'm under 21", 'child-theme' ); ?></button>
+			</div>
+			<p class="zaza-modal__restricted" data-zaza-age-message hidden><?php echo esc_html__( 'Access is restricted. This site is intended only for adults 21+ where permitted by law.', 'child-theme' ); ?></p>
+		</div>
+	</div>
+
+	<div class="zaza-modal zaza-email-modal" data-zaza-email-modal role="dialog" aria-modal="true" aria-labelledby="zaza-email-title" hidden>
+		<div class="zaza-modal__panel zaza-modal__panel--email">
+			<button class="zaza-modal__close" type="button" aria-label="<?php echo esc_attr__( 'Close discount signup', 'child-theme' ); ?>" data-zaza-email-dismiss>&times;</button>
+			<p class="zaza-modal__eyebrow"><?php echo esc_html__( 'Welcome Offer', 'child-theme' ); ?></p>
+			<h2 id="zaza-email-title" class="zaza-modal__title"><?php echo esc_html__( 'Get First Access to Drops', 'child-theme' ); ?></h2>
+			<p class="zaza-modal__copy"><?php echo esc_html__( 'Join the list for launch updates, rotating bundles, and limited-time offers.', 'child-theme' ); ?></p>
+			<form class="zaza-email-form" data-zaza-email-form>
+				<label class="zaza-sr-only" for="zaza-email-input"><?php echo esc_html__( 'Email address', 'child-theme' ); ?></label>
+				<input id="zaza-email-input" class="zaza-email-form__input" type="email" name="email" placeholder="<?php echo esc_attr__( 'Email address', 'child-theme' ); ?>" required>
+				<button class="zaza-button zaza-button--accent zaza-email-form__button" type="submit"><?php echo esc_html__( 'Send My Offer', 'child-theme' ); ?></button>
+			</form>
+			<button class="zaza-modal__secondary" type="button" data-zaza-email-dismiss><?php echo esc_html__( 'No thanks', 'child-theme' ); ?></button>
+			<p class="zaza-modal__success" data-zaza-email-success hidden><?php echo esc_html__( 'Thanks. You are on the list.', 'child-theme' ); ?></p>
+		</div>
+	</div>
+</div>
+
+<header class="zaza-header" data-zaza-nav>
+	<div class="zaza-header__inner">
+		<a class="zaza-header__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr__( 'The Zaza Club home', 'child-theme' ); ?>">
+			<span class="zaza-header__brand-mark"><?php echo esc_html__( 'Z', 'child-theme' ); ?></span>
+			<span class="zaza-header__brand-copy">
+				<span class="zaza-header__brand-name"><?php echo esc_html__( 'The Zaza Club', 'child-theme' ); ?></span>
+				<span class="zaza-header__brand-subtitle"><?php echo esc_html__( 'Welcome to the Club', 'child-theme' ); ?></span>
+			</span>
+		</a>
+
+		<button class="zaza-nav-toggle" type="button" data-zaza-nav-toggle aria-expanded="false" aria-controls="zaza-home-nav-menu">
+			<span class="zaza-nav-toggle__bar"></span>
+			<span class="zaza-nav-toggle__bar"></span>
+			<span class="zaza-nav-toggle__bar"></span>
+			<span class="zaza-sr-only"><?php echo esc_html__( 'Toggle navigation', 'child-theme' ); ?></span>
+		</button>
+
+		<nav id="zaza-home-nav-menu" class="zaza-nav" data-zaza-nav-panel aria-label="<?php echo esc_attr__( 'Homepage product navigation', 'child-theme' ); ?>">
+			<?php if ( has_nav_menu( 'zaza_home_nav' ) ) : ?>
+				<?php
+				wp_nav_menu(
+					array(
+						'theme_location' => 'zaza_home_nav',
+						'container'      => false,
+						'menu_class'     => 'zaza-nav-menu',
+						'menu_id'        => false,
+						'depth'          => 2,
+						'fallback_cb'    => false,
+					)
+				);
+				?>
+			<?php else : ?>
+				<?php /* Temporary fallback nav. Assign a menu to "Zaza Homepage Navigation" to manage these items in WordPress. */ ?>
+				<?php zaza_home_render_fallback_nav(); ?>
+			<?php endif; ?>
+		</nav>
+	</div>
+</header>
+
+<main id="primary" class="zaza-home">
+	<section class="zaza-hero" data-zaza-carousel aria-label="<?php echo esc_attr__( 'Homepage banner carousel', 'child-theme' ); ?>">
+		<div class="zaza-hero__slides">
+			<?php foreach ( $zaza_slides as $index => $slide ) : ?>
+				<?php
+				$is_active   = 0 === $index;
+				$slide_style = sprintf(
+					'--zaza-slide-image: url("%s");',
+					esc_url_raw( $slide['image'] )
+				);
+				?>
+				<article class="zaza-hero__slide<?php echo $is_active ? ' is-active' : ''; ?>" data-zaza-slide style="<?php echo esc_attr( $slide_style ); ?>" aria-hidden="<?php echo esc_attr( $is_active ? 'false' : 'true' ); ?>">
+					<div class="zaza-hero__inner">
+						<div class="zaza-hero__copy">
+							<?php if ( ! empty( $slide['eyebrow'] ) ) : ?>
+								<p class="zaza-eyebrow"><?php echo esc_html( $slide['eyebrow'] ); ?></p>
+							<?php endif; ?>
+							<?php if ( ! empty( $slide['headline'] ) ) : ?>
+								<h1 class="zaza-hero__headline"><?php echo esc_html( $slide['headline'] ); ?></h1>
+							<?php endif; ?>
+							<?php if ( ! empty( $slide['subheadline'] ) ) : ?>
+								<p class="zaza-hero__subheadline"><?php echo esc_html( $slide['subheadline'] ); ?></p>
+							<?php endif; ?>
+							<?php if ( ! empty( $slide['button_text'] ) ) : ?>
+								<a class="zaza-button zaza-button--accent zaza-hero__button" href="<?php echo esc_url( $slide['button_url'] ); ?>"><?php echo esc_html( $slide['button_text'] ); ?></a>
+							<?php endif; ?>
+						</div>
+					</div>
+				</article>
+			<?php endforeach; ?>
+		</div>
+		<div class="zaza-hero__controls" aria-label="<?php echo esc_attr__( 'Carousel controls', 'child-theme' ); ?>">
+			<button class="zaza-hero__arrow" type="button" data-zaza-prev aria-label="<?php echo esc_attr__( 'Previous slide', 'child-theme' ); ?>"></button>
+			<div class="zaza-hero__dots">
+				<?php foreach ( $zaza_slides as $index => $slide ) : ?>
+					<button class="zaza-hero__dot<?php echo 0 === $index ? ' is-active' : ''; ?>" type="button" data-zaza-dot="<?php echo esc_attr( $index ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Go to slide %d', 'child-theme' ), $index + 1 ) ); ?>" aria-current="<?php echo esc_attr( 0 === $index ? 'true' : 'false' ); ?>"></button>
+				<?php endforeach; ?>
+			</div>
+			<button class="zaza-hero__arrow zaza-hero__arrow--next" type="button" data-zaza-next aria-label="<?php echo esc_attr__( 'Next slide', 'child-theme' ); ?>"></button>
+		</div>
+	</section>
+
+	<section class="zaza-section zaza-featured" aria-labelledby="zaza-featured-title">
+		<div class="zaza-section__header">
+			<p class="zaza-eyebrow"><?php echo esc_html__( 'Featured / Best Sellers', 'child-theme' ); ?></p>
+			<h2 id="zaza-featured-title" class="zaza-section__title"><?php echo esc_html__( 'Popular Picks', 'child-theme' ); ?></h2>
+			<a class="zaza-section__link" href="<?php echo esc_url( zaza_home_shop_url() ); ?>"><?php echo esc_html__( 'View Shop', 'child-theme' ); ?></a>
+		</div>
+
+		<?php if ( ! empty( $zaza_products ) ) : ?>
+			<div class="zaza-product-grid">
+				<?php foreach ( $zaza_products as $product ) : ?>
+					<?php zaza_home_render_product_card( $product ); ?>
+				<?php endforeach; ?>
+			</div>
+		<?php else : ?>
+			<div class="zaza-empty-state">
+				<h3><?php echo esc_html__( 'Products are coming soon.', 'child-theme' ); ?></h3>
+				<p><?php echo esc_html__( 'Featured products will appear here automatically once WooCommerce products are published.', 'child-theme' ); ?></p>
+			</div>
+		<?php endif; ?>
+	</section>
+
+	<section class="zaza-section zaza-categories" aria-labelledby="zaza-categories-title">
+		<div class="zaza-section__header">
+			<p class="zaza-eyebrow"><?php echo esc_html__( 'Shop by Category', 'child-theme' ); ?></p>
+			<h2 id="zaza-categories-title" class="zaza-section__title"><?php echo esc_html__( 'Browse the Club', 'child-theme' ); ?></h2>
+		</div>
+
+		<?php if ( ! empty( $zaza_categories ) ) : ?>
+			<div class="zaza-category-grid">
+				<?php foreach ( $zaza_categories as $category ) : ?>
+					<?php zaza_home_render_category_card( $category ); ?>
+				<?php endforeach; ?>
+			</div>
+		<?php else : ?>
+			<div class="zaza-category-grid zaza-category-grid--placeholder">
+				<?php
+				$zaza_placeholder_categories = array(
+					esc_html__( 'Flower', 'child-theme' ),
+					esc_html__( 'Pre-Rolls', 'child-theme' ),
+					esc_html__( 'Bundles', 'child-theme' ),
+				);
+				?>
+				<?php foreach ( $zaza_placeholder_categories as $placeholder_category ) : ?>
+					<div class="zaza-category-card zaza-category-card--placeholder">
+						<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url("%s");', esc_url_raw( zaza_home_placeholder_image() ) ) ); ?>"></span>
+						<span class="zaza-category-card__body">
+							<span class="zaza-category-card__title"><?php echo esc_html( $placeholder_category ); ?></span>
+							<span class="zaza-category-card__cta"><?php echo esc_html__( 'Coming Soon', 'child-theme' ); ?></span>
+						</span>
+					</div>
+				<?php endforeach; ?>
+			</div>
+		<?php endif; ?>
+	</section>
+
+	<section class="zaza-promo" aria-labelledby="zaza-promo-title">
+		<div class="zaza-promo__media" style="<?php echo esc_attr( sprintf( 'background-image: url("%s");', esc_url_raw( $zaza_promo_img ) ) ); ?>"></div>
+		<div class="zaza-promo__content">
+			<p class="zaza-eyebrow"><?php echo esc_html__( 'Bundle Drop', 'child-theme' ); ?></p>
+			<h2 id="zaza-promo-title" class="zaza-promo__title"><?php echo esc_html__( 'Bundle More, Browse Less', 'child-theme' ); ?></h2>
+			<p class="zaza-promo__copy"><?php echo esc_html__( 'Rotating bundles, seasonal picks, and limited-time offers can live here once final promo details are ready.', 'child-theme' ); ?></p>
+			<a class="zaza-button zaza-button--light" href="<?php echo esc_url( zaza_home_shop_url() ); ?>"><?php echo esc_html__( 'Explore Bundles', 'child-theme' ); ?></a>
+		</div>
+	</section>
+
+	<section class="zaza-trust-strip" aria-label="<?php echo esc_attr__( 'Store policies', 'child-theme' ); ?>">
+		<div class="zaza-trust-strip__item">
+			<strong><?php echo esc_html__( 'Age Restricted', 'child-theme' ); ?></strong>
+			<span><?php echo esc_html__( 'Adults 21+ where permitted.', 'child-theme' ); ?></span>
+		</div>
+		<div class="zaza-trust-strip__item">
+			<strong><?php echo esc_html__( 'Secure Checkout', 'child-theme' ); ?></strong>
+			<span><?php echo esc_html__( 'Encrypted payment flow.', 'child-theme' ); ?></span>
+		</div>
+		<div class="zaza-trust-strip__item">
+			<strong><?php echo esc_html__( 'Discreet Packaging', 'child-theme' ); ?></strong>
+			<span><?php echo esc_html__( 'Plain, protective shipments.', 'child-theme' ); ?></span>
+		</div>
+		<div class="zaza-trust-strip__item">
+			<strong><?php echo esc_html__( 'Shipping Rules Apply', 'child-theme' ); ?></strong>
+			<span><?php echo esc_html__( 'Availability varies by location.', 'child-theme' ); ?></span>
+		</div>
+	</section>
+
+	<section class="zaza-section zaza-reviews" aria-labelledby="zaza-reviews-title">
+		<div class="zaza-section__header">
+			<p class="zaza-eyebrow"><?php echo esc_html__( 'Social Proof', 'child-theme' ); ?></p>
+			<h2 id="zaza-reviews-title" class="zaza-section__title"><?php echo esc_html__( 'What Customers Notice', 'child-theme' ); ?></h2>
+		</div>
+		<div class="zaza-review-grid">
+			<article class="zaza-review">
+				<p><?php echo esc_html__( 'Clean layout, easy browsing, and the product details are simple to scan.', 'child-theme' ); ?></p>
+				<strong><?php echo esc_html__( 'Avery M.', 'child-theme' ); ?></strong>
+			</article>
+			<article class="zaza-review">
+				<p><?php echo esc_html__( 'Checkout felt straightforward and the category pages made reordering quick.', 'child-theme' ); ?></p>
+				<strong><?php echo esc_html__( 'Jordan K.', 'child-theme' ); ?></strong>
+			</article>
+			<article class="zaza-review">
+				<p><?php echo esc_html__( 'The featured picks helped me compare options without digging around.', 'child-theme' ); ?></p>
+				<strong><?php echo esc_html__( 'Sam R.', 'child-theme' ); ?></strong>
+			</article>
+		</div>
+	</section>
+</main>
+
+<?php
+get_footer();
