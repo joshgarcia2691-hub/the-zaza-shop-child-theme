@@ -129,23 +129,21 @@ if ( ! function_exists( 'zaza_home_prepare_hero_slides' ) ) {
 			}
 
 			$prepared_slides[] = array(
-				'image'       => ! empty( $slide['image'] ) ? $slide['image'] : zaza_home_placeholder_image(),
-				'eyebrow'     => isset( $slide['eyebrow'] ) ? $slide['eyebrow'] : '',
-				'headline'    => isset( $slide['headline'] ) ? $slide['headline'] : '',
-				'subheadline' => isset( $slide['subheadline'] ) ? $slide['subheadline'] : '',
-				'button_text' => isset( $slide['button_text'] ) ? $slide['button_text'] : '',
-				'button_url'  => ! empty( $slide['button_url'] ) ? $slide['button_url'] : zaza_home_shop_url(),
+				'image'        => ! empty( $slide['image'] ) ? $slide['image'] : zaza_home_placeholder_image(),
+				'kicker'       => isset( $slide['kicker'] ) ? $slide['kicker'] : ( isset( $slide['eyebrow'] ) ? $slide['eyebrow'] : '' ),
+				'title'        => isset( $slide['title'] ) ? $slide['title'] : ( isset( $slide['headline'] ) ? $slide['headline'] : '' ),
+				'button_label' => isset( $slide['button_label'] ) ? $slide['button_label'] : ( isset( $slide['button_text'] ) ? $slide['button_text'] : '' ),
+				'button_url'   => ! empty( $slide['button_url'] ) ? $slide['button_url'] : zaza_home_shop_url(),
 			);
 		}
 
 		if ( empty( $prepared_slides ) ) {
 			$prepared_slides[] = array(
-				'image'       => zaza_home_placeholder_image(),
-				'eyebrow'     => esc_html__( 'Featured Drop', 'child-theme' ),
-				'headline'    => esc_html__( 'Curated Goods for the Club', 'child-theme' ),
-				'subheadline' => esc_html__( 'Premium picks for adults 21+ where permitted.', 'child-theme' ),
-				'button_text' => esc_html__( 'Shop Now', 'child-theme' ),
-				'button_url'  => zaza_home_shop_url(),
+				'image'        => zaza_home_placeholder_image(),
+				'kicker'       => esc_html__( 'New Drop', 'child-theme' ),
+				'title'        => esc_html__( 'New Arrivals', 'child-theme' ),
+				'button_label' => esc_html__( 'Shop Now', 'child-theme' ),
+				'button_url'   => zaza_home_shop_url(),
 			);
 		}
 
@@ -442,28 +440,25 @@ $zaza_products = zaza_home_get_products( 8 );
  */
 $zaza_hero_slides = array(
 	array(
-		'image'       => '',
-		'eyebrow'     => esc_html__( 'Featured Drop', 'child-theme' ),
-		'headline'    => esc_html__( 'THC Vape Collection', 'child-theme' ),
-		'subheadline' => esc_html__( 'Premium picks for adults 21+ where permitted.', 'child-theme' ),
-		'button_text' => esc_html__( 'Shop Now', 'child-theme' ),
-		'button_url'  => zaza_home_nav_url( 'product-category/thc-vape/' ),
+		'image'        => '',
+		'kicker'       => esc_html__( 'New Drop', 'child-theme' ),
+		'title'        => esc_html__( 'THC Vape', 'child-theme' ),
+		'button_label' => esc_html__( 'Shop Now', 'child-theme' ),
+		'button_url'   => zaza_home_nav_url( 'product-category/thc-vape/' ),
 	),
 	array(
-		'image'       => '',
-		'eyebrow'     => esc_html__( 'New Arrivals', 'child-theme' ),
-		'headline'    => esc_html__( 'Fresh Finds for the Club', 'child-theme' ),
-		'subheadline' => esc_html__( 'Browse the newest additions to the shop.', 'child-theme' ),
-		'button_text' => esc_html__( 'See What Is New', 'child-theme' ),
-		'button_url'  => zaza_home_shop_collection_url( 'date' ),
+		'image'        => '',
+		'kicker'       => '',
+		'title'        => esc_html__( 'New Arrivals', 'child-theme' ),
+		'button_label' => esc_html__( 'Browse Now', 'child-theme' ),
+		'button_url'   => zaza_home_shop_collection_url( 'date' ),
 	),
 	array(
-		'image'       => '',
-		'eyebrow'     => esc_html__( 'Best Sellers', 'child-theme' ),
-		'headline'    => esc_html__( 'Customer Favorites', 'child-theme' ),
-		'subheadline' => esc_html__( 'Explore popular picks and rotating featured items.', 'child-theme' ),
-		'button_text' => esc_html__( 'Browse Favorites', 'child-theme' ),
-		'button_url'  => zaza_home_shop_collection_url( 'popularity' ),
+		'image'        => '',
+		'kicker'       => esc_html__( 'Top Picks', 'child-theme' ),
+		'title'        => esc_html__( 'Best Sellers', 'child-theme' ),
+		'button_label' => esc_html__( 'Shop Favorites', 'child-theme' ),
+		'button_url'   => zaza_home_shop_collection_url( 'popularity' ),
 	),
 );
 
@@ -558,17 +553,14 @@ get_header();
 				<article class="zaza-hero__slide<?php echo $is_active ? ' is-active' : ''; ?>" data-zaza-slide style="<?php echo esc_attr( $slide_style ); ?>" aria-hidden="<?php echo esc_attr( $is_active ? 'false' : 'true' ); ?>">
 					<div class="zaza-hero__inner">
 						<div class="zaza-hero__copy">
-							<?php if ( ! empty( $slide['eyebrow'] ) ) : ?>
-								<p class="zaza-eyebrow"><?php echo esc_html( $slide['eyebrow'] ); ?></p>
+							<?php if ( ! empty( $slide['kicker'] ) ) : ?>
+								<p class="zaza-eyebrow"><?php echo esc_html( $slide['kicker'] ); ?></p>
 							<?php endif; ?>
-							<?php if ( ! empty( $slide['headline'] ) ) : ?>
-								<h1 class="zaza-hero__headline"><?php echo esc_html( $slide['headline'] ); ?></h1>
+							<?php if ( ! empty( $slide['title'] ) ) : ?>
+								<h1 class="zaza-hero__headline"><?php echo esc_html( $slide['title'] ); ?></h1>
 							<?php endif; ?>
-							<?php if ( ! empty( $slide['subheadline'] ) ) : ?>
-								<p class="zaza-hero__subheadline"><?php echo esc_html( $slide['subheadline'] ); ?></p>
-							<?php endif; ?>
-							<?php if ( ! empty( $slide['button_text'] ) ) : ?>
-								<a class="zaza-button zaza-button--accent zaza-hero__button" href="<?php echo esc_url( $slide['button_url'] ); ?>"><?php echo esc_html( $slide['button_text'] ); ?></a>
+							<?php if ( ! empty( $slide['button_label'] ) ) : ?>
+								<a class="zaza-button zaza-button--accent zaza-hero__button" href="<?php echo esc_url( $slide['button_url'] ); ?>"><?php echo esc_html( $slide['button_label'] ); ?></a>
 							<?php endif; ?>
 						</div>
 					</div>

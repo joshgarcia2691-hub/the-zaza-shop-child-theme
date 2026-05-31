@@ -472,7 +472,7 @@ body.zaza-modal-lock {
 	inset: 0;
 	z-index: 0;
 	background-color: var(--zaza-charcoal);
-	background-image: linear-gradient(90deg, rgba(5, 7, 6, 0.86), rgba(5, 7, 6, 0.42), rgba(5, 7, 6, 0.12)), var(--zaza-slide-image);
+	background-image: radial-gradient(circle at center, rgba(5, 7, 6, 0.16), rgba(5, 7, 6, 0.62)), linear-gradient(180deg, rgba(5, 7, 6, 0.2), rgba(5, 7, 6, 0.36)), var(--zaza-slide-image);
 	background-position: center;
 	background-size: cover;
 	transform: scale(1.03);
@@ -501,34 +501,38 @@ body.zaza-modal-lock {
 	z-index: 2;
 	display: flex;
 	align-items: center;
+	justify-content: center;
 	width: min(1180px, calc(100% - 40px));
 	min-height: 680px;
 	margin: 0 auto;
-	padding: 104px 0 112px;
+	padding: 116px 0 112px;
+	text-align: center;
 }
 
 .zaza-hero__copy {
-	max-width: 620px;
-	padding: 20px 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	max-width: 680px;
+	margin: 0 auto;
+	padding: 18px 0;
 }
 
 .zaza-hero .zaza-eyebrow {
 	color: var(--zaza-accent);
+	font-size: 0.78rem;
 }
 
 .zaza-hero__headline {
 	margin: 0;
 	color: #ffffff;
-	font-size: 4.6rem;
-	line-height: 0.96;
+	font-size: 5rem;
+	font-weight: 900;
+	line-height: 0.98;
 }
 
-.zaza-hero__subheadline {
-	max-width: 530px;
-	margin: 22px 0 30px;
-	color: rgba(255, 255, 255, 0.84);
-	font-size: 1.15rem;
-	line-height: 1.65;
+.zaza-hero__button {
+	margin-top: 24px;
 }
 
 .zaza-hero__controls {
@@ -1029,7 +1033,7 @@ body.zaza-modal-lock {
 	}
 
 	.zaza-hero__headline {
-		font-size: 3.25rem;
+		font-size: 3.65rem;
 	}
 
 	.zaza-product-grid {
@@ -1095,10 +1099,6 @@ body.zaza-modal-lock {
 	.zaza-hero__headline {
 		font-size: 2.45rem;
 		line-height: 1.02;
-	}
-
-	.zaza-hero__subheadline {
-		font-size: 1rem;
 	}
 
 	.zaza-hero__controls {
