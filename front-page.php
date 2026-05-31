@@ -500,7 +500,7 @@ get_header();
 <header class="zaza-header" data-zaza-nav>
 	<div class="zaza-header__inner">
 		<a class="zaza-header__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr__( 'The Zaza Club home', 'child-theme' ); ?>">
-			<span class="zaza-header__brand-mark"><?php echo esc_html__( 'Z', 'child-theme' ); ?></span>
+			<img class="zaza-header__brand-logo" src="<?php echo esc_url( 'https://thezazaclub.com/wp-content/uploads/2026/05/logo.jpeg' ); ?>" alt="" width="42" height="42">
 			<span class="zaza-header__brand-copy">
 				<span class="zaza-header__brand-name"><?php echo esc_html__( 'The Zaza Club', 'child-theme' ); ?></span>
 			</span>
