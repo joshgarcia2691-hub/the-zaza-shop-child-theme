@@ -76,6 +76,7 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 }
 
 .zaza-header__brand {
+	order: 1;
 	display: inline-flex;
 	flex: 0 0 auto;
 	align-items: center;
@@ -119,6 +120,7 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 }
 
 .zaza-nav {
+	order: 3;
 	flex: 1 1 auto;
 	min-width: 0;
 }
@@ -241,6 +243,7 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 }
 
 .zaza-nav-toggle {
+	order: 2;
 	display: none;
 	flex: 0 0 auto;
 	width: 42px;
@@ -1315,5 +1318,475 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 
 	.zaza-promo__content {
 		padding: 30px;
+	}
+}
+
+/* Responsive homepage layout upgrade. */
+.zaza-header__cart {
+	position: relative;
+	order: 4;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 38px;
+	padding: 0 13px;
+	border: 1px solid rgba(255, 255, 255, 0.18);
+	border-radius: 999px;
+	color: #ffffff;
+	font-size: 0.72rem;
+	font-weight: 900;
+	text-decoration: none;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.zaza-header__cart:hover,
+.zaza-header__cart:focus-visible {
+	background: rgba(183, 241, 111, 0.12);
+	color: #ffffff;
+	text-decoration: none;
+}
+
+.zaza-product-card {
+	border-radius: 7px;
+	box-shadow: 0 10px 30px rgba(17, 20, 19, 0.07);
+}
+
+.zaza-product-card__media {
+	aspect-ratio: 4 / 5;
+	padding: 14px;
+	background: linear-gradient(180deg, #f8faf5, #eef2e8);
+}
+
+.zaza-product-card__body {
+	gap: 10px;
+	padding: 14px;
+}
+
+.zaza-product-card__title {
+	display: -webkit-box;
+	min-height: 2.7em;
+	font-size: 0.96rem;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+}
+
+.zaza-product-card__price {
+	font-size: 0.92rem;
+}
+
+.zaza-product-card__button {
+	min-height: 42px;
+	padding: 0 12px;
+	font-size: 0.84rem;
+}
+
+.zaza-category-grid {
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.zaza-category-card {
+	min-height: 285px;
+	border-radius: 8px;
+	box-shadow: 0 16px 38px rgba(17, 20, 19, 0.12);
+}
+
+.zaza-category-card::after {
+	background: linear-gradient(180deg, rgba(17, 20, 19, 0), rgba(17, 20, 19, 0.72));
+}
+
+.zaza-category-card__body {
+	right: 18px;
+	bottom: 18px;
+	left: 18px;
+	gap: 10px;
+}
+
+.zaza-category-card__title {
+	font-size: 1.28rem;
+}
+
+.zaza-category-card__cta {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 38px;
+	height: 38px;
+	padding: 0;
+	border-radius: 50%;
+	font-size: 1.1rem;
+	line-height: 1;
+}
+
+.zaza-section.zaza-reviews {
+	padding-top: 64px;
+	padding-bottom: 74px;
+}
+
+.zaza-reviews .zaza-section__title {
+	font-size: 3rem;
+}
+
+.zaza-review {
+	min-height: 210px;
+	padding: 28px;
+}
+
+@media (min-width: 901px) {
+	.zaza-header__inner {
+		gap: 16px;
+	}
+
+	.zaza-header__brand {
+		min-width: 178px;
+	}
+
+	.zaza-nav-menu a {
+		padding: 0 8px;
+		font-size: 0.72rem;
+	}
+
+	.zaza-product-grid {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+		gap: 16px;
+	}
+}
+
+@media (max-width: 900px) {
+	.zaza-header__inner {
+		display: grid;
+		grid-template-columns: 44px minmax(0, 1fr) 44px;
+		gap: 10px;
+		width: min(100% - 24px, 1280px);
+		min-height: 58px;
+	}
+
+	.zaza-nav-toggle {
+		order: 1;
+		display: inline-flex;
+		width: 42px;
+		height: 42px;
+	}
+
+	.zaza-header__brand {
+		order: 2;
+		justify-self: center;
+		min-width: 0;
+		gap: 8px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 36px;
+		height: 36px;
+	}
+
+	.zaza-header__brand-name {
+		font-size: 0.82rem;
+	}
+
+	.zaza-header__cart {
+		order: 3;
+		justify-self: end;
+		width: 42px;
+		height: 42px;
+		min-height: 42px;
+		padding: 0;
+		border-radius: 50%;
+		font-size: 0;
+	}
+
+	.zaza-header__cart::before {
+		content: "";
+		width: 15px;
+		height: 13px;
+		border: 2px solid currentColor;
+		border-top: 0;
+		border-radius: 2px 2px 5px 5px;
+	}
+
+	.zaza-header__cart::after {
+		content: "";
+		position: absolute;
+		width: 9px;
+		height: 7px;
+		margin-top: -15px;
+		border: 2px solid currentColor;
+		border-bottom: 0;
+		border-radius: 8px 8px 0 0;
+	}
+
+	.zaza-nav {
+		order: 4;
+		grid-column: 1 / -1;
+	}
+
+	.zaza-hero {
+		min-height: 500px;
+	}
+
+	.zaza-hero__inner {
+		min-height: 500px;
+		padding: 74px 0 88px;
+	}
+
+	.zaza-hero__headline {
+		font-size: 3rem;
+	}
+
+	.zaza-section {
+		width: min(100% - 32px, 1180px);
+		padding: 58px 0;
+	}
+
+	.zaza-section__header {
+		align-items: start;
+		margin-bottom: 22px;
+	}
+
+	.zaza-product-grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 14px;
+	}
+
+	.zaza-category-grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 14px;
+	}
+
+	.zaza-category-card {
+		min-height: 230px;
+	}
+
+	.zaza-trust-strip {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		padding: 22px 16px;
+	}
+
+	.zaza-review-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 600px) {
+	.zaza-header__inner {
+		grid-template-columns: 42px minmax(0, 1fr) 42px;
+		width: min(100% - 18px, 1280px);
+		min-height: 56px;
+	}
+
+	.zaza-header__brand-name {
+		max-width: 132px;
+		overflow: hidden;
+		font-size: 0.78rem;
+		text-overflow: ellipsis;
+	}
+
+	.zaza-nav {
+		margin-right: -9px;
+		margin-left: -9px;
+	}
+
+	.zaza-nav-menu {
+		padding: 6px 14px 14px;
+	}
+
+	.zaza-hero {
+		min-height: 390px;
+	}
+
+	.zaza-hero__slide::before {
+		background-position: center;
+	}
+
+	.zaza-hero__inner {
+		width: min(100% - 24px, 1180px);
+		min-height: 390px;
+		padding: 58px 0 72px;
+	}
+
+	.zaza-hero__headline {
+		font-size: 2rem;
+		line-height: 1.05;
+	}
+
+	.zaza-hero__button {
+		min-height: 42px;
+		margin-top: 16px;
+		padding: 0 18px;
+		font-size: 0.86rem;
+	}
+
+	.zaza-hero__controls {
+		right: 12px;
+		bottom: 16px;
+		left: 12px;
+	}
+
+	.zaza-section {
+		width: min(100% - 24px, 1180px);
+		padding: 42px 0;
+	}
+
+	.zaza-section__title,
+	.zaza-promo__title {
+		font-size: 1.65rem;
+		line-height: 1.08;
+	}
+
+	.zaza-eyebrow,
+	.zaza-modal__eyebrow {
+		margin-bottom: 8px;
+		font-size: 0.72rem;
+	}
+
+	.zaza-product-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 10px;
+	}
+
+	.zaza-product-card__media {
+		padding: 8px;
+	}
+
+	.zaza-product-card__body {
+		gap: 7px;
+		padding: 10px;
+	}
+
+	.zaza-product-card__title {
+		font-size: 0.78rem;
+		line-height: 1.28;
+	}
+
+	.zaza-product-card__price {
+		font-size: 0.78rem;
+	}
+
+	.zaza-product-card__button {
+		min-height: 34px;
+		padding: 0 8px;
+		font-size: 0.72rem;
+	}
+
+	.zaza-category-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 10px;
+	}
+
+	.zaza-category-card {
+		min-height: 168px;
+	}
+
+	.zaza-category-card__body {
+		right: 12px;
+		bottom: 12px;
+		left: 12px;
+	}
+
+	.zaza-category-card__title {
+		font-size: 0.98rem;
+	}
+
+	.zaza-category-card__cta {
+		width: 32px;
+		height: 32px;
+		font-size: 0.96rem;
+	}
+
+	.zaza-promo {
+		width: min(100% - 24px, 1180px);
+		margin-top: 4px;
+		margin-bottom: 42px;
+	}
+
+	.zaza-promo__media {
+		min-height: 220px;
+	}
+
+	.zaza-promo__content {
+		padding: 24px;
+	}
+
+	.zaza-promo__copy {
+		margin: 12px 0 18px;
+		font-size: 0.92rem;
+		line-height: 1.5;
+	}
+
+	.zaza-trust-strip {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 8px;
+		padding: 14px 12px;
+	}
+
+	.zaza-trust-strip__item {
+		min-height: 106px;
+		padding: 14px;
+	}
+
+	.zaza-trust-strip__item strong {
+		font-size: 0.82rem;
+	}
+
+	.zaza-trust-strip__item span {
+		font-size: 0.74rem;
+	}
+
+	.zaza-section.zaza-reviews {
+		padding: 42px 14px 52px;
+	}
+
+	.zaza-reviews .zaza-section__header {
+		margin-bottom: 22px;
+		text-align: left;
+	}
+
+	.zaza-reviews .zaza-section__title {
+		font-size: 1.8rem;
+	}
+
+	.zaza-review-grid {
+		grid-template-columns: 1fr;
+		gap: 12px;
+	}
+
+	.zaza-review {
+		min-height: 0;
+		padding: 22px;
+	}
+
+	.zaza-review p {
+		margin-bottom: 16px;
+		font-size: 0.94rem;
+		line-height: 1.55;
+	}
+
+	.zaza-footer__inner {
+		width: min(100% - 24px, 1180px);
+		padding: 30px 0 28px;
+	}
+
+	.zaza-footer__brand {
+		font-size: 0.9rem;
+	}
+
+	.zaza-footer__logo {
+		width: 46px;
+		height: 46px;
+	}
+
+	.zaza-footer__nav {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		width: 100%;
+		gap: 10px;
+	}
+
+	.zaza-footer__meta {
+		display: grid;
+		gap: 8px;
+		margin-top: 22px;
+		padding-top: 18px;
 	}
 }

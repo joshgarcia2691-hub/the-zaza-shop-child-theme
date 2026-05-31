@@ -49,6 +49,21 @@ if ( ! function_exists( 'zaza_home_shop_url' ) ) {
 	}
 }
 
+if ( ! function_exists( 'zaza_home_cart_url' ) ) {
+	/**
+	 * Resolve the WooCommerce cart URL with a fallback.
+	 *
+	 * @return string
+	 */
+	function zaza_home_cart_url() {
+		if ( function_exists( 'wc_get_cart_url' ) ) {
+			return wc_get_cart_url();
+		}
+
+		return home_url( '/cart/' );
+	}
+}
+
 if ( ! function_exists( 'zaza_home_get_products' ) ) {
 	/**
 	 * Get featured products first, then recent products if none are featured.
@@ -420,7 +435,7 @@ if ( ! function_exists( 'zaza_home_render_category_card' ) ) {
 			<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url("%s");', esc_url_raw( $image_url ) ) ); ?>"></span>
 			<span class="zaza-category-card__body">
 				<span class="zaza-category-card__title"><?php echo esc_html( $term->name ); ?></span>
-				<span class="zaza-category-card__cta"><?php echo esc_html__( 'Shop Category', 'child-theme' ); ?></span>
+				<span class="zaza-category-card__cta" aria-hidden="true">&gt;</span>
 			</span>
 		</a>
 		<?php
@@ -512,6 +527,12 @@ get_header();
 			<span class="zaza-nav-toggle__bar"></span>
 			<span class="zaza-sr-only"><?php echo esc_html__( 'Toggle navigation', 'child-theme' ); ?></span>
 		</button>
+
+		<?php if ( function_exists( 'wc_get_cart_url' ) ) : ?>
+			<a class="zaza-header__cart" href="<?php echo esc_url( zaza_home_cart_url() ); ?>" aria-label="<?php echo esc_attr__( 'View cart', 'child-theme' ); ?>">
+				<span aria-hidden="true"><?php echo esc_html__( 'Cart', 'child-theme' ); ?></span>
+			</a>
+		<?php endif; ?>
 
 		<nav id="zaza-home-nav-menu" class="zaza-nav" data-zaza-nav-panel aria-label="<?php echo esc_attr__( 'Homepage product navigation', 'child-theme' ); ?>">
 			<?php if ( has_nav_menu( 'zaza_home_nav' ) ) : ?>
@@ -618,12 +639,12 @@ get_header();
 				?>
 				<?php foreach ( $zaza_placeholder_categories as $placeholder_category ) : ?>
 					<div class="zaza-category-card zaza-category-card--placeholder">
-						<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url("%s");', esc_url_raw( zaza_home_placeholder_image() ) ) ); ?>"></span>
-						<span class="zaza-category-card__body">
-							<span class="zaza-category-card__title"><?php echo esc_html( $placeholder_category ); ?></span>
-							<span class="zaza-category-card__cta"><?php echo esc_html__( 'Coming Soon', 'child-theme' ); ?></span>
-						</span>
-					</div>
+							<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url("%s");', esc_url_raw( zaza_home_placeholder_image() ) ) ); ?>"></span>
+							<span class="zaza-category-card__body">
+								<span class="zaza-category-card__title"><?php echo esc_html( $placeholder_category ); ?></span>
+								<span class="zaza-category-card__cta"><?php echo esc_html__( 'Soon', 'child-theme' ); ?></span>
+							</span>
+						</div>
 				<?php endforeach; ?>
 			</div>
 		<?php endif; ?>
