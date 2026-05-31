@@ -844,52 +844,116 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 .zaza-trust-strip {
 	display: grid;
 	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: 1px;
-	width: 100%;
-	background: var(--zaza-line);
-	border-top: 1px solid var(--zaza-line);
-	border-bottom: 1px solid var(--zaza-line);
+	gap: 14px;
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
+	padding: 30px max(20px, calc((100vw - 1180px) / 2));
+	background: #050706;
+	border: 0;
 }
 
 .zaza-trust-strip__item {
 	display: grid;
-	gap: 6px;
-	min-height: 112px;
-	padding: 24px;
-	background: var(--zaza-soft);
+	gap: 8px;
+	align-content: start;
+	min-height: 124px;
+	padding: 22px;
+	border: 1px solid rgba(255, 255, 255, 0.12);
+	border-radius: 8px;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.035));
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.zaza-trust-strip__item::before {
+	content: "";
+	width: 30px;
+	height: 3px;
+	border-radius: 999px;
+	background: var(--zaza-accent);
 }
 
 .zaza-trust-strip__item strong {
-	color: var(--zaza-ink);
+	color: #ffffff;
 	font-size: 1rem;
 }
 
 .zaza-trust-strip__item span {
-	color: var(--zaza-muted);
+	color: rgba(255, 255, 255, 0.68);
 	font-size: 0.92rem;
 	line-height: 1.4;
 }
 
-.zaza-reviews {
-	background: #ffffff;
+.zaza-section.zaza-reviews {
+	width: 100vw;
+	margin-left: calc(50% - 50vw);
+	padding: 72px max(20px, calc((100vw - 1180px) / 2)) 88px;
+	background:
+		linear-gradient(180deg, rgba(183, 241, 111, 0.09), rgba(255, 255, 255, 0) 42%),
+		#f8faf4;
+}
+
+.zaza-reviews .zaza-section__header {
+	display: block;
+	max-width: 760px;
+	margin: 0 auto 34px;
+	text-align: center;
+}
+
+.zaza-reviews .zaza-eyebrow {
+	color: #4d6254;
+}
+
+.zaza-reviews .zaza-section__title {
+	max-width: none;
+	margin: 0;
+	color: var(--zaza-ink);
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: clamp(2.35rem, 4vw, 3.8rem);
+	font-weight: 900;
+	line-height: 1.02;
 }
 
 .zaza-review-grid {
 	display: grid;
 	grid-template-columns: repeat(3, minmax(0, 1fr));
-	gap: 18px;
+	gap: 20px;
 }
 
 .zaza-review {
-	min-height: 220px;
-	padding: 28px;
-	border: 1px solid var(--zaza-line);
+	position: relative;
+	min-height: 238px;
+	padding: 34px;
+	border: 1px solid rgba(17, 20, 19, 0.08);
 	border-radius: 8px;
 	background: #ffffff;
-	box-shadow: 0 1px 0 rgba(17, 20, 19, 0.05);
+	box-shadow: 0 18px 42px rgba(17, 20, 19, 0.08);
+	overflow: hidden;
+}
+
+.zaza-review::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 0;
+	height: 4px;
+	background: linear-gradient(90deg, var(--zaza-accent), var(--zaza-rose));
+}
+
+.zaza-review::after {
+	content: "\201C";
+	position: absolute;
+	right: 22px;
+	bottom: -22px;
+	color: rgba(17, 20, 19, 0.05);
+	font-size: 7rem;
+	font-weight: 900;
+	line-height: 1;
 }
 
 .zaza-review p {
+	position: relative;
+	z-index: 1;
 	margin: 0 0 24px;
 	color: #303733;
 	font-size: 1.05rem;
@@ -897,6 +961,8 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 }
 
 .zaza-review strong {
+	position: relative;
+	z-index: 1;
 	color: var(--zaza-ink);
 }
 
@@ -1186,6 +1252,11 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 		padding: 58px 0;
 	}
 
+	.zaza-section.zaza-reviews {
+		width: 100vw;
+		padding: 54px 20px 68px;
+	}
+
 	.zaza-section__header {
 		display: block;
 	}
@@ -1207,6 +1278,10 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 
 	.zaza-footer__nav {
 		justify-content: flex-start;
+	}
+
+	.zaza-trust-strip {
+		padding: 20px 14px;
 	}
 
 	.zaza-product-grid,
