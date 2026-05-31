@@ -140,8 +140,8 @@ if ( ! function_exists( 'zaza_home_prepare_hero_slides' ) ) {
 		if ( empty( $prepared_slides ) ) {
 			$prepared_slides[] = array(
 				'image'        => zaza_home_placeholder_image(),
-				'kicker'       => esc_html__( 'New Drop', 'child-theme' ),
-				'title'        => esc_html__( 'New Arrivals', 'child-theme' ),
+				'kicker'       => '',
+				'title'        => esc_html__( 'Welcome to The Zaza Club', 'child-theme' ),
 				'button_label' => esc_html__( 'Shop Now', 'child-theme' ),
 				'button_url'   => zaza_home_shop_url(),
 			);
@@ -439,21 +439,21 @@ $zaza_hero_slides = array(
 	array(
 		'image'        => 'https://thezazaclub.com/wp-content/uploads/2026/05/ZAZA_Web_Slider_3.0_4g_DESKTOP_ALT.jpg',
 		'kicker'       => '',
-		'title'        => '',
+		'title'        => esc_html__( 'Welcome to The Zaza Club', 'child-theme' ),
 		'button_label' => esc_html__( 'Get Deal', 'child-theme' ),
 		'button_url'   => 'https://thezazaclub.com/product-category/flower/',
 	),
 	array(
 		'image'        => 'https://thezazaclub.com/wp-content/uploads/2026/05/ZAZA_Web_Slider_3.0_Gummies_Desktop.jpg',
 		'kicker'       => '',
-		'title'        => '',
+		'title'        => esc_html__( 'Welcome to The Zaza Club', 'child-theme' ),
 		'button_label' => esc_html__( 'Shop Gummies', 'child-theme' ),
 		'button_url'   => 'https://thezazaclub.com/product-category/edibles/',
 	),
 	array(
 		'image'        => 'https://thezazaclub.com/wp-content/uploads/2026/05/ZAZA_Web_Littles.jpg',
 		'kicker'       => '',
-		'title'        => '',
+		'title'        => esc_html__( 'Welcome to The Zaza Club', 'child-theme' ),
 		'button_label' => esc_html__( 'Shop Littles', 'child-theme' ),
 		'button_url'   => 'https://thezazaclub.com/product-category/smalls/',
 	),
@@ -503,7 +503,6 @@ get_header();
 			<span class="zaza-header__brand-mark"><?php echo esc_html__( 'Z', 'child-theme' ); ?></span>
 			<span class="zaza-header__brand-copy">
 				<span class="zaza-header__brand-name"><?php echo esc_html__( 'The Zaza Club', 'child-theme' ); ?></span>
-				<span class="zaza-header__brand-subtitle"><?php echo esc_html__( 'Welcome to the Club', 'child-theme' ); ?></span>
 			</span>
 		</a>
 

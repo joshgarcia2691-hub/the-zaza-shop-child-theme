@@ -2,11 +2,6 @@ body.zaza-modal-lock {
 	overflow: hidden;
 }
 
-body.home .wp-site-blocks > header.wp-block-template-part:first-child,
-body.front-page .wp-site-blocks > header.wp-block-template-part:first-child {
-	display: none;
-}
-
 .zaza-home,
 .zaza-entry-popups,
 .zaza-header {
@@ -106,8 +101,7 @@ body.front-page .wp-site-blocks > header.wp-block-template-part:first-child {
 	gap: 2px;
 }
 
-.zaza-header__brand-name,
-.zaza-header__brand-subtitle {
+.zaza-header__brand-name {
 	display: block;
 	white-space: nowrap;
 }
@@ -117,13 +111,6 @@ body.front-page .wp-site-blocks > header.wp-block-template-part:first-child {
 	font-weight: 900;
 	line-height: 1.1;
 	text-transform: uppercase;
-}
-
-.zaza-header__brand-subtitle {
-	color: rgba(255, 255, 255, 0.66);
-	font-size: 0.75rem;
-	font-weight: 700;
-	line-height: 1.2;
 }
 
 .zaza-nav {
@@ -477,7 +464,7 @@ body.front-page .wp-site-blocks > header.wp-block-template-part:first-child {
 	inset: 0;
 	z-index: 0;
 	background-color: var(--zaza-charcoal);
-	background-image: radial-gradient(circle at center, rgba(5, 7, 6, 0.16), rgba(5, 7, 6, 0.62)), linear-gradient(180deg, rgba(5, 7, 6, 0.2), rgba(5, 7, 6, 0.36)), var(--zaza-slide-image);
+	background-image: var(--zaza-slide-image);
 	background-position: center;
 	background-size: cover;
 	transform: scale(1.03);
@@ -489,7 +476,8 @@ body.front-page .wp-site-blocks > header.wp-block-template-part:first-child {
 	position: absolute;
 	inset: 0;
 	z-index: 0;
-	background: linear-gradient(180deg, rgba(5, 7, 6, 0.1), rgba(5, 7, 6, 0.18));
+	background: linear-gradient(180deg, rgba(5, 7, 6, 0.04), rgba(5, 7, 6, 0.12));
+	pointer-events: none;
 }
 
 .zaza-hero__slide.is-active {
@@ -1068,10 +1056,6 @@ body.front-page .wp-site-blocks > header.wp-block-template-part:first-child {
 
 	.zaza-header__brand-name {
 		font-size: 0.88rem;
-	}
-
-	.zaza-header__brand-subtitle {
-		font-size: 0.7rem;
 	}
 
 	.zaza-modal__panel {

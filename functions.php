@@ -52,3 +52,32 @@ function zaza_child_enqueue_home_assets() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'zaza_child_enqueue_home_assets', 20 );
+
+/**
+ * Hide the parent block-theme title/header where the custom Zaza header is used
+ * or where product category pages otherwise show the oversized site title.
+ */
+function zaza_child_hide_parent_theme_title() {
+	if ( ! is_front_page() && ! is_tax( 'product_cat' ) ) {
+		return;
+	}
+	?>
+	<style id="zaza-parent-title-cleanup">
+		body.home .wp-site-blocks > header.wp-block-template-part:first-child,
+		body.front-page .wp-site-blocks > header.wp-block-template-part:first-child,
+		body.tax-product_cat .wp-site-blocks > header.wp-block-template-part:first-child,
+		body.product_cat .wp-site-blocks > header.wp-block-template-part:first-child,
+		body.home .wp-site-blocks > .wp-block-template-part:first-child,
+		body.front-page .wp-site-blocks > .wp-block-template-part:first-child,
+		body.tax-product_cat .wp-site-blocks > .wp-block-template-part:first-child,
+		body.product_cat .wp-site-blocks > .wp-block-template-part:first-child,
+		body.home header.wp-block-template-part .wp-block-site-title,
+		body.front-page header.wp-block-template-part .wp-block-site-title,
+		body.tax-product_cat header.wp-block-template-part .wp-block-site-title,
+		body.product_cat header.wp-block-template-part .wp-block-site-title {
+			display: none !important;
+		}
+	</style>
+	<?php
+}
+add_action( 'wp_head', 'zaza_child_hide_parent_theme_title', 5 );
