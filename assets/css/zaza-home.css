@@ -2,6 +2,17 @@ body.zaza-modal-lock {
 	overflow: hidden;
 }
 
+body:has(.zaza-header) > header:not(.zaza-header),
+body:has(.zaza-header) .wp-site-blocks > header:not(.zaza-header),
+body:has(.zaza-header) .wp-site-blocks > .wp-block-template-part:first-child,
+body:has(.zaza-header) .wp-site-blocks > .wp-block-group:first-child:has(.wp-block-site-title),
+body:has(.zaza-header) .wp-block-site-title,
+body:has(.zaza-header) .wp-block-site-title a,
+body:has(.zaza-header) .wp-block-post-title:first-child {
+	display: none !important;
+	visibility: hidden !important;
+}
+
 .zaza-home,
 .zaza-entry-popups,
 .zaza-header {

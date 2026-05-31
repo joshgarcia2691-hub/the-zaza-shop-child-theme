@@ -64,12 +64,17 @@ function zaza_child_hide_parent_theme_title() {
 	?>
 	<style id="zaza-parent-title-cleanup">
 		<?php if ( is_front_page() ) : ?>
+		body > header:not(.zaza-header),
 		.wp-site-blocks > header.wp-block-template-part:first-child,
-		.wp-site-blocks > .wp-block-template-part:first-child {
+		.wp-site-blocks > header:not(.zaza-header),
+		.wp-site-blocks > .wp-block-template-part:first-child,
+		.wp-site-blocks > .wp-block-group:first-child:has(.wp-block-site-title) {
 			display: none !important;
 		}
 		<?php endif; ?>
 
+		.wp-block-site-title,
+		.wp-block-site-title a,
 		.wp-site-blocks header .wp-block-site-title,
 		.wp-site-blocks header .wp-block-site-title a,
 		.wp-site-blocks .wp-block-template-part .wp-block-site-title,
@@ -81,6 +86,7 @@ function zaza_child_hide_parent_theme_title() {
 		}
 
 		<?php if ( is_front_page() ) : ?>
+		.wp-block-post-title:first-child,
 		.wp-site-blocks .wp-block-post-title:first-child,
 		.wp-site-blocks > main .wp-block-post-title:first-child {
 			display: none !important;
