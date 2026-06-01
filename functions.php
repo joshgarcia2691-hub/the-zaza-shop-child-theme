@@ -23,6 +23,23 @@ function zaza_child_register_menus() {
 add_action( 'after_setup_theme', 'zaza_child_register_menus' );
 
 /**
+ * Force the coded homepage template for the front page.
+ *
+ * Twenty Twenty-Four is a block theme, so this prevents the parent block
+ * homepage template from taking over when WP Pusher refreshes the child theme.
+ */
+function zaza_child_force_front_page_template( $template ) {
+	if ( ! is_front_page() ) {
+		return $template;
+	}
+
+	$front_page_template = get_stylesheet_directory() . '/front-page.php';
+
+	return file_exists( $front_page_template ) ? $front_page_template : $template;
+}
+add_filter( 'template_include', 'zaza_child_force_front_page_template', 99 );
+
+/**
  * Enqueue custom homepage assets only on the front page.
  */
 function zaza_child_enqueue_home_assets() {
