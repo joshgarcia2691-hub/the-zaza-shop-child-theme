@@ -502,24 +502,24 @@ $zaza_products = zaza_home_get_products( 8 );
 $zaza_hero_slides = array(
 	array(
 		'image'        => 'https://thezazaclub.com/wp-content/uploads/2026/05/ZAZA_Web_Slider_3.0_4g_DESKTOP_ALT.jpg',
-		'kicker'       => '',
-		'title'        => esc_html__( 'Welcome to The Zaza Club', 'child-theme' ),
-		'button_label' => esc_html__( 'Get Deal', 'child-theme' ),
-		'button_url'   => 'https://thezazaclub.com/product-category/flower/',
+		'kicker'       => esc_html__( 'Buy One Get One', 'child-theme' ),
+		'title'        => esc_html__( '4G Flower', 'child-theme' ),
+		'button_label' => esc_html__( 'Get Deal!', 'child-theme' ),
+		'button_url'   => zaza_get_product_category_url( 'flower' ),
 	),
 	array(
 		'image'        => 'https://thezazaclub.com/wp-content/uploads/2026/05/ZAZA_Web_Slider_3.0_Gummies_Desktop.jpg',
-		'kicker'       => '',
-		'title'        => esc_html__( 'Welcome to The Zaza Club', 'child-theme' ),
+		'kicker'       => esc_html__( 'New Drop', 'child-theme' ),
+		'title'        => esc_html__( 'Gummies', 'child-theme' ),
 		'button_label' => esc_html__( 'Shop Gummies', 'child-theme' ),
-		'button_url'   => 'https://thezazaclub.com/product-category/edibles/',
+		'button_url'   => zaza_get_product_category_url( 'edibles' ),
 	),
 	array(
 		'image'        => 'https://thezazaclub.com/wp-content/uploads/2026/05/ZAZA_Web_Littles.jpg',
-		'kicker'       => '',
-		'title'        => esc_html__( 'Welcome to The Zaza Club', 'child-theme' ),
+		'kicker'       => esc_html__( 'Small Buds', 'child-theme' ),
+		'title'        => esc_html__( 'Littles', 'child-theme' ),
 		'button_label' => esc_html__( 'Shop Littles', 'child-theme' ),
-		'button_url'   => 'https://thezazaclub.com/product-category/smalls/',
+		'button_url'   => zaza_get_product_category_url( 'smalls' ),
 	),
 );
 

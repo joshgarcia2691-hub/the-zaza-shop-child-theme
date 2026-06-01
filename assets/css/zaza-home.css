@@ -3181,3 +3181,110 @@ body.single-product .woocommerce div.product form.cart .quantity {
 		font-size: 0.68rem;
 	}
 }
+
+/* Hero/display type correction: compact condensed promo style like the approved 4G Flower reference. */
+body.zaza-storefront-page,
+.zaza-home,
+.zaza-header {
+	--zaza-display-font: Impact, Haettenschweiler, "Arial Narrow", "Roboto Condensed", "Helvetica Neue Condensed", sans-serif;
+}
+
+.zaza-hero {
+	height: clamp(430px, 36vw, 650px);
+	min-height: 0;
+}
+
+.zaza-hero__inner {
+	min-height: 100%;
+	padding: clamp(52px, 5.4vw, 92px) 0 clamp(54px, 5.5vw, 94px);
+}
+
+.zaza-hero__copy {
+	max-width: min(560px, 74vw);
+	gap: 0;
+	padding: 0;
+}
+
+.zaza-hero .zaza-eyebrow {
+	margin: 0 0 12px;
+	color: #050706;
+	font-family: var(--zaza-display-font);
+	font-size: clamp(0.72rem, 0.95vw, 0.95rem);
+	font-weight: 900;
+	line-height: 1;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.28);
+}
+
+.zaza-hero__headline {
+	color: #050706;
+	font-family: var(--zaza-display-font);
+	font-size: clamp(3.1rem, 5vw, 5.2rem);
+	font-weight: 900;
+	letter-spacing: 0;
+	line-height: 0.9;
+	text-transform: uppercase;
+	text-shadow: 0 2px 0 rgba(255, 255, 255, 0.26);
+}
+
+.zaza-hero__button {
+	min-height: 46px;
+	margin-top: 22px;
+	padding: 0 38px;
+	border-radius: 999px;
+	background: #ffb72f;
+	color: #050706;
+	font-family: var(--zaza-display-font);
+	font-size: 0.86rem;
+	font-weight: 900;
+	letter-spacing: 0;
+	line-height: 1;
+	box-shadow: 0 14px 26px rgba(17, 20, 19, 0.18);
+}
+
+.zaza-hero__button:hover,
+.zaza-hero__button:focus-visible {
+	background: #ffc84f;
+	color: #050706;
+	transform: translateY(-1px);
+}
+
+@media (max-width: 900px) {
+	.zaza-hero {
+		height: clamp(340px, 58vw, 480px);
+	}
+
+	.zaza-hero__headline {
+		font-size: clamp(2.55rem, 8vw, 3.7rem);
+	}
+}
+
+@media (max-width: 600px) {
+	.zaza-hero {
+		height: clamp(286px, 72vw, 360px);
+	}
+
+	.zaza-hero__inner {
+		padding: 40px 0 58px;
+	}
+
+	.zaza-hero__copy {
+		max-width: min(320px, 86vw);
+	}
+
+	.zaza-hero .zaza-eyebrow {
+		margin-bottom: 8px;
+		font-size: 0.68rem;
+	}
+
+	.zaza-hero__headline {
+		font-size: clamp(2.15rem, 11vw, 3rem);
+		line-height: 0.92;
+	}
+
+	.zaza-hero__button {
+		min-height: 38px;
+		margin-top: 15px;
+		padding: 0 24px;
+		font-size: 0.76rem;
+	}
+}

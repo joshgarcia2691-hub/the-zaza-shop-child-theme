@@ -8,7 +8,7 @@ body.zaza-product-archive-page {
 	--zaza-shop-black: #030504;
 	--zaza-shop-accent: #b7f16f;
 	--zaza-shop-gold: #f6cf43;
-	--zaza-shop-display-font: "Arial Narrow", "Roboto Condensed", "Helvetica Neue Condensed", Impact, Haettenschweiler, sans-serif;
+	--zaza-shop-display-font: Impact, Haettenschweiler, "Arial Narrow", "Roboto Condensed", "Helvetica Neue Condensed", sans-serif;
 	--zaza-shop-body-font: Arial, Helvetica, sans-serif;
 	background: var(--zaza-shop-soft);
 	color: var(--zaza-shop-ink);
