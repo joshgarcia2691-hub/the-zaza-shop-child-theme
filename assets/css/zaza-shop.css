@@ -1,15 +1,15 @@
-/* Zaza WooCommerce archive polish: shop, product categories, and product taxonomies only. */
+/* Zaza WooCommerce archive system: shop, product categories, and product taxonomies only. */
 body.zaza-product-archive-page {
-	--zaza-shop-ink: #111413;
-	--zaza-shop-muted: #626b66;
-	--zaza-shop-line: rgba(17, 20, 19, 0.12);
-	--zaza-shop-soft: #f6f7f3;
+	--zaza-shop-ink: #111312;
+	--zaza-shop-muted: #70736f;
+	--zaza-shop-line: rgba(17, 19, 18, 0.16);
+	--zaza-shop-soft: #f7f7f4;
 	--zaza-shop-paper: #ffffff;
-	--zaza-shop-black: #030504;
-	--zaza-shop-accent: #b7f16f;
-	--zaza-shop-gold: #f6cf43;
-	--zaza-shop-display-font: Impact, Haettenschweiler, "Arial Narrow", "Roboto Condensed", "Helvetica Neue Condensed", sans-serif;
-	--zaza-shop-body-font: Arial, Helvetica, sans-serif;
+	--zaza-shop-charcoal: #242424;
+	--zaza-shop-black: #050706;
+	--zaza-shop-accent: #ffb72f;
+	--zaza-shop-display-font: "Bebas Neue", "Arial Narrow", "Roboto Condensed", sans-serif;
+	--zaza-shop-body-font: "DM Sans", Arial, Helvetica, sans-serif;
 	background: var(--zaza-shop-soft);
 	color: var(--zaza-shop-ink);
 	font-family: var(--zaza-shop-body-font);
@@ -28,97 +28,122 @@ body.zaza-product-archive-page .wp-site-blocks > .wp-block-group:first-child:has
 }
 
 body.zaza-product-archive-page .wp-site-blocks > main {
-	padding: 0 max(16px, calc((100vw - 1440px) / 2)) clamp(60px, 6vw, 92px);
+	width: 100%;
+	max-width: none;
+	margin: 0;
+	padding: 0 0 clamp(64px, 7vw, 108px);
 }
 
-body.zaza-product-archive-page .woocommerce {
-	max-width: min(1440px, calc(100vw - 40px));
-	margin: 0 auto;
+body.zaza-product-archive-page .woocommerce,
+body.zaza-product-archive-page .wp-block-woocommerce-product-collection,
+body.zaza-product-archive-page .wp-block-woocommerce-store-notices,
+body.zaza-product-archive-page .wc-block-store-notices {
+	font-family: var(--zaza-shop-body-font);
 }
 
 body.zaza-product-archive-page .woocommerce-breadcrumb,
-body.zaza-product-archive-page .woocommerce-products-header,
-body.zaza-product-archive-page .wp-block-woocommerce-breadcrumbs,
-body.zaza-product-archive-page .wc-block-breadcrumbs,
-body.zaza-product-archive-page .wp-block-query-title {
-	text-align: center;
-}
-
-body.zaza-product-archive-page .woocommerce-breadcrumb {
-	max-width: 920px;
-	margin: 0 auto;
-	padding: 28px 0 0;
-	color: var(--zaza-shop-muted);
-	font-size: 0.76rem;
-	font-weight: 700;
-	line-height: 1.5;
-	text-transform: uppercase;
-}
-
 body.zaza-product-archive-page .wp-block-woocommerce-breadcrumbs,
 body.zaza-product-archive-page .wc-block-breadcrumbs {
-	max-width: 920px;
+	width: min(100% - 40px, 1380px);
 	margin: 0 auto;
-	padding: 28px 0 0;
+	padding: clamp(34px, 4vw, 58px) 0 0;
 	color: var(--zaza-shop-muted);
-	font-size: 0.76rem;
-	font-weight: 700;
-	line-height: 1.5;
+	font-family: var(--zaza-shop-body-font);
+	font-size: 0.82rem;
+	font-weight: 800;
+	line-height: 1.35;
+	text-align: left;
 	text-transform: uppercase;
 }
 
-body.zaza-product-archive-page .woocommerce-breadcrumb a {
-	color: var(--zaza-shop-ink);
-	text-decoration-thickness: 1px;
-	text-underline-offset: 4px;
-}
-
+body.zaza-product-archive-page .woocommerce-breadcrumb a,
 body.zaza-product-archive-page .wp-block-woocommerce-breadcrumbs a,
 body.zaza-product-archive-page .wc-block-breadcrumbs a {
 	color: var(--zaza-shop-ink);
 	text-decoration-thickness: 1px;
-	text-underline-offset: 4px;
+	text-underline-offset: 5px;
 }
 
-body.zaza-product-archive-page .woocommerce-products-header {
-	max-width: 980px;
-	margin: 0 auto 24px;
-	padding: 10px 0 28px;
+body.zaza-product-archive-page .woocommerce-products-header,
+body.zaza-product-archive-page .wp-block-query-title {
+	width: min(100% - 40px, 1380px);
+	margin: 0 auto;
+	padding: 12px 0 clamp(34px, 4vw, 54px);
+	border-bottom: 1px solid var(--zaza-shop-line);
+	text-align: left;
+}
+
+.zaza-shop-intro {
+	width: min(100% - 40px, 1380px);
+	margin: 0 auto;
+	padding: 12px 0 clamp(34px, 4vw, 54px);
+	border-bottom: 1px solid var(--zaza-shop-line);
+}
+
+.zaza-shop-intro .wp-block-query-title {
+	width: auto;
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
 
 body.zaza-product-archive-page .woocommerce-products-header__title.page-title,
 body.zaza-product-archive-page h1.page-title,
 body.zaza-product-archive-page .wp-block-query-title {
-	margin: 0;
 	color: var(--zaza-shop-ink);
 	font-family: var(--zaza-shop-display-font);
-	font-size: clamp(2.2rem, 3.2vw, 3.55rem);
-	font-weight: 900;
-	letter-spacing: 0;
-	line-height: 0.95;
-	text-align: center;
+	font-size: clamp(2.6rem, 4.2vw, 4.8rem);
+	font-weight: 400;
+	letter-spacing: 0.02em;
+	line-height: 0.9;
 	text-transform: uppercase;
 }
 
-body.zaza-product-archive-page .wp-block-query-title {
-	display: block !important;
-	max-width: 980px;
-	margin: 0 auto 24px;
-	padding: 10px 0 28px;
-	visibility: visible !important;
+.zaza-shop-intro__description {
+	max-width: 800px;
+	margin-top: 18px;
+	color: var(--zaza-shop-muted);
+	font-family: var(--zaza-shop-body-font);
+	font-size: 0.98rem;
+	font-weight: 400;
+	line-height: 1.7;
+}
+
+.zaza-shop-intro__description > :first-child {
+	margin-top: 0;
+}
+
+.zaza-shop-intro__description > :last-child {
+	margin-bottom: 0;
 }
 
 body.zaza-product-archive-page .term-description {
-	max-width: 720px;
-	margin: 16px auto 0;
+	width: min(100% - 40px, 760px);
+	margin: -34px auto clamp(38px, 4vw, 58px);
 	color: var(--zaza-shop-muted);
-	font-size: 1rem;
-	line-height: 1.6;
-	text-align: center;
+	font-family: var(--zaza-shop-body-font);
+	font-size: 0.98rem;
+	font-weight: 400;
+	line-height: 1.7;
+	text-align: left;
 }
 
-body.zaza-product-archive-page .woocommerce-notices-wrapper {
-	margin: 0 auto 18px;
+body.zaza-product-archive-page .woocommerce-notices-wrapper,
+body.zaza-product-archive-page .wc-block-store-notices {
+	width: min(100% - 40px, 1380px);
+	margin: 0 auto;
+}
+
+body.zaza-product-archive-page .wp-site-blocks > main > .wp-block-group.alignwide:has(.wc-block-product-results-count),
+body.zaza-product-archive-page .wp-site-blocks > main > .wp-block-group.alignwide.is-content-justification-space-between {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: min(100% - 40px, 1380px);
+	max-width: 1380px;
+	margin: clamp(24px, 3vw, 42px) auto 0;
+	padding: 0;
+	gap: 20px;
 }
 
 body.zaza-product-archive-page .woocommerce-result-count,
@@ -126,47 +151,191 @@ body.zaza-product-archive-page .woocommerce-ordering,
 body.zaza-product-archive-page .wc-block-product-results-count,
 body.zaza-product-archive-page .wp-block-woocommerce-catalog-sorting {
 	float: none;
-	display: inline-flex;
+	display: flex;
 	align-items: center;
-	margin: 0 0 24px;
+	margin: 0;
+	color: var(--zaza-shop-ink);
+	font-family: var(--zaza-shop-body-font);
+	font-size: 0.88rem;
+	font-weight: 600;
+	line-height: 1.4;
 }
 
-body.zaza-product-archive-page .woocommerce-result-count,
-body.zaza-product-archive-page .wc-block-product-results-count {
-	min-height: 44px;
-	margin-right: 18px;
-	color: var(--zaza-shop-muted);
-	font-size: 0.9rem;
-	line-height: 1.4;
+body.zaza-product-archive-page .woocommerce-ordering::before,
+body.zaza-product-archive-page .wp-block-woocommerce-catalog-sorting::before {
+	content: "Sort by:";
+	margin-right: 10px;
+	color: var(--zaza-shop-ink);
+	font-size: 0.86rem;
+	font-weight: 800;
 }
 
 body.zaza-product-archive-page .woocommerce-ordering select,
 body.zaza-product-archive-page .wp-block-woocommerce-catalog-sorting select {
-	min-height: 44px;
+	min-height: 42px;
 	max-width: 100%;
-	padding: 0 38px 0 14px;
-	border: 1px solid var(--zaza-shop-line);
+	padding: 0 36px 0 14px;
+	border: 1px solid transparent;
 	border-radius: 999px;
-	background-color: var(--zaza-shop-paper);
+	background-color: var(--zaza-shop-soft);
 	color: var(--zaza-shop-ink);
-	font-size: 0.92rem;
-	font-weight: 700;
+	font-family: var(--zaza-shop-body-font);
+	font-size: 0.86rem;
+	font-weight: 600;
 }
 
-body.zaza-product-archive-page .wp-block-woocommerce-product-collection {
-	max-width: min(1440px, calc(100vw - 40px));
-	margin-right: auto;
-	margin-left: auto;
+.zaza-shop-layout {
+	display: grid;
+	grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+	align-items: start;
+	width: min(100% - 40px, 1380px);
+	margin: clamp(22px, 3vw, 38px) auto 0;
+	gap: clamp(34px, 4vw, 64px);
+}
+
+.zaza-shop-filters {
+	color: var(--zaza-shop-ink);
+	font-family: var(--zaza-shop-body-font);
+}
+
+.zaza-shop-filter,
+.zaza-shop-filter-widget {
+	padding: 0 0 28px;
+	margin: 0 0 28px;
+	border-bottom: 1px solid var(--zaza-shop-line);
+}
+
+.zaza-shop-filter__title,
+.zaza-shop-filter-widget .widget-title {
+	margin: 0 0 18px;
+	color: var(--zaza-shop-ink);
+	font-family: var(--zaza-shop-display-font);
+	font-size: clamp(1.45rem, 2vw, 2rem);
+	font-weight: 400;
+	letter-spacing: 0.02em;
+	line-height: 1;
+	text-transform: uppercase;
+}
+
+.zaza-shop-filter__list,
+.zaza-shop-filter-widget ul {
+	display: grid;
+	gap: 13px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.zaza-shop-filter__link,
+.zaza-shop-filter-widget a {
+	display: grid;
+	grid-template-columns: 20px minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 10px;
+	color: var(--zaza-shop-ink);
+	font-size: 0.9rem;
+	font-weight: 500;
+	line-height: 1.35;
+	text-decoration: none;
+}
+
+.zaza-shop-filter__link:hover,
+.zaza-shop-filter__link:focus-visible,
+.zaza-shop-filter__link.is-active,
+.zaza-shop-filter-widget a:hover,
+.zaza-shop-filter-widget a:focus-visible {
+	color: var(--zaza-shop-black);
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 4px;
+}
+
+.zaza-shop-filter__box {
+	width: 18px;
+	height: 18px;
+	border: 1px solid rgba(17, 19, 18, 0.34);
+	border-radius: 3px;
+	background: transparent;
+}
+
+.zaza-shop-filter__link.is-active .zaza-shop-filter__box {
+	border-color: var(--zaza-shop-black);
+	background: var(--zaza-shop-black);
+	box-shadow: inset 0 0 0 4px var(--zaza-shop-soft);
+}
+
+.zaza-shop-filter__count {
+	color: var(--zaza-shop-muted);
+	font-size: 0.82rem;
+	font-weight: 500;
+}
+
+.zaza-shop-price-filter {
+	display: grid;
+	gap: 14px;
+}
+
+.zaza-shop-price-filter__fields {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 10px;
+}
+
+.zaza-shop-price-filter label {
+	display: grid;
+	gap: 6px;
+	color: var(--zaza-shop-muted);
+	font-size: 0.76rem;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.zaza-shop-price-filter input {
+	width: 100%;
+	min-height: 42px;
+	padding: 0 12px;
+	border: 1px solid var(--zaza-shop-line);
+	border-radius: 999px;
+	background: #eeeeec;
+	color: var(--zaza-shop-ink);
+	font-family: var(--zaza-shop-body-font);
+	font-size: 0.88rem;
+	font-weight: 600;
+}
+
+.zaza-shop-price-filter button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: max-content;
+	min-height: 42px;
+	padding: 0 20px;
+	border: 0;
+	border-radius: 999px;
+	background: var(--zaza-shop-black);
+	color: #ffffff;
+	font-family: var(--zaza-shop-display-font);
+	font-size: 1rem;
+	font-weight: 400;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+.zaza-shop-results {
+	min-width: 0;
 }
 
 body.zaza-product-archive-page .woocommerce ul.products,
 body.zaza-product-archive-page .wc-block-product-template {
 	clear: both;
-	display: grid;
-	grid-template-columns: repeat(4, minmax(0, 1fr));
-	gap: clamp(16px, 2vw, 28px);
-	margin: 0;
-	padding: 0;
+	display: grid !important;
+	grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+	gap: clamp(34px, 4vw, 58px) clamp(20px, 2.6vw, 42px) !important;
+	width: 100%;
+	margin: 0 !important;
+	padding: 0 !important;
+	list-style: none;
 }
 
 body.zaza-product-archive-page .woocommerce ul.products::before,
@@ -179,35 +348,23 @@ body.zaza-product-archive-page .wc-block-product-template::after {
 
 body.zaza-product-archive-page .woocommerce ul.products li.product,
 body.zaza-product-archive-page .wc-block-product {
-	float: none;
+	float: none !important;
 	display: flex;
 	flex-direction: column;
-	width: auto;
+	width: auto !important;
 	min-width: 0;
-	margin: 0;
-	padding: 0 0 18px;
-	border: 1px solid rgba(17, 20, 19, 0.1);
-	border-radius: 8px;
-	background: var(--zaza-shop-paper);
-	box-shadow: 0 14px 36px rgba(17, 20, 19, 0.08);
-	overflow: hidden;
-	text-align: center;
-	transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
-}
-
-body.zaza-product-archive-page .woocommerce ul.products li.product:hover,
-body.zaza-product-archive-page .wc-block-product:hover {
-	border-color: rgba(17, 20, 19, 0.24);
-	box-shadow: 0 20px 46px rgba(17, 20, 19, 0.13);
-	transform: translateY(-3px);
+	margin: 0 !important;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	box-shadow: none;
+	text-align: left;
+	overflow: visible;
 }
 
 body.zaza-product-archive-page .woocommerce ul.products li.product a.woocommerce-LoopProduct-link,
 body.zaza-product-archive-page .wc-block-product .wp-block-woocommerce-product-image > a {
-	display: flex;
-	flex: 1 1 auto;
-	flex-direction: column;
-	min-height: 100%;
+	display: block;
 	color: var(--zaza-shop-ink);
 	text-decoration: none;
 }
@@ -215,8 +372,8 @@ body.zaza-product-archive-page .wc-block-product .wp-block-woocommerce-product-i
 body.zaza-product-archive-page .wp-block-woocommerce-product-image,
 body.zaza-product-archive-page .wc-block-components-product-image {
 	width: 100%;
-	margin: 0;
-	background: var(--zaza-shop-paper);
+	margin: 0 0 18px !important;
+	background: transparent;
 }
 
 body.zaza-product-archive-page .wp-block-woocommerce-product-image > a,
@@ -230,20 +387,20 @@ body.zaza-product-archive-page .woocommerce ul.products li.product a img,
 body.zaza-product-archive-page .wc-block-product .wp-block-woocommerce-product-image img,
 body.zaza-product-archive-page .wc-block-product .wc-block-components-product-image img {
 	display: block;
-	width: 100%;
-	height: 100%;
+	width: 100% !important;
+	height: 100% !important;
 	aspect-ratio: 1 / 1;
-	margin: 0;
-	padding: clamp(10px, 1.4vw, 22px);
-	background: var(--zaza-shop-paper);
+	margin: 0 !important;
+	padding: clamp(6px, 1vw, 14px);
+	background: transparent;
 	object-fit: contain !important;
-	transition: transform 200ms ease;
+	transition: transform 180ms ease;
 }
 
 body.zaza-product-archive-page .woocommerce ul.products li.product:hover a img,
 body.zaza-product-archive-page .wc-block-product:hover .wp-block-woocommerce-product-image img,
 body.zaza-product-archive-page .wc-block-product:hover .wc-block-components-product-image img {
-	transform: scale(1.035);
+	transform: translateY(-4px) scale(1.025);
 }
 
 body.zaza-product-archive-page .woocommerce ul.products li.product .woocommerce-loop-product__title,
@@ -251,15 +408,17 @@ body.zaza-product-archive-page .wc-block-product .wp-block-post-title,
 body.zaza-product-archive-page .wc-block-product .wp-block-post-title a {
 	display: -webkit-box;
 	min-height: 2.4em;
-	margin: 0;
-	padding: 13px 14px 0;
+	margin: 0 !important;
+	padding: 0 !important;
 	overflow: hidden;
 	color: var(--zaza-shop-ink);
 	font-family: var(--zaza-shop-display-font);
-	font-size: clamp(0.98rem, 1.15vw, 1.18rem);
-	font-weight: 900;
-	letter-spacing: 0;
-	line-height: 1.18 !important;
+	font-size: clamp(1.02rem, 1.18vw, 1.32rem) !important;
+	font-weight: 400;
+	letter-spacing: 0.015em;
+	line-height: 1.08 !important;
+	text-align: left;
+	text-decoration: none;
 	text-transform: uppercase;
 	-webkit-box-orient: vertical;
 	-webkit-line-clamp: 2;
@@ -267,24 +426,34 @@ body.zaza-product-archive-page .wc-block-product .wp-block-post-title a {
 
 body.zaza-product-archive-page .wc-block-product .wp-block-post-title a {
 	color: inherit;
-	text-decoration: none;
+}
+
+body.zaza-product-archive-page .woocommerce ul.products li.product .star-rating,
+body.zaza-product-archive-page .wc-block-components-product-rating {
+	margin: 9px 0 0;
+	color: #f0b400;
+	font-size: 0.86rem;
 }
 
 body.zaza-product-archive-page .woocommerce ul.products li.product .price,
 body.zaza-product-archive-page .wc-block-product .wp-block-woocommerce-product-price,
 body.zaza-product-archive-page .wc-block-product .wc-block-components-product-price {
 	display: block;
-	margin: 9px 14px 15px !important;
+	margin: 10px 0 0 !important;
 	color: var(--zaza-shop-black);
-	font-size: 0.96rem;
-	font-weight: 900;
+	font-family: var(--zaza-shop-body-font);
+	font-size: 0.94rem !important;
+	font-weight: 800;
+	line-height: 1.3;
+	text-align: left;
 }
 
 body.zaza-product-archive-page .woocommerce ul.products li.product .button,
 body.zaza-product-archive-page .wc-block-product .wp-block-woocommerce-product-button,
 body.zaza-product-archive-page .wc-block-product .wc-block-components-product-button {
 	width: 100%;
-	margin-top: auto;
+	margin-top: 14px !important;
+	text-align: left;
 }
 
 body.zaza-product-archive-page .woocommerce ul.products li.product .button,
@@ -293,17 +462,18 @@ body.zaza-product-archive-page .wc-block-product .wc-block-components-product-bu
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: calc(100% - 28px);
-	min-height: 42px;
-	margin: auto 14px 0 !important;
-	padding: 0 12px;
-	border-radius: 6px;
+	width: auto;
+	min-height: 38px;
+	margin: 0 !important;
+	padding: 0 18px;
+	border: 0;
+	border-radius: 999px;
 	background: var(--zaza-shop-black);
 	color: #ffffff;
 	font-family: var(--zaza-shop-display-font);
-	font-size: 0.86rem;
-	font-weight: 900;
-	letter-spacing: 0;
+	font-size: 0.96rem !important;
+	font-weight: 400;
+	letter-spacing: 0.03em;
 	line-height: 1;
 	text-decoration: none;
 	text-transform: uppercase;
@@ -315,14 +485,14 @@ body.zaza-product-archive-page .wc-block-product .wp-block-button__link:hover,
 body.zaza-product-archive-page .wc-block-product .wp-block-button__link:focus-visible,
 body.zaza-product-archive-page .wc-block-product .wc-block-components-product-button__button:hover,
 body.zaza-product-archive-page .wc-block-product .wc-block-components-product-button__button:focus-visible {
-	background: #1c231f;
+	background: #222625;
 	color: #ffffff;
 	outline: 2px solid var(--zaza-shop-accent);
 	outline-offset: 2px;
 }
 
 body.zaza-product-archive-page .woocommerce nav.woocommerce-pagination {
-	margin-top: clamp(34px, 5vw, 58px);
+	margin-top: clamp(38px, 5vw, 68px);
 }
 
 body.zaza-product-archive-page .woocommerce nav.woocommerce-pagination ul {
@@ -348,85 +518,134 @@ body.zaza-product-archive-page .woocommerce nav.woocommerce-pagination ul li spa
 	background: var(--zaza-shop-paper);
 	color: var(--zaza-shop-ink);
 	font-family: var(--zaza-shop-display-font);
-	font-weight: 900;
+	font-size: 1rem;
+	font-weight: 400;
 	text-decoration: none;
 }
 
 body.zaza-product-archive-page .woocommerce nav.woocommerce-pagination ul li span.current {
-	background: linear-gradient(135deg, var(--zaza-shop-gold), var(--zaza-shop-accent));
+	background: var(--zaza-shop-accent);
 	color: var(--zaza-shop-black);
 }
 
+body.zaza-product-archive-page .wc-block-product-template + .wp-block-query-no-results,
+body.zaza-product-archive-page .wp-block-query-no-results,
+body.zaza-product-archive-page .woocommerce-info {
+	grid-column: 1 / -1;
+	max-width: 720px;
+	margin: 36px auto;
+	color: var(--zaza-shop-ink);
+	font-family: var(--zaza-shop-body-font);
+	text-align: center;
+}
+
 @media (max-width: 1180px) {
+	.zaza-shop-layout {
+		grid-template-columns: minmax(190px, 240px) minmax(0, 1fr);
+		gap: 28px;
+	}
+
 	body.zaza-product-archive-page .woocommerce ul.products,
 	body.zaza-product-archive-page .wc-block-product-template {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
 	}
 }
 
-@media (max-width: 760px) {
-	body.zaza-product-archive-page .wp-site-blocks > main {
-		padding-right: 12px;
-		padding-bottom: 76px;
-		padding-left: 12px;
+@media (max-width: 900px) {
+	body.zaza-product-archive-page .woocommerce-breadcrumb,
+	body.zaza-product-archive-page .wp-block-woocommerce-breadcrumbs,
+	body.zaza-product-archive-page .wc-block-breadcrumbs,
+	body.zaza-product-archive-page .woocommerce-products-header,
+	body.zaza-product-archive-page .wp-block-query-title,
+	.zaza-shop-intro,
+	body.zaza-product-archive-page .wp-site-blocks > main > .wp-block-group.alignwide:has(.wc-block-product-results-count),
+	body.zaza-product-archive-page .wp-site-blocks > main > .wp-block-group.alignwide.is-content-justification-space-between,
+	.zaza-shop-layout {
+		width: min(100% - 28px, 1380px);
 	}
 
-	body.zaza-product-archive-page .woocommerce {
-		max-width: 100%;
+	.zaza-shop-layout {
+		grid-template-columns: 1fr;
+		gap: 24px;
 	}
 
-	body.zaza-product-archive-page .woocommerce-breadcrumb {
-		padding-top: 20px;
-		font-size: 0.68rem;
+	.zaza-shop-filters {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 18px;
 	}
 
-	body.zaza-product-archive-page .woocommerce-products-header {
-		margin-bottom: 18px;
-		padding: 8px 0 22px;
+	.zaza-shop-filter,
+	.zaza-shop-filter-widget {
+		margin: 0;
+		padding: 18px;
+		border: 1px solid var(--zaza-shop-line);
+		border-radius: 8px;
+		background: rgba(255, 255, 255, 0.48);
+	}
+
+	body.zaza-product-archive-page .woocommerce ul.products,
+	body.zaza-product-archive-page .wc-block-product-template {
+		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+		gap: 28px 14px !important;
+	}
+}
+
+@media (max-width: 600px) {
+	body.zaza-product-archive-page .woocommerce-breadcrumb,
+	body.zaza-product-archive-page .wp-block-woocommerce-breadcrumbs,
+	body.zaza-product-archive-page .wc-block-breadcrumbs {
+		padding-top: 28px;
+		font-size: 0.72rem;
+	}
+
+	body.zaza-product-archive-page .woocommerce-products-header,
+	body.zaza-product-archive-page .wp-block-query-title {
+		padding-bottom: 28px;
+	}
+
+	.zaza-shop-intro {
+		padding-bottom: 28px;
 	}
 
 	body.zaza-product-archive-page .woocommerce-products-header__title.page-title,
 	body.zaza-product-archive-page h1.page-title,
 	body.zaza-product-archive-page .wp-block-query-title {
-		font-size: clamp(1.9rem, 8vw, 2.65rem);
-		line-height: 1;
+		font-size: clamp(2.35rem, 13vw, 3.3rem);
+	}
+
+	body.zaza-product-archive-page .wp-site-blocks > main > .wp-block-group.alignwide:has(.wc-block-product-results-count),
+	body.zaza-product-archive-page .wp-site-blocks > main > .wp-block-group.alignwide.is-content-justification-space-between {
+		align-items: stretch;
+		flex-direction: column;
+		gap: 12px;
 	}
 
 	body.zaza-product-archive-page .woocommerce-result-count,
-	body.zaza-product-archive-page .woocommerce-ordering,
-	body.zaza-product-archive-page .wc-block-product-results-count,
-	body.zaza-product-archive-page .wp-block-woocommerce-catalog-sorting {
-		display: flex;
-		width: 100%;
-		margin-right: 0;
+	body.zaza-product-archive-page .wc-block-product-results-count {
+		min-height: 0;
 	}
 
+	body.zaza-product-archive-page .woocommerce-ordering,
+	body.zaza-product-archive-page .wp-block-woocommerce-catalog-sorting,
 	body.zaza-product-archive-page .woocommerce-ordering select,
 	body.zaza-product-archive-page .wp-block-woocommerce-catalog-sorting select {
 		width: 100%;
 	}
 
+	.zaza-shop-filters {
+		grid-template-columns: 1fr;
+	}
+
 	body.zaza-product-archive-page .woocommerce ul.products,
 	body.zaza-product-archive-page .wc-block-product-template {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 10px;
-	}
-
-	body.zaza-product-archive-page .woocommerce ul.products li.product,
-	body.zaza-product-archive-page .wc-block-product {
-		padding-bottom: 11px;
-	}
-
-	body.zaza-product-archive-page .woocommerce ul.products li.product:hover,
-	body.zaza-product-archive-page .wc-block-product:hover {
-		box-shadow: 0 14px 36px rgba(17, 20, 19, 0.08);
-		transform: none;
+		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
 	}
 
 	body.zaza-product-archive-page .woocommerce ul.products li.product a img,
 	body.zaza-product-archive-page .wc-block-product .wp-block-woocommerce-product-image img,
 	body.zaza-product-archive-page .wc-block-product .wc-block-components-product-image img {
-		padding: 8px;
+		padding: 4px;
 	}
 
 	body.zaza-product-archive-page .woocommerce ul.products li.product:hover a img,
@@ -438,27 +657,21 @@ body.zaza-product-archive-page .woocommerce nav.woocommerce-pagination ul li spa
 	body.zaza-product-archive-page .woocommerce ul.products li.product .woocommerce-loop-product__title,
 	body.zaza-product-archive-page .wc-block-product .wp-block-post-title,
 	body.zaza-product-archive-page .wc-block-product .wp-block-post-title a {
-		min-height: 2.45em;
-		padding: 9px 9px 0;
-		font-size: 0.82rem;
-		line-height: 1.2;
+		font-size: 0.96rem !important;
+		line-height: 1.08 !important;
 	}
 
 	body.zaza-product-archive-page .woocommerce ul.products li.product .price,
 	body.zaza-product-archive-page .wc-block-product .wp-block-woocommerce-product-price,
 	body.zaza-product-archive-page .wc-block-product .wc-block-components-product-price {
-		margin: 7px 9px 10px;
-		font-size: 0.8rem;
+		font-size: 0.82rem !important;
 	}
 
 	body.zaza-product-archive-page .woocommerce ul.products li.product .button,
 	body.zaza-product-archive-page .wc-block-product .wp-block-button__link,
 	body.zaza-product-archive-page .wc-block-product .wc-block-components-product-button__button {
-		width: calc(100% - 18px);
-		min-height: 36px;
-		margin-right: 9px;
-		margin-left: 9px;
-		padding: 0 8px;
-		font-size: 0.72rem;
+		min-height: 34px;
+		padding: 0 13px;
+		font-size: 0.82rem !important;
 	}
 }

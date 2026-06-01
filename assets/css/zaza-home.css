@@ -3891,3 +3891,81 @@ body.zaza-storefront-page,
 		padding: 0 22px;
 	}
 }
+
+/* Final font system: Bebas-style top labels, DM Sans dropdowns/body utility text. */
+body.zaza-storefront-page,
+.zaza-home,
+.zaza-header {
+	--zaza-display-font: "Bebas Neue", "Arial Narrow", "Roboto Condensed", sans-serif;
+	--zaza-body-font: "DM Sans", Arial, Helvetica, sans-serif;
+}
+
+.zaza-header__brand-name,
+.zaza-nav-menu > li > a,
+.zaza-header__cart,
+.zaza-hero .zaza-eyebrow,
+.zaza-hero__headline,
+.zaza-hero__button,
+.zaza-section__title,
+.zaza-category-card__title,
+.zaza-product-card__title,
+.zaza-product-card__button,
+.zaza-button {
+	font-family: var(--zaza-display-font);
+	font-weight: 400;
+	letter-spacing: 0.035em;
+}
+
+.zaza-nav-menu .sub-menu a,
+.zaza-entry-popups,
+.zaza-footer,
+.zaza-trust-strip,
+.zaza-review-card,
+.zaza-product-card__price {
+	font-family: var(--zaza-body-font);
+	letter-spacing: 0;
+}
+
+@media (min-width: 901px) {
+	.zaza-nav-menu > li > a {
+		font-size: clamp(1rem, 0.94vw, 1.12rem);
+		line-height: 1;
+	}
+
+	.zaza-nav-menu .sub-menu {
+		min-width: 238px;
+		padding: 14px 0;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 0 0 14px 14px;
+		background: #242424;
+	}
+
+	.zaza-nav-menu .sub-menu a {
+		min-height: 36px;
+		padding: 0 22px;
+		border-radius: 0;
+		color: rgba(255, 255, 255, 0.88);
+		font-size: 0.82rem;
+		font-weight: 700;
+		line-height: 1.25;
+		text-transform: uppercase;
+	}
+
+	.zaza-nav-menu .sub-menu a:hover,
+	.zaza-nav-menu .sub-menu a:focus-visible {
+		background: rgba(255, 255, 255, 0.08);
+		color: #ffffff;
+	}
+
+	.zaza-dropdown-toggle {
+		width: 20px;
+		height: 24px;
+		margin-left: -14px;
+	}
+
+	.zaza-dropdown-toggle::before {
+		width: 6px;
+		height: 6px;
+		border-width: 1.8px;
+	}
+}

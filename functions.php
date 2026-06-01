@@ -23,6 +23,24 @@ function zaza_child_register_menus() {
 add_action( 'after_setup_theme', 'zaza_child_register_menus' );
 
 /**
+ * Register a shop filter area for WooCommerce archive pages.
+ */
+function zaza_child_register_shop_filter_sidebar() {
+	register_sidebar(
+		array(
+			'name'          => __( 'Zaza Shop Filters', 'the-zaza-shop-child' ),
+			'id'            => 'zaza-shop-filters',
+			'description'   => __( 'Optional WooCommerce filter widgets for the shop and product category layout.', 'the-zaza-shop-child' ),
+			'before_widget' => '<section id="%1$s" class="zaza-shop-filter-widget %2$s">',
+			'after_widget'  => '</section>',
+			'before_title'  => '<h3 class="zaza-shop-filter__title">',
+			'after_title'   => '</h3>',
+		)
+	);
+}
+add_action( 'widgets_init', 'zaza_child_register_shop_filter_sidebar' );
+
+/**
  * Check whether the current request is a public storefront page.
  *
  * @return bool
@@ -405,6 +423,13 @@ function zaza_child_enqueue_home_assets() {
 	$home_js_path  = $theme_dir . '/assets/js/zaza-home.js';
 
 	wp_enqueue_style(
+		'zaza-fonts',
+		'https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700;800&display=swap',
+		array(),
+		null
+	);
+
+	wp_enqueue_style(
 		'zaza-home',
 		$theme_uri . '/assets/css/zaza-home.css',
 		array(),
@@ -441,6 +466,183 @@ function zaza_child_enqueue_shop_assets() {
 add_action( 'wp_enqueue_scripts', 'zaza_child_enqueue_shop_assets', 25 );
 
 /**
+ * Get safe product category filter terms for the archive sidebar.
+ *
+ * @return WP_Term[]
+ */
+function zaza_child_get_shop_filter_terms() {
+	if ( ! taxonomy_exists( 'product_cat' ) ) {
+		return array();
+	}
+
+	$current_term = is_tax( 'product_cat' ) ? get_queried_object() : null;
+	$parent_id    = 0;
+
+	if ( $current_term instanceof WP_Term ) {
+		$children = get_terms(
+			array(
+				'taxonomy'   => 'product_cat',
+				'hide_empty' => true,
+				'parent'     => (int) $current_term->term_id,
+			)
+		);
+
+		if ( ! is_wp_error( $children ) && ! empty( $children ) ) {
+			return $children;
+		}
+
+		$parent_id = (int) $current_term->parent;
+	}
+
+	$terms = get_terms(
+		array(
+			'taxonomy'   => 'product_cat',
+			'hide_empty' => true,
+			'parent'     => $parent_id,
+			'orderby'    => 'name',
+			'order'      => 'ASC',
+		)
+	);
+
+	if ( is_wp_error( $terms ) || ! is_array( $terms ) ) {
+		return array();
+	}
+
+	return $terms;
+}
+
+/**
+ * Render the shop filter/sidebar panel.
+ *
+ * @return string
+ */
+function zaza_child_get_shop_filter_panel_html() {
+	ob_start();
+	$zaza_clean  = function ( $value ) {
+		if ( function_exists( 'wc_clean' ) ) {
+			return wc_clean( $value );
+		}
+
+		return sanitize_text_field( $value );
+	};
+	$current_slug = is_tax( 'product_cat' ) ? get_query_var( 'product_cat' ) : '';
+	$terms        = zaza_child_get_shop_filter_terms();
+	$min_price    = isset( $_GET['min_price'] ) ? $zaza_clean( wp_unslash( $_GET['min_price'] ) ) : '';
+	$max_price    = isset( $_GET['max_price'] ) ? $zaza_clean( wp_unslash( $_GET['max_price'] ) ) : '';
+	$form_action  = remove_query_arg( array( 'min_price', 'max_price', 'paged' ) );
+	?>
+	<aside class="zaza-shop-filters" aria-label="<?php echo esc_attr__( 'Shop filters', 'the-zaza-shop-child' ); ?>">
+		<?php if ( is_active_sidebar( 'zaza-shop-filters' ) ) : ?>
+			<?php dynamic_sidebar( 'zaza-shop-filters' ); ?>
+		<?php else : ?>
+			<?php if ( ! empty( $terms ) ) : ?>
+				<section class="zaza-shop-filter">
+					<h3 class="zaza-shop-filter__title"><?php echo esc_html__( 'Product Type', 'the-zaza-shop-child' ); ?></h3>
+					<ul class="zaza-shop-filter__list">
+						<?php foreach ( $terms as $term ) : ?>
+							<?php
+							if ( ! $term instanceof WP_Term ) {
+								continue;
+							}
+
+							$term_link = get_term_link( $term );
+
+							if ( is_wp_error( $term_link ) ) {
+								continue;
+							}
+
+							$is_current = $current_slug === $term->slug;
+							?>
+							<li>
+								<a class="zaza-shop-filter__link<?php echo $is_current ? ' is-active' : ''; ?>" href="<?php echo esc_url( $term_link ); ?>">
+									<span class="zaza-shop-filter__box" aria-hidden="true"></span>
+									<span class="zaza-shop-filter__label"><?php echo esc_html( $term->name ); ?></span>
+									<span class="zaza-shop-filter__count"><?php echo esc_html( (string) $term->count ); ?></span>
+								</a>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</section>
+			<?php endif; ?>
+
+			<section class="zaza-shop-filter">
+				<h3 class="zaza-shop-filter__title"><?php echo esc_html__( 'Price', 'the-zaza-shop-child' ); ?></h3>
+				<form class="zaza-shop-price-filter" method="get" action="<?php echo esc_url( $form_action ); ?>">
+					<?php foreach ( $_GET as $key => $value ) : ?>
+						<?php
+						$key = sanitize_key( $key );
+
+						if ( '' === $key || in_array( $key, array( 'min_price', 'max_price', 'paged' ), true ) || is_array( $value ) ) {
+							continue;
+						}
+						?>
+						<input type="hidden" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $zaza_clean( wp_unslash( $value ) ) ); ?>">
+					<?php endforeach; ?>
+					<div class="zaza-shop-price-filter__fields">
+						<label>
+							<span><?php echo esc_html__( 'Min', 'the-zaza-shop-child' ); ?></span>
+							<input type="number" min="0" step="1" name="min_price" value="<?php echo esc_attr( $min_price ); ?>" placeholder="0">
+						</label>
+						<label>
+							<span><?php echo esc_html__( 'Max', 'the-zaza-shop-child' ); ?></span>
+							<input type="number" min="0" step="1" name="max_price" value="<?php echo esc_attr( $max_price ); ?>" placeholder="100">
+						</label>
+					</div>
+					<button type="submit"><?php echo esc_html__( 'Apply', 'the-zaza-shop-child' ); ?></button>
+				</form>
+			</section>
+		<?php endif; ?>
+	</aside>
+	<?php
+	return ob_get_clean();
+}
+
+/**
+ * Wrap WooCommerce Blocks product collections with the Zaza archive layout.
+ *
+ * @param string $block_content Rendered block content.
+ * @param array  $block         Parsed block data.
+ * @return string
+ */
+function zaza_child_wrap_product_collection_block( $block_content, $block ) {
+	static $wrapped_collection = false;
+
+	if ( $wrapped_collection || ! zaza_child_is_zaza_product_archive_page() || empty( $block['blockName'] ) || 'woocommerce/product-collection' !== $block['blockName'] ) {
+		return $block_content;
+	}
+
+	$wrapped_collection = true;
+
+	return '<div class="zaza-shop-layout">' . zaza_child_get_shop_filter_panel_html() . '<section class="zaza-shop-results" aria-label="' . esc_attr__( 'Products', 'the-zaza-shop-child' ) . '">' . $block_content . '</section></div>';
+}
+add_filter( 'render_block', 'zaza_child_wrap_product_collection_block', 10, 2 );
+
+/**
+ * Wrap the archive title and optional real term description as a clean intro.
+ *
+ * @param string $block_content Rendered block content.
+ * @param array  $block         Parsed block data.
+ * @return string
+ */
+function zaza_child_wrap_archive_query_title_block( $block_content, $block ) {
+	static $wrapped_title = false;
+
+	if ( $wrapped_title || ! zaza_child_is_zaza_product_archive_page() || empty( $block['blockName'] ) || 'core/query-title' !== $block['blockName'] ) {
+		return $block_content;
+	}
+
+	$wrapped_title = true;
+	$description   = '';
+
+	if ( is_tax( 'product_cat' ) ) {
+		$description = term_description();
+	}
+
+	return '<section class="zaza-shop-intro">' . $block_content . ( $description ? '<div class="zaza-shop-intro__description">' . wp_kses_post( $description ) . '</div>' : '' ) . '</section>';
+}
+add_filter( 'render_block', 'zaza_child_wrap_archive_query_title_block', 9, 2 );
+
+/**
  * Hide the parent block-theme title/header where the custom Zaza header is used
  * or where product category pages otherwise show the oversized site title.
  */
@@ -469,7 +671,7 @@ function zaza_child_hide_parent_theme_title() {
 			visibility: hidden !important;
 		}
 
-		<?php if ( zaza_child_is_zaza_visual_surface_page() ) : ?>
+		<?php if ( zaza_child_is_zaza_visual_surface_page() && ! zaza_child_is_zaza_product_archive_page() ) : ?>
 		.wp-block-post-title:first-child,
 		.wp-site-blocks .wp-block-post-title:first-child,
 		.wp-site-blocks > main .wp-block-post-title:first-child,
