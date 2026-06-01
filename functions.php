@@ -246,7 +246,7 @@ if ( ! function_exists( 'zaza_home_render_canonical_nav' ) ) {
 			),
 			array(
 				'label'    => esc_html__( 'THC Vape', 'the-zaza-shop-child' ),
-				'url'      => zaza_get_product_category_url( 'vapes' ),
+				'url'      => zaza_get_product_category_url( 'thc-vape' ),
 				'children' => array(
 					array(
 						'label' => esc_html__( 'All Whole Melts', 'the-zaza-shop-child' ),
@@ -407,6 +407,28 @@ function zaza_child_force_front_page_template( $template ) {
 	return file_exists( $front_page_template ) ? $front_page_template : $template;
 }
 add_filter( 'template_include', 'zaza_child_force_front_page_template', 99 );
+
+/**
+ * Force a controlled PHP template for WooCommerce product archives.
+ *
+ * The parent block theme's product archive template is too constrained for the
+ * left-filter/right-grid storefront layout, so product archives use the child
+ * theme template while cart, checkout, account, and single products remain on
+ * their normal WooCommerce templates.
+ *
+ * @param string $template Current template path.
+ * @return string
+ */
+function zaza_child_force_product_archive_template( $template ) {
+	if ( ! zaza_child_is_zaza_product_archive_page() ) {
+		return $template;
+	}
+
+	$archive_template = get_stylesheet_directory() . '/archive-product.php';
+
+	return file_exists( $archive_template ) ? $archive_template : $template;
+}
+add_filter( 'template_include', 'zaza_child_force_product_archive_template', 100 );
 
 /**
  * Enqueue custom Zaza shell assets on public storefront pages.
@@ -596,51 +618,6 @@ function zaza_child_get_shop_filter_panel_html() {
 	<?php
 	return ob_get_clean();
 }
-
-/**
- * Wrap WooCommerce Blocks product collections with the Zaza archive layout.
- *
- * @param string $block_content Rendered block content.
- * @param array  $block         Parsed block data.
- * @return string
- */
-function zaza_child_wrap_product_collection_block( $block_content, $block ) {
-	static $wrapped_collection = false;
-
-	if ( $wrapped_collection || ! zaza_child_is_zaza_product_archive_page() || empty( $block['blockName'] ) || 'woocommerce/product-collection' !== $block['blockName'] ) {
-		return $block_content;
-	}
-
-	$wrapped_collection = true;
-
-	return '<div class="zaza-shop-layout">' . zaza_child_get_shop_filter_panel_html() . '<section class="zaza-shop-results" aria-label="' . esc_attr__( 'Products', 'the-zaza-shop-child' ) . '">' . $block_content . '</section></div>';
-}
-add_filter( 'render_block', 'zaza_child_wrap_product_collection_block', 10, 2 );
-
-/**
- * Wrap the archive title and optional real term description as a clean intro.
- *
- * @param string $block_content Rendered block content.
- * @param array  $block         Parsed block data.
- * @return string
- */
-function zaza_child_wrap_archive_query_title_block( $block_content, $block ) {
-	static $wrapped_title = false;
-
-	if ( $wrapped_title || ! zaza_child_is_zaza_product_archive_page() || empty( $block['blockName'] ) || 'core/query-title' !== $block['blockName'] ) {
-		return $block_content;
-	}
-
-	$wrapped_title = true;
-	$description   = '';
-
-	if ( is_tax( 'product_cat' ) ) {
-		$description = term_description();
-	}
-
-	return '<section class="zaza-shop-intro">' . $block_content . ( $description ? '<div class="zaza-shop-intro__description">' . wp_kses_post( $description ) . '</div>' : '' ) . '</section>';
-}
-add_filter( 'render_block', 'zaza_child_wrap_archive_query_title_block', 9, 2 );
 
 /**
  * Hide the parent block-theme title/header where the custom Zaza header is used

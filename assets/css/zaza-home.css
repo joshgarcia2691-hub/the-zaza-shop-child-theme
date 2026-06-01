@@ -1859,6 +1859,329 @@ body.zaza-commerce-page .wp-site-blocks,
 	}
 }
 
+/* Storefront nav reset: one final rule set wins over older experimental nav overrides. */
+.zaza-header {
+	background: #242424;
+}
+
+.zaza-header::before {
+	background: #242424;
+}
+
+@media (min-width: 901px) {
+	.zaza-header {
+		overflow: visible;
+	}
+
+	.zaza-header__inner {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		align-items: center;
+		width: 100%;
+		max-width: none;
+		min-height: 96px;
+		margin: 0;
+		padding: 0 clamp(34px, 3.2vw, 58px);
+		gap: clamp(26px, 2.7vw, 48px);
+	}
+
+	.zaza-header__brand {
+		min-width: max-content;
+		gap: 12px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 72px;
+		height: 72px;
+	}
+
+	.zaza-header__brand-name {
+		display: block;
+		max-width: none;
+		overflow: visible;
+		font-family: var(--zaza-display-font);
+		font-size: 1rem;
+		font-weight: 400;
+		letter-spacing: 0.03em;
+		line-height: 1;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.zaza-nav {
+		min-width: 0;
+		overflow: visible;
+	}
+
+	.zaza-nav-menu {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: flex-start;
+		width: auto;
+		min-width: 0;
+		max-width: 100%;
+		margin: 0;
+		gap: 12px clamp(18px, 1.35vw, 28px);
+	}
+
+	.zaza-nav-menu > li {
+		display: inline-flex;
+		align-items: center;
+		flex: 0 0 auto;
+		min-width: auto;
+	}
+
+	.zaza-nav-menu > li > a {
+		width: auto;
+		min-width: 0;
+		min-height: 34px;
+		padding: 0;
+		color: rgba(255, 255, 255, 0.94);
+		font-family: var(--zaza-display-font);
+		font-size: clamp(0.9rem, 0.78vw, 1rem);
+		font-weight: 400;
+		letter-spacing: 0.035em;
+		line-height: 1;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.zaza-dropdown-toggle {
+		position: static;
+		flex: 0 0 auto;
+		width: 16px;
+		height: 24px;
+		margin: 0 0 0 4px;
+		border: 0;
+		background: transparent;
+	}
+
+	.zaza-dropdown-toggle::before {
+		width: 6px;
+		height: 6px;
+		border-width: 1.6px;
+	}
+
+	.zaza-nav-menu .sub-menu {
+		min-width: 230px;
+		padding: 14px 0;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 0 0 14px 14px;
+		background: #242424;
+	}
+
+	.zaza-nav-menu .sub-menu a {
+		min-height: 36px;
+		padding: 0 22px;
+		border-radius: 0;
+		color: rgba(255, 255, 255, 0.86);
+		font-family: var(--zaza-body-font);
+		font-size: 0.82rem;
+		font-weight: 700;
+		letter-spacing: 0;
+		line-height: 1.25;
+		text-transform: none;
+	}
+
+	.zaza-header__cart {
+		justify-self: end;
+		min-width: max-content;
+		min-height: 46px;
+		padding: 0 24px;
+		border-color: rgba(255, 255, 255, 0.22);
+		font-family: var(--zaza-display-font);
+		font-size: 0.95rem;
+		font-weight: 400;
+		letter-spacing: 0.035em;
+		line-height: 1;
+		text-transform: uppercase;
+	}
+}
+
+@media (min-width: 901px) and (max-width: 1280px) {
+	.zaza-header__inner {
+		min-height: 92px;
+		padding-right: 24px;
+		padding-left: 24px;
+		gap: 20px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 62px;
+		height: 62px;
+	}
+
+	.zaza-header__brand-name {
+		display: none;
+	}
+
+	.zaza-nav-menu {
+		gap: 10px 14px;
+	}
+
+	.zaza-nav-menu > li > a,
+	.zaza-header__cart {
+		font-size: 0.82rem;
+	}
+}
+
+@media (max-width: 900px) {
+	.zaza-header {
+		background: #242424;
+		overflow: visible;
+	}
+
+	.zaza-header__inner {
+		display: grid;
+		grid-template-columns: 48px minmax(0, 1fr) 48px;
+		align-items: center;
+		width: 100%;
+		min-height: 88px;
+		margin: 0;
+		padding: 0 16px;
+		gap: 12px;
+	}
+
+	.zaza-nav-toggle {
+		order: 1;
+		display: inline-flex;
+		width: 48px;
+		height: 48px;
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+	}
+
+	.zaza-header__brand {
+		order: 2;
+		justify-self: center;
+		min-width: 0;
+		gap: 10px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 58px;
+		height: 58px;
+	}
+
+	.zaza-header__brand-name {
+		max-width: none;
+		overflow: visible;
+		font-size: clamp(1rem, 4vw, 1.15rem);
+		text-overflow: clip;
+		white-space: nowrap;
+	}
+
+	.zaza-header__cart {
+		order: 3;
+		justify-self: end;
+		width: 48px;
+		min-width: 48px;
+		height: 48px;
+		min-height: 48px;
+		padding: 0;
+		font-size: 0;
+	}
+
+	.zaza-nav {
+		position: absolute;
+		top: 100%;
+		right: 0;
+		left: 0;
+		z-index: 90;
+		display: block;
+		grid-column: auto;
+		max-height: 0;
+		margin: 0;
+		padding: 0;
+		background: #242424;
+		box-shadow: 0 24px 46px rgba(0, 0, 0, 0.38);
+		opacity: 0;
+		visibility: hidden;
+		overflow: hidden;
+		pointer-events: none;
+		transition: max-height 220ms ease, opacity 160ms ease, visibility 160ms ease;
+	}
+
+	.zaza-header.is-open .zaza-nav {
+		max-height: calc(100vh - 88px);
+		opacity: 1;
+		visibility: visible;
+		overflow-y: auto;
+		pointer-events: auto;
+	}
+
+	.zaza-nav-menu {
+		display: grid;
+		width: 100%;
+		max-width: none;
+		margin: 0;
+		padding: 10px 18px 20px;
+		gap: 0;
+		background: #242424;
+	}
+
+	.zaza-nav-menu > li {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 42px;
+		align-items: center;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+	}
+
+	.zaza-nav-menu > li:not(.menu-item-has-children) {
+		grid-template-columns: 1fr;
+	}
+
+	.zaza-nav-menu a,
+	.zaza-nav-menu > li:not(.menu-item-has-children) > a {
+		width: 100%;
+		min-height: 46px;
+		padding: 0;
+		background: transparent;
+		color: #ffffff;
+		font-family: var(--zaza-display-font);
+		font-size: 1rem;
+		font-weight: 400;
+		letter-spacing: 0.035em;
+		line-height: 1;
+		text-transform: uppercase;
+	}
+
+	.zaza-dropdown-toggle {
+		position: static;
+		width: 42px;
+		height: 42px;
+		margin: 0;
+		border: 0;
+		background: transparent;
+	}
+
+	.zaza-nav-menu .sub-menu {
+		grid-column: 1 / -1;
+		width: 100%;
+		max-height: 0;
+		padding: 0;
+		background: rgba(0, 0, 0, 0.2);
+	}
+
+	.zaza-nav-menu li.is-open > .sub-menu {
+		max-height: 420px;
+		padding: 8px 14px;
+	}
+
+	.zaza-nav-menu .sub-menu a {
+		min-height: 40px;
+		padding: 0;
+		color: rgba(255, 255, 255, 0.82);
+		font-family: var(--zaza-body-font);
+		font-size: 0.9rem;
+		font-weight: 700;
+		letter-spacing: 0;
+		text-transform: none;
+	}
+}
+
 /* Reference-inspired visual polish, original to The Zaza Club. */
 .zaza-home,
 .zaza-entry-popups,
@@ -3967,5 +4290,328 @@ body.zaza-storefront-page,
 		width: 6px;
 		height: 6px;
 		border-width: 1.8px;
+	}
+}
+
+/* Absolute final storefront nav rules. These intentionally come last. */
+.zaza-header {
+	background: #242424;
+}
+
+.zaza-header::before {
+	background: #242424;
+}
+
+@media (min-width: 901px) {
+	.zaza-header {
+		overflow: visible;
+	}
+
+	.zaza-header__inner {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		align-items: center;
+		width: 100%;
+		max-width: none;
+		min-height: 96px;
+		margin: 0;
+		padding: 0 clamp(34px, 3.2vw, 58px);
+		gap: clamp(26px, 2.7vw, 48px);
+	}
+
+	.zaza-header__brand {
+		min-width: max-content;
+		gap: 12px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 72px;
+		height: 72px;
+	}
+
+	.zaza-header__brand-name {
+		display: block;
+		max-width: none;
+		overflow: visible;
+		font-family: var(--zaza-display-font);
+		font-size: 1rem;
+		font-weight: 400;
+		letter-spacing: 0.03em;
+		line-height: 1;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.zaza-nav {
+		min-width: 0;
+		overflow: visible;
+	}
+
+	.zaza-nav-menu {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: flex-start;
+		width: auto;
+		min-width: 0;
+		max-width: 100%;
+		margin: 0;
+		gap: 12px clamp(18px, 1.35vw, 28px);
+	}
+
+	.zaza-nav-menu > li {
+		display: inline-flex;
+		align-items: center;
+		flex: 0 0 auto;
+		min-width: auto;
+	}
+
+	.zaza-nav-menu > li > a {
+		width: auto;
+		min-width: 0;
+		min-height: 34px;
+		padding: 0;
+		color: rgba(255, 255, 255, 0.94);
+		font-family: var(--zaza-display-font);
+		font-size: clamp(0.9rem, 0.78vw, 1rem);
+		font-weight: 400;
+		letter-spacing: 0.035em;
+		line-height: 1;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+
+	.zaza-dropdown-toggle {
+		position: static;
+		flex: 0 0 auto;
+		width: 16px;
+		height: 24px;
+		margin: 0 0 0 4px;
+		border: 0;
+		background: transparent;
+	}
+
+	.zaza-dropdown-toggle::before {
+		width: 6px;
+		height: 6px;
+		border-width: 1.6px;
+	}
+
+	.zaza-nav-menu .sub-menu {
+		min-width: 230px;
+		padding: 14px 0;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 0 0 14px 14px;
+		background: #242424;
+	}
+
+	.zaza-nav-menu .sub-menu a {
+		min-height: 36px;
+		padding: 0 22px;
+		border-radius: 0;
+		color: rgba(255, 255, 255, 0.86);
+		font-family: var(--zaza-body-font);
+		font-size: 0.82rem;
+		font-weight: 700;
+		letter-spacing: 0;
+		line-height: 1.25;
+		text-transform: none;
+	}
+
+	.zaza-header__cart {
+		justify-self: end;
+		min-width: max-content;
+		min-height: 46px;
+		padding: 0 24px;
+		border-color: rgba(255, 255, 255, 0.22);
+		font-family: var(--zaza-display-font);
+		font-size: 0.95rem;
+		font-weight: 400;
+		letter-spacing: 0.035em;
+		line-height: 1;
+		text-transform: uppercase;
+	}
+}
+
+@media (min-width: 901px) and (max-width: 1280px) {
+	.zaza-header__inner {
+		min-height: 92px;
+		padding-right: 24px;
+		padding-left: 24px;
+		gap: 20px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 62px;
+		height: 62px;
+	}
+
+	.zaza-header__brand-name {
+		display: none;
+	}
+
+	.zaza-nav-menu {
+		gap: 10px 14px;
+	}
+
+	.zaza-nav-menu > li > a,
+	.zaza-header__cart {
+		font-size: 0.82rem;
+	}
+}
+
+@media (max-width: 900px) {
+	.zaza-header {
+		background: #242424;
+		overflow: visible;
+	}
+
+	.zaza-header__inner {
+		display: grid;
+		grid-template-columns: 48px minmax(0, 1fr) 48px;
+		align-items: center;
+		width: 100%;
+		min-height: 88px;
+		margin: 0;
+		padding: 0 16px;
+		gap: 12px;
+	}
+
+	.zaza-nav-toggle {
+		order: 1;
+		display: inline-flex;
+		width: 48px;
+		height: 48px;
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+	}
+
+	.zaza-header__brand {
+		order: 2;
+		justify-self: center;
+		min-width: 0;
+		gap: 10px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 58px;
+		height: 58px;
+	}
+
+	.zaza-header__brand-name {
+		max-width: none;
+		overflow: visible;
+		font-size: clamp(1rem, 4vw, 1.15rem);
+		text-overflow: clip;
+		white-space: nowrap;
+	}
+
+	.zaza-header__cart {
+		order: 3;
+		justify-self: end;
+		width: 48px;
+		min-width: 48px;
+		height: 48px;
+		min-height: 48px;
+		padding: 0;
+		font-size: 0;
+	}
+
+	.zaza-nav {
+		position: absolute;
+		top: 100%;
+		right: 0;
+		left: 0;
+		z-index: 90;
+		display: block;
+		grid-column: auto;
+		max-height: 0;
+		margin: 0;
+		padding: 0;
+		background: #242424;
+		box-shadow: 0 24px 46px rgba(0, 0, 0, 0.38);
+		opacity: 0;
+		visibility: hidden;
+		overflow: hidden;
+		pointer-events: none;
+		transition: max-height 220ms ease, opacity 160ms ease, visibility 160ms ease;
+	}
+
+	.zaza-header.is-open .zaza-nav {
+		max-height: calc(100vh - 88px);
+		opacity: 1;
+		visibility: visible;
+		overflow-y: auto;
+		pointer-events: auto;
+	}
+
+	.zaza-nav-menu {
+		display: grid;
+		width: 100%;
+		max-width: none;
+		margin: 0;
+		padding: 10px 18px 20px;
+		gap: 0;
+		background: #242424;
+	}
+
+	.zaza-nav-menu > li {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 42px;
+		align-items: center;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+	}
+
+	.zaza-nav-menu > li:not(.menu-item-has-children) {
+		grid-template-columns: 1fr;
+	}
+
+	.zaza-nav-menu a,
+	.zaza-nav-menu > li:not(.menu-item-has-children) > a {
+		width: 100%;
+		min-height: 46px;
+		padding: 0;
+		background: transparent;
+		color: #ffffff;
+		font-family: var(--zaza-display-font);
+		font-size: 1rem;
+		font-weight: 400;
+		letter-spacing: 0.035em;
+		line-height: 1;
+		text-transform: uppercase;
+	}
+
+	.zaza-dropdown-toggle {
+		position: static;
+		width: 42px;
+		height: 42px;
+		margin: 0;
+		border: 0;
+		background: transparent;
+	}
+
+	.zaza-nav-menu .sub-menu {
+		grid-column: 1 / -1;
+		width: 100%;
+		max-height: 0;
+		padding: 0;
+		background: rgba(0, 0, 0, 0.2);
+	}
+
+	.zaza-nav-menu li.is-open > .sub-menu {
+		max-height: 420px;
+		padding: 8px 14px;
+	}
+
+	.zaza-nav-menu .sub-menu a {
+		min-height: 40px;
+		padding: 0;
+		color: rgba(255, 255, 255, 0.82);
+		font-family: var(--zaza-body-font);
+		font-size: 0.9rem;
+		font-weight: 700;
+		letter-spacing: 0;
+		text-transform: none;
 	}
 }
