@@ -228,7 +228,7 @@ if ( ! function_exists( 'zaza_home_render_canonical_nav' ) ) {
 			),
 			array(
 				'label'    => esc_html__( 'THC Vape', 'the-zaza-shop-child' ),
-				'url'      => zaza_get_product_category_url( 'thc-vape' ),
+				'url'      => zaza_get_product_category_url( 'vapes' ),
 				'children' => array(
 					array(
 						'label' => esc_html__( 'All Whole Melts', 'the-zaza-shop-child' ),
