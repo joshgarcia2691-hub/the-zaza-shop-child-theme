@@ -3288,3 +3288,96 @@ body.zaza-storefront-page,
 		font-size: 0.76rem;
 	}
 }
+
+/* Header alignment correction: left logo, readable nav, ShopZaza-style row balance. */
+.zaza-header {
+	background: #050706;
+}
+
+.zaza-header__inner {
+	width: 100%;
+	max-width: none;
+	min-height: 94px;
+	margin: 0;
+	padding: 0 22px;
+	gap: 24px;
+}
+
+.zaza-header__brand {
+	flex: 0 0 auto;
+	min-width: 300px;
+	gap: 14px;
+}
+
+.zaza-header__brand-logo {
+	width: 68px;
+	height: 68px;
+}
+
+.zaza-header__brand-name {
+	font-size: 1.08rem;
+	line-height: 1;
+}
+
+.zaza-nav {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.zaza-nav-menu {
+	justify-content: flex-start;
+	gap: 8px;
+}
+
+.zaza-nav-menu a {
+	min-height: 46px;
+	padding: 0 4px;
+	font-size: 0.82rem;
+	line-height: 1;
+	white-space: nowrap;
+}
+
+.zaza-header__cart {
+	flex: 0 0 auto;
+	min-height: 44px;
+	padding: 0 20px;
+	font-size: 0.82rem;
+}
+
+@media (min-width: 901px) and (max-width: 1500px) {
+	.zaza-header__inner {
+		min-height: 84px;
+		padding: 0 14px;
+		gap: 14px;
+	}
+
+	.zaza-header__brand {
+		min-width: 220px;
+		gap: 10px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 56px;
+		height: 56px;
+	}
+
+	.zaza-header__brand-name {
+		font-size: 0.92rem;
+	}
+
+	.zaza-nav-menu {
+		gap: 4px;
+	}
+
+	.zaza-nav-menu a {
+		min-height: 42px;
+		padding: 0 3px;
+		font-size: 0.7rem;
+	}
+
+	.zaza-header__cart {
+		min-height: 40px;
+		padding: 0 12px;
+		font-size: 0.72rem;
+	}
+}
