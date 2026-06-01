@@ -2,8 +2,8 @@
 /**
  * Child theme asset loading.
  *
- * Keeps homepage assets scoped to the front page so cart, checkout, product
- * pages, and payment gateways are not affected.
+ * Keeps storefront header assets scoped to the public frontend while leaving
+ * WooCommerce, checkout, and payment gateway logic untouched.
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,15 +23,36 @@ function zaza_child_register_menus() {
 add_action( 'after_setup_theme', 'zaza_child_register_menus' );
 
 /**
- * Check whether the current request should use the custom Zaza ecommerce shell.
+ * Check whether the current request is a public storefront page.
  *
  * @return bool
  */
-function zaza_child_is_zaza_ecommerce_page() {
-	if ( is_front_page() ) {
-		return true;
+function zaza_child_is_public_storefront_page() {
+	if ( is_admin() ) {
+		return false;
 	}
 
+	if ( function_exists( 'wp_doing_ajax' ) && wp_doing_ajax() ) {
+		return false;
+	}
+
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+		return false;
+	}
+
+	if ( function_exists( 'is_feed' ) && is_feed() ) {
+		return false;
+	}
+
+	return true;
+}
+
+/**
+ * Check whether the current request is a WooCommerce product archive surface.
+ *
+ * @return bool
+ */
+function zaza_child_is_zaza_product_archive_page() {
 	if ( is_post_type_archive( 'product' ) || is_tax( 'product_cat' ) ) {
 		return true;
 	}
@@ -41,6 +62,32 @@ function zaza_child_is_zaza_ecommerce_page() {
 	}
 
 	if ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ) {
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Backward-compatible alias for the public Zaza storefront shell.
+ *
+ * @return bool
+ */
+function zaza_child_is_zaza_ecommerce_page() {
+	return zaza_child_is_public_storefront_page();
+}
+
+/**
+ * Check whether the current request should receive home/archive surface styling.
+ *
+ * @return bool
+ */
+function zaza_child_is_zaza_visual_surface_page() {
+	if ( is_front_page() ) {
+		return true;
+	}
+
+	if ( zaza_child_is_zaza_product_archive_page() ) {
 		return true;
 	}
 
@@ -290,12 +337,12 @@ if ( ! function_exists( 'zaza_render_custom_header' ) ) {
 }
 
 /**
- * Add the custom Zaza header to WooCommerce archive surfaces.
+ * Add the custom Zaza header to public storefront surfaces.
  *
  * The front page renders it inside front-page.php to keep popup ordering intact.
  */
 function zaza_child_render_custom_archive_header() {
-	if ( is_front_page() || ! zaza_child_is_zaza_ecommerce_page() ) {
+	if ( is_front_page() || ! zaza_child_is_public_storefront_page() ) {
 		return;
 	}
 
@@ -310,11 +357,15 @@ add_action( 'wp_body_open', 'zaza_child_render_custom_archive_header', 20 );
  * @return string[]
  */
 function zaza_child_ecommerce_body_classes( $classes ) {
-	if ( zaza_child_is_zaza_ecommerce_page() ) {
+	if ( zaza_child_is_public_storefront_page() ) {
+		$classes[] = 'zaza-storefront-page';
+	}
+
+	if ( zaza_child_is_zaza_visual_surface_page() ) {
 		$classes[] = 'zaza-commerce-page';
 	}
 
-	if ( ! is_front_page() && zaza_child_is_zaza_ecommerce_page() ) {
+	if ( zaza_child_is_zaza_product_archive_page() ) {
 		$classes[] = 'zaza-product-archive-page';
 	}
 
@@ -340,10 +391,10 @@ function zaza_child_force_front_page_template( $template ) {
 add_filter( 'template_include', 'zaza_child_force_front_page_template', 99 );
 
 /**
- * Enqueue custom Zaza shell assets on the homepage and product archives.
+ * Enqueue custom Zaza shell assets on public storefront pages.
  */
 function zaza_child_enqueue_home_assets() {
-	if ( ! zaza_child_is_zaza_ecommerce_page() ) {
+	if ( ! zaza_child_is_public_storefront_page() ) {
 		return;
 	}
 
@@ -374,7 +425,7 @@ add_action( 'wp_enqueue_scripts', 'zaza_child_enqueue_home_assets', 20 );
  * Enqueue archive polish only for the WooCommerce shop and product categories.
  */
 function zaza_child_enqueue_shop_assets() {
-	if ( is_front_page() || ! zaza_child_is_zaza_ecommerce_page() ) {
+	if ( ! zaza_child_is_zaza_product_archive_page() ) {
 		return;
 	}
 
@@ -394,7 +445,7 @@ add_action( 'wp_enqueue_scripts', 'zaza_child_enqueue_shop_assets', 25 );
  * or where product category pages otherwise show the oversized site title.
  */
 function zaza_child_hide_parent_theme_title() {
-	if ( ! zaza_child_is_zaza_ecommerce_page() ) {
+	if ( ! zaza_child_is_public_storefront_page() ) {
 		return;
 	}
 	?>
@@ -408,24 +459,24 @@ function zaza_child_hide_parent_theme_title() {
 			display: none !important;
 		}
 
-		.wp-block-site-title,
-		.wp-block-site-title a,
 		.wp-site-blocks header .wp-block-site-title,
 		.wp-site-blocks header .wp-block-site-title a,
 		.wp-site-blocks .wp-block-template-part .wp-block-site-title,
 		.wp-site-blocks .wp-block-template-part .wp-block-site-title a,
-		.wp-site-blocks > .wp-block-site-title,
-		.wp-site-blocks > .wp-block-site-title a {
+		.wp-site-blocks > header .wp-block-site-title,
+		.wp-site-blocks > header .wp-block-site-title a {
 			display: none !important;
 			visibility: hidden !important;
 		}
 
+		<?php if ( zaza_child_is_zaza_visual_surface_page() ) : ?>
 		.wp-block-post-title:first-child,
 		.wp-site-blocks .wp-block-post-title:first-child,
 		.wp-site-blocks > main .wp-block-post-title:first-child,
 		.wp-site-blocks > main .wp-block-query-title:first-child {
 			display: none !important;
 		}
+		<?php endif; ?>
 	</style>
 	<?php
 }

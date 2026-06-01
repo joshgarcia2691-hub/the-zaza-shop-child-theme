@@ -4,15 +4,18 @@ body.zaza-modal-lock {
 
 html:has(.zaza-header),
 body:has(.zaza-header),
-body:has(.zaza-header) .wp-site-blocks,
+body.zaza-storefront-page {
+	margin: 0;
+}
+
 body.zaza-commerce-page,
 body.zaza-commerce-page .wp-site-blocks {
-	margin: 0;
 	background: #050706;
 }
 
 body:has(.zaza-header) .wp-site-blocks,
-body.zaza-commerce-page .wp-site-blocks {
+body.zaza-storefront-page .wp-site-blocks {
+	margin-top: 0;
 	padding-top: 0;
 }
 
@@ -20,15 +23,18 @@ body:has(.zaza-header) > header:not(.zaza-header),
 body:has(.zaza-header) .wp-site-blocks > header:not(.zaza-header),
 body:has(.zaza-header) .wp-site-blocks > .wp-block-template-part:first-child,
 body:has(.zaza-header) .wp-site-blocks > .wp-block-group:first-child:has(.wp-block-site-title),
-body:has(.zaza-header) .wp-block-site-title,
-body:has(.zaza-header) .wp-block-site-title a,
-body:has(.zaza-header) .wp-block-post-title:first-child,
-body.zaza-commerce-page > header:not(.zaza-header),
-body.zaza-commerce-page .wp-site-blocks > header:not(.zaza-header),
-body.zaza-commerce-page .wp-site-blocks > .wp-block-template-part:first-child,
-body.zaza-commerce-page .wp-site-blocks > .wp-block-group:first-child:has(.wp-block-site-title),
-body.zaza-commerce-page .wp-block-site-title,
-body.zaza-commerce-page .wp-block-site-title a,
+body:has(.zaza-header) .wp-site-blocks > header .wp-block-site-title,
+body:has(.zaza-header) .wp-site-blocks > header .wp-block-site-title a,
+body.zaza-storefront-page > header:not(.zaza-header),
+body.zaza-storefront-page .wp-site-blocks > header:not(.zaza-header),
+body.zaza-storefront-page .wp-site-blocks > .wp-block-template-part:first-child,
+body.zaza-storefront-page .wp-site-blocks > .wp-block-group:first-child:has(.wp-block-site-title),
+body.zaza-storefront-page .wp-site-blocks > header .wp-block-site-title,
+body.zaza-storefront-page .wp-site-blocks > header .wp-block-site-title a {
+	display: none !important;
+	visibility: hidden !important;
+}
+
 body.zaza-commerce-page .wp-block-post-title:first-child {
 	display: none !important;
 	visibility: hidden !important;
