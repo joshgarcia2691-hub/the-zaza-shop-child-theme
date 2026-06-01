@@ -3758,3 +3758,136 @@ body.zaza-storefront-page,
 		font-size: 0.8rem;
 	}
 }
+
+/* Desktop nav final structure: wrap like a real ecommerce header instead of clipping or hiding items. */
+@media (min-width: 901px) {
+	.zaza-header {
+		overflow: visible;
+		background: #242424;
+	}
+
+	.zaza-header__inner {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		align-items: center;
+		width: 100%;
+		max-width: none;
+		min-height: 128px;
+		margin: 0;
+		padding: 18px clamp(38px, 3.4vw, 64px);
+		gap: clamp(30px, 3vw, 54px);
+	}
+
+	.zaza-header__brand {
+		min-width: 0;
+		gap: 14px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 78px;
+		height: 78px;
+	}
+
+	.zaza-header__brand-name {
+		display: block;
+		max-width: none;
+		overflow: visible;
+		font-size: clamp(1rem, 1vw, 1.16rem);
+		text-overflow: clip;
+		white-space: nowrap;
+	}
+
+	.zaza-nav {
+		min-width: 0;
+		max-width: 100%;
+		overflow: visible;
+	}
+
+	.zaza-nav-menu {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		align-content: center;
+		justify-content: flex-start;
+		width: auto;
+		min-width: 0;
+		max-width: 100%;
+		margin: 0;
+		gap: 12px clamp(18px, 1.45vw, 30px);
+	}
+
+	.zaza-nav-menu > li {
+		flex: 0 0 auto;
+		min-width: auto;
+	}
+
+	.zaza-nav-menu a {
+		width: auto;
+		min-width: 0;
+		min-height: 30px;
+		padding: 0;
+		font-family: "Arial Narrow", "Roboto Condensed", "Helvetica Neue", Arial, sans-serif;
+		font-size: clamp(0.92rem, 0.9vw, 1.08rem);
+		font-weight: 900;
+		line-height: 1;
+		white-space: nowrap;
+	}
+
+	.zaza-dropdown-toggle {
+		flex: 0 0 auto;
+		margin-left: -14px;
+	}
+
+	.zaza-header__cart {
+		justify-self: end;
+		min-width: max-content;
+		min-height: 56px;
+		padding: 0 30px;
+		font-size: clamp(0.9rem, 0.9vw, 1.06rem);
+	}
+}
+
+@media (min-width: 901px) and (max-width: 1440px) {
+	.zaza-header__inner {
+		min-height: 118px;
+		padding-right: 28px;
+		padding-left: 28px;
+		gap: 26px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 68px;
+		height: 68px;
+	}
+
+	.zaza-header__brand-name {
+		font-size: 0.98rem;
+	}
+
+	.zaza-nav-menu {
+		gap: 10px 16px;
+	}
+
+	.zaza-nav-menu a,
+	.zaza-header__cart {
+		font-size: 0.88rem;
+	}
+
+	.zaza-header__cart {
+		min-height: 50px;
+		padding: 0 24px;
+	}
+}
+
+@media (min-width: 901px) and (max-width: 1120px) {
+	.zaza-header__inner {
+		grid-template-columns: auto minmax(0, 1fr);
+	}
+
+	.zaza-header__cart {
+		grid-column: 1 / -1;
+		justify-self: start;
+		min-height: 44px;
+		padding: 0 22px;
+	}
+}
