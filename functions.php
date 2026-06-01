@@ -71,6 +71,31 @@ function zaza_child_enqueue_home_assets() {
 add_action( 'wp_enqueue_scripts', 'zaza_child_enqueue_home_assets', 20 );
 
 /**
+ * Enqueue archive polish only for the WooCommerce shop and product categories.
+ */
+function zaza_child_enqueue_shop_assets() {
+	$is_shop_archive = is_post_type_archive( 'product' ) || is_tax( 'product_cat' );
+
+	if ( function_exists( 'is_shop' ) && is_shop() ) {
+		$is_shop_archive = true;
+	}
+
+	if ( ! $is_shop_archive ) {
+		return;
+	}
+
+	$shop_css_path = get_stylesheet_directory() . '/assets/css/zaza-shop.css';
+
+	wp_enqueue_style(
+		'zaza-shop',
+		get_stylesheet_directory_uri() . '/assets/css/zaza-shop.css',
+		array(),
+		file_exists( $shop_css_path ) ? filemtime( $shop_css_path ) : '1.0.0'
+	);
+}
+add_action( 'wp_enqueue_scripts', 'zaza_child_enqueue_shop_assets', 25 );
+
+/**
  * Hide the parent block-theme title/header where the custom Zaza header is used
  * or where product category pages otherwise show the oversized site title.
  */
