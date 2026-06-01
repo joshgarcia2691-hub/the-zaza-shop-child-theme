@@ -33,6 +33,14 @@ if ( ! function_exists( 'zaza_home_shop_url' ) ) {
 	 * @return string
 	 */
 	function zaza_home_shop_url() {
+		if ( function_exists( 'wc_get_page_permalink' ) ) {
+			$shop_url = wc_get_page_permalink( 'shop' );
+
+			if ( $shop_url ) {
+				return $shop_url;
+			}
+		}
+
 		if ( function_exists( 'wc_get_page_id' ) ) {
 			$shop_page_id = wc_get_page_id( 'shop' );
 
@@ -204,6 +212,32 @@ if ( ! function_exists( 'zaza_home_get_categories' ) ) {
 	}
 }
 
+if ( ! function_exists( 'zaza_get_product_category_url' ) ) {
+	/**
+	 * Resolve a WooCommerce product category URL by slug.
+	 *
+	 * @param string $slug Product category slug.
+	 * @return string
+	 */
+	function zaza_get_product_category_url( $slug ) {
+		$slug = sanitize_title( $slug );
+
+		if ( function_exists( 'taxonomy_exists' ) && function_exists( 'get_term_by' ) && function_exists( 'get_term_link' ) && taxonomy_exists( 'product_cat' ) ) {
+			$term = get_term_by( 'slug', $slug, 'product_cat' );
+
+			if ( $term && ! is_wp_error( $term ) ) {
+				$term_link = get_term_link( $term );
+
+				if ( ! is_wp_error( $term_link ) && $term_link ) {
+					return $term_link;
+				}
+			}
+		}
+
+		return home_url( '/product-category/' . $slug . '/' );
+	}
+}
+
 if ( ! function_exists( 'zaza_home_nav_url' ) ) {
 	/**
 	 * Build a temporary fallback URL for the homepage nav.
@@ -218,27 +252,27 @@ if ( ! function_exists( 'zaza_home_nav_url' ) ) {
 
 if ( ! function_exists( 'zaza_home_shop_collection_url' ) ) {
 	/**
-	 * Build a dynamic shop collection URL for temporary fallback nav items.
+	 * Build a dynamic shop collection URL for canonical nav items.
 	 *
 	 * @param string $orderby WooCommerce catalog orderby value.
 	 * @return string
 	 */
 	function zaza_home_shop_collection_url( $orderby ) {
-		return add_query_arg( 'orderby', rawurlencode( $orderby ), zaza_home_shop_url() );
+		return add_query_arg( 'orderby', sanitize_key( $orderby ), zaza_home_shop_url() );
 	}
 }
 
-if ( ! function_exists( 'zaza_home_render_fallback_nav' ) ) {
+if ( ! function_exists( 'zaza_home_render_canonical_nav' ) ) {
 	/**
-	 * Render a temporary fallback nav until a WordPress menu is assigned.
+	 * Render the canonical product navigation.
 	 *
 	 * @return void
 	 */
-	function zaza_home_render_fallback_nav() {
+	function zaza_home_render_canonical_nav() {
 		$nav_items = array(
 			array(
 				'label' => esc_html__( 'Join The Club', 'child-theme' ),
-				'url'   => zaza_home_nav_url( 'join-the-club/' ),
+				'url'   => home_url( '/#join-the-club' ),
 			),
 			array(
 				'label' => esc_html__( 'New Arrivals', 'child-theme' ),
@@ -250,79 +284,79 @@ if ( ! function_exists( 'zaza_home_render_fallback_nav' ) ) {
 			),
 			array(
 				'label' => esc_html__( 'Flower', 'child-theme' ),
-				'url'   => zaza_home_nav_url( 'product-category/flower/' ),
+				'url'   => zaza_get_product_category_url( 'flower' ),
 			),
 			array(
 				'label' => esc_html__( 'Bulk', 'child-theme' ),
-				'url'   => zaza_home_nav_url( 'product-category/bulk/' ),
+				'url'   => zaza_get_product_category_url( 'bulk' ),
 			),
 			array(
 				'label' => esc_html__( 'Organic Exotic', 'child-theme' ),
-				'url'   => zaza_home_nav_url( 'product-category/organic-exotic/' ),
+				'url'   => zaza_get_product_category_url( 'organic-exotic' ),
 			),
 			array(
 				'label' => esc_html__( 'Smalls', 'child-theme' ),
-				'url'   => zaza_home_nav_url( 'product-category/smalls/' ),
+				'url'   => zaza_get_product_category_url( 'smalls' ),
 			),
 			array(
 				'label' => esc_html__( 'Edibles', 'child-theme' ),
-				'url'   => zaza_home_nav_url( 'product-category/edibles/' ),
+				'url'   => zaza_get_product_category_url( 'edibles' ),
 			),
 			array(
 				'label' => esc_html__( 'Pre Rolls', 'child-theme' ),
-				'url'   => zaza_home_nav_url( 'product-category/pre-rolls/' ),
+				'url'   => zaza_get_product_category_url( 'pre-rolls' ),
 			),
 			array(
 				'label' => esc_html__( 'Concentrates', 'child-theme' ),
-				'url'   => zaza_home_nav_url( 'product-category/concentrates/' ),
+				'url'   => zaza_get_product_category_url( 'concentrates' ),
 			),
 			array(
 				'label'    => esc_html__( 'THC Vape', 'child-theme' ),
-				'url'      => zaza_home_nav_url( 'product-category/thc-vape/' ),
+				'url'      => zaza_get_product_category_url( 'thc-vape' ),
 				'children' => array(
 					array(
 						'label' => esc_html__( 'All Whole Melts', 'child-theme' ),
-						'url'   => zaza_home_nav_url( 'product-category/all-whole-melts/' ),
+						'url'   => zaza_get_product_category_url( 'all-whole-melts' ),
 					),
 					array(
 						'label' => esc_html__( 'Muha Meds', 'child-theme' ),
-						'url'   => zaza_home_nav_url( 'product-category/muha-meds/' ),
+						'url'   => zaza_get_product_category_url( 'muha-meds' ),
 					),
 					array(
 						'label' => esc_html__( 'Boutique Switch', 'child-theme' ),
-						'url'   => zaza_home_nav_url( 'product-category/boutique-switch/' ),
+						'url'   => zaza_get_product_category_url( 'boutique-switch' ),
 					),
 					array(
 						'label' => esc_html__( 'Hit Stick', 'child-theme' ),
-						'url'   => zaza_home_nav_url( 'product-category/hit-stick/' ),
+						'url'   => zaza_get_product_category_url( 'hit-stick' ),
 					),
 				),
 			),
 			array(
 				'label'    => esc_html__( 'Accessories', 'child-theme' ),
-				'url'      => zaza_home_nav_url( 'product-category/accessories/' ),
+				'url'      => zaza_get_product_category_url( 'accessories' ),
 				'children' => array(
 					array(
 						'label' => esc_html__( 'Lighters', 'child-theme' ),
-						'url'   => zaza_home_nav_url( 'product-category/lighters/' ),
+						'url'   => zaza_get_product_category_url( 'lighters' ),
 					),
 					array(
 						'label' => esc_html__( 'Rolling Trays', 'child-theme' ),
-						'url'   => zaza_home_nav_url( 'product-category/rolling-trays/' ),
+						'url'   => zaza_get_product_category_url( 'rolling-trays' ),
 					),
 					array(
 						'label' => esc_html__( 'Papers', 'child-theme' ),
-						'url'   => zaza_home_nav_url( 'product-category/papers/' ),
+						'url'   => zaza_get_product_category_url( 'papers' ),
 					),
 					array(
 						'label' => esc_html__( 'Other Accessories', 'child-theme' ),
-						'url'   => zaza_home_nav_url( 'product-category/other-accessories/' ),
+						'url'   => zaza_get_product_category_url( 'other-accessories' ),
 					),
 				),
 			),
 		);
 		?>
-		<ul class="zaza-nav-menu zaza-nav-menu--fallback">
+		<ul class="zaza-nav-menu zaza-nav-menu--canonical">
 			<?php foreach ( $nav_items as $item ) : ?>
 				<?php $has_children = ! empty( $item['children'] ); ?>
 				<li class="zaza-nav-menu__item<?php echo $has_children ? ' zaza-dropdown menu-item-has-children' : ''; ?>">
@@ -340,6 +374,17 @@ if ( ! function_exists( 'zaza_home_render_fallback_nav' ) ) {
 			<?php endforeach; ?>
 		</ul>
 		<?php
+	}
+}
+
+if ( ! function_exists( 'zaza_home_render_fallback_nav' ) ) {
+	/**
+	 * Backward-compatible wrapper for older calls.
+	 *
+	 * @return void
+	 */
+	function zaza_home_render_fallback_nav() {
+		zaza_home_render_canonical_nav();
 	}
 }
 
@@ -535,23 +580,7 @@ get_header();
 		<?php endif; ?>
 
 		<nav id="zaza-home-nav-menu" class="zaza-nav" data-zaza-nav-panel aria-label="<?php echo esc_attr__( 'Homepage product navigation', 'child-theme' ); ?>">
-			<?php if ( has_nav_menu( 'zaza_home_nav' ) ) : ?>
-				<?php
-				wp_nav_menu(
-					array(
-						'theme_location' => 'zaza_home_nav',
-						'container'      => false,
-						'menu_class'     => 'zaza-nav-menu',
-						'menu_id'        => false,
-						'depth'          => 2,
-						'fallback_cb'    => false,
-					)
-				);
-				?>
-			<?php else : ?>
-				<?php /* Temporary fallback nav. Assign a menu to "Zaza Homepage Navigation" to manage these items in WordPress. */ ?>
-				<?php zaza_home_render_fallback_nav(); ?>
-			<?php endif; ?>
+			<?php zaza_home_render_canonical_nav(); ?>
 		</nav>
 	</div>
 </header>
