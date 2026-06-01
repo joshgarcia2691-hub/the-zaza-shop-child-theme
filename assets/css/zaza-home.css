@@ -3675,3 +3675,86 @@ body.zaza-storefront-page,
 		max-height: calc(100vh - 92px);
 	}
 }
+
+/* Final desktop nav anti-overlap fix: links keep their own width, never collapse into each other. */
+@media (min-width: 901px) {
+	.zaza-header__inner {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		align-items: center;
+		width: 100%;
+		min-height: 100px;
+		padding: 0 clamp(28px, 3vw, 56px);
+		gap: clamp(28px, 3vw, 54px);
+	}
+
+	.zaza-header__brand {
+		min-width: max-content;
+	}
+
+	.zaza-nav {
+		min-width: 0;
+		overflow-x: auto;
+		overflow-y: visible;
+		scrollbar-width: none;
+	}
+
+	.zaza-nav::-webkit-scrollbar {
+		display: none;
+	}
+
+	.zaza-nav-menu {
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		justify-content: flex-start;
+		width: max-content;
+		min-width: max-content;
+		margin: 0 auto;
+		gap: clamp(14px, 1.15vw, 24px);
+	}
+
+	.zaza-nav-menu > li {
+		flex: 0 0 auto;
+		min-width: max-content;
+	}
+
+	.zaza-nav-menu a {
+		flex: 0 0 auto;
+		width: auto;
+		min-width: max-content;
+		padding: 0;
+		font-size: clamp(0.82rem, 0.78vw, 0.94rem);
+		white-space: nowrap;
+	}
+
+	.zaza-dropdown-toggle {
+		flex: 0 0 auto;
+		margin-left: -8px;
+	}
+
+	.zaza-header__cart {
+		min-width: max-content;
+	}
+}
+
+@media (min-width: 901px) and (max-width: 1280px) {
+	.zaza-header__inner {
+		padding: 0 20px;
+		gap: 22px;
+	}
+
+	.zaza-header__brand-name {
+		display: none;
+	}
+
+	.zaza-nav-menu {
+		margin: 0;
+		gap: 12px;
+	}
+
+	.zaza-nav-menu a,
+	.zaza-header__cart {
+		font-size: 0.8rem;
+	}
+}
