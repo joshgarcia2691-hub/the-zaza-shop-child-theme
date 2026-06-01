@@ -2,6 +2,17 @@ body.zaza-modal-lock {
 	overflow: hidden;
 }
 
+html:has(.zaza-header),
+body:has(.zaza-header),
+body:has(.zaza-header) .wp-site-blocks {
+	margin: 0;
+	background: #050706;
+}
+
+body:has(.zaza-header) .wp-site-blocks {
+	padding-top: 0;
+}
+
 body:has(.zaza-header) > header:not(.zaza-header),
 body:has(.zaza-header) .wp-site-blocks > header:not(.zaza-header),
 body:has(.zaza-header) .wp-site-blocks > .wp-block-template-part:first-child,
@@ -61,9 +72,21 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 	z-index: 30;
 	width: 100vw;
 	margin-left: calc(50% - 50vw);
+	margin-top: 0;
 	background: #050706;
 	color: #ffffff;
 	border: 0;
+}
+
+.zaza-header::before {
+	content: "";
+	position: absolute;
+	right: 0;
+	bottom: 100%;
+	left: 0;
+	height: 32px;
+	background: #050706;
+	pointer-events: none;
 }
 
 .zaza-header__inner {
