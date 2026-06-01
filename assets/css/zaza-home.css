@@ -63,7 +63,7 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 	margin-left: calc(50% - 50vw);
 	background: #050706;
 	color: #ffffff;
-	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+	border: 0;
 }
 
 .zaza-header__inner {
@@ -1092,7 +1092,7 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 		left: 0;
 		max-height: 0;
 		background: #050706;
-		border-top: 1px solid rgba(255, 255, 255, 0.12);
+		border-top: 0;
 		box-shadow: 0 22px 42px rgba(0, 0, 0, 0.28);
 		overflow: hidden;
 		transition: max-height 220ms ease;
@@ -1345,6 +1345,13 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 	background: rgba(183, 241, 111, 0.12);
 	color: #ffffff;
 	text-decoration: none;
+}
+
+.wp-site-blocks,
+.zaza-header + .zaza-home,
+.zaza-home > .zaza-hero:first-child {
+	margin-top: 0;
+	padding-top: 0;
 }
 
 .zaza-product-card {
