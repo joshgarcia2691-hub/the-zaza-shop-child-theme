@@ -323,8 +323,12 @@ if ( ! function_exists( 'zaza_home_render_canonical_nav' ) ) {
 						'url'   => zaza_get_product_category_url( 'muha-meds' ),
 					),
 					array(
-						'label' => esc_html__( 'Boutique Switch', 'child-theme' ),
-						'url'   => zaza_get_product_category_url( 'boutique-switch' ),
+						'label' => esc_html__( 'Boutique', 'child-theme' ),
+						'url'   => zaza_get_product_category_url( 'boutique' ),
+					),
+					array(
+						'label' => esc_html__( 'Switch', 'child-theme' ),
+						'url'   => zaza_get_product_category_url( 'switch' ),
 					),
 					array(
 						'label' => esc_html__( 'Hit Stick', 'child-theme' ),
