@@ -3102,7 +3102,82 @@ body.single-product .woocommerce-tabs ul.tabs li a {
 		grid-template-columns: 1fr;
 	}
 
-	body.single-product .woocommerce div.product form.cart .quantity {
+body.single-product .woocommerce div.product form.cart .quantity {
 		width: 100%;
+	}
+}
+
+/* Typography scale correction: keep the Zaza look without oversized archive/nav text. */
+.zaza-header__inner {
+	width: min(1580px, calc(100% - 40px));
+	min-height: 78px;
+	gap: 18px;
+}
+
+.zaza-header__brand {
+	min-width: 238px;
+	gap: 12px;
+}
+
+.zaza-header__brand-logo {
+	width: 58px;
+	height: 58px;
+}
+
+.zaza-header__brand-name {
+	font-size: 1rem;
+	line-height: 1;
+}
+
+.zaza-nav {
+	overflow: visible;
+}
+
+.zaza-nav-menu {
+	justify-content: flex-end;
+	gap: 2px;
+}
+
+.zaza-nav-menu a {
+	min-height: 42px;
+	padding: 0 6px;
+	font-size: 0.72rem;
+	line-height: 1;
+	white-space: nowrap;
+}
+
+.zaza-header__cart {
+	min-height: 40px;
+	padding: 0 15px;
+	font-size: 0.76rem;
+}
+
+@media (min-width: 901px) and (max-width: 1500px) {
+	.zaza-header__inner {
+		width: min(100% - 26px, 1320px);
+		gap: 10px;
+	}
+
+	.zaza-header__brand {
+		min-width: 190px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 48px;
+		height: 48px;
+	}
+
+	.zaza-header__brand-name {
+		font-size: 0.88rem;
+	}
+
+	.zaza-nav-menu a {
+		padding: 0 4px;
+		font-size: 0.64rem;
+	}
+
+	.zaza-header__cart {
+		padding: 0 11px;
+		font-size: 0.68rem;
 	}
 }

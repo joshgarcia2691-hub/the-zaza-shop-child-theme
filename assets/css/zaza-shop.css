@@ -28,7 +28,7 @@ body.zaza-product-archive-page .wp-site-blocks > .wp-block-group:first-child:has
 }
 
 body.zaza-product-archive-page .wp-site-blocks > main {
-	padding: 0 max(16px, calc((100vw - 1440px) / 2)) clamp(76px, 7vw, 118px);
+	padding: 0 max(16px, calc((100vw - 1440px) / 2)) clamp(60px, 6vw, 92px);
 }
 
 body.zaza-product-archive-page .woocommerce {
@@ -47,9 +47,9 @@ body.zaza-product-archive-page .wp-block-query-title {
 body.zaza-product-archive-page .woocommerce-breadcrumb {
 	max-width: 920px;
 	margin: 0 auto;
-	padding: 34px 0 0;
+	padding: 28px 0 0;
 	color: var(--zaza-shop-muted);
-	font-size: 0.82rem;
+	font-size: 0.76rem;
 	font-weight: 700;
 	line-height: 1.5;
 	text-transform: uppercase;
@@ -59,9 +59,9 @@ body.zaza-product-archive-page .wp-block-woocommerce-breadcrumbs,
 body.zaza-product-archive-page .wc-block-breadcrumbs {
 	max-width: 920px;
 	margin: 0 auto;
-	padding: 34px 0 0;
+	padding: 28px 0 0;
 	color: var(--zaza-shop-muted);
-	font-size: 0.82rem;
+	font-size: 0.76rem;
 	font-weight: 700;
 	line-height: 1.5;
 	text-transform: uppercase;
@@ -82,8 +82,8 @@ body.zaza-product-archive-page .wc-block-breadcrumbs a {
 
 body.zaza-product-archive-page .woocommerce-products-header {
 	max-width: 980px;
-	margin: 0 auto 34px;
-	padding: 14px 0 40px;
+	margin: 0 auto 24px;
+	padding: 10px 0 28px;
 }
 
 body.zaza-product-archive-page .woocommerce-products-header__title.page-title,
@@ -92,10 +92,10 @@ body.zaza-product-archive-page .wp-block-query-title {
 	margin: 0;
 	color: var(--zaza-shop-ink);
 	font-family: var(--zaza-shop-display-font);
-	font-size: clamp(3rem, 6vw, 6.8rem);
+	font-size: clamp(2.2rem, 3.2vw, 3.55rem);
 	font-weight: 900;
 	letter-spacing: 0;
-	line-height: 0.88;
+	line-height: 0.95;
 	text-align: center;
 	text-transform: uppercase;
 }
@@ -103,8 +103,8 @@ body.zaza-product-archive-page .wp-block-query-title {
 body.zaza-product-archive-page .wp-block-query-title {
 	display: block !important;
 	max-width: 980px;
-	margin: 0 auto 34px;
-	padding: 14px 0 40px;
+	margin: 0 auto 24px;
+	padding: 10px 0 28px;
 	visibility: visible !important;
 }
 
@@ -376,19 +376,20 @@ body.zaza-product-archive-page .woocommerce nav.woocommerce-pagination ul li spa
 	}
 
 	body.zaza-product-archive-page .woocommerce-breadcrumb {
-		padding-top: 24px;
-		font-size: 0.72rem;
+		padding-top: 20px;
+		font-size: 0.68rem;
 	}
 
 	body.zaza-product-archive-page .woocommerce-products-header {
-		margin-bottom: 24px;
-		padding: 10px 0 30px;
+		margin-bottom: 18px;
+		padding: 8px 0 22px;
 	}
 
 	body.zaza-product-archive-page .woocommerce-products-header__title.page-title,
 	body.zaza-product-archive-page h1.page-title,
 	body.zaza-product-archive-page .wp-block-query-title {
-		font-size: clamp(2.35rem, 12vw, 3.55rem);
+		font-size: clamp(1.9rem, 8vw, 2.65rem);
+		line-height: 1;
 	}
 
 	body.zaza-product-archive-page .woocommerce-result-count,
