@@ -3291,7 +3291,7 @@ body.zaza-storefront-page,
 
 /* Header alignment correction: left logo, readable nav, ShopZaza-style row balance. */
 .zaza-header {
-	background: #050706;
+	background: #242424;
 }
 
 .zaza-header__inner {
@@ -3379,5 +3379,114 @@ body.zaza-storefront-page,
 		min-height: 40px;
 		padding: 0 12px;
 		font-size: 0.72rem;
+	}
+}
+
+/* Final desktop nav readability pass: keep the ShopZaza-style row spacious and legible. */
+@media (min-width: 901px) {
+	.zaza-header {
+		background: #242424;
+	}
+
+	.zaza-header__inner {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		width: 100%;
+		max-width: none;
+		min-height: 96px;
+		padding: 0 clamp(26px, 2.6vw, 50px);
+		gap: clamp(28px, 3vw, 56px);
+	}
+
+	.zaza-header__brand {
+		min-width: 0;
+		gap: 14px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 74px;
+		height: 74px;
+	}
+
+	.zaza-header__brand-name {
+		font-family: var(--zaza-display-font);
+		font-size: clamp(1.02rem, 1vw, 1.22rem);
+		line-height: 1;
+		white-space: nowrap;
+	}
+
+	.zaza-nav {
+		min-width: 0;
+		overflow: visible;
+	}
+
+	.zaza-nav-menu {
+		justify-content: center;
+		gap: clamp(10px, 1vw, 22px);
+	}
+
+	.zaza-nav-menu a {
+		min-height: 48px;
+		padding: 0;
+		font-family: "Arial Narrow", "Roboto Condensed", "Helvetica Neue", Arial, sans-serif;
+		font-size: clamp(0.78rem, 0.78vw, 0.92rem);
+		font-weight: 900;
+		letter-spacing: 0.01em;
+		line-height: 1;
+		white-space: nowrap;
+	}
+
+	.zaza-header__cart {
+		min-height: 46px;
+		padding: 0 22px;
+		font-family: "Arial Narrow", "Roboto Condensed", "Helvetica Neue", Arial, sans-serif;
+		font-size: clamp(0.78rem, 0.78vw, 0.92rem);
+		font-weight: 900;
+		letter-spacing: 0.01em;
+		white-space: nowrap;
+	}
+}
+
+@media (min-width: 901px) and (max-width: 1380px) {
+	.zaza-header__inner {
+		min-height: 90px;
+		padding: 0 22px;
+		gap: 22px;
+	}
+
+	.zaza-header__brand {
+		gap: 10px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 62px;
+		height: 62px;
+	}
+
+	.zaza-header__brand-name {
+		font-size: 0.95rem;
+	}
+
+	.zaza-nav-menu {
+		gap: 10px;
+	}
+
+	.zaza-nav-menu a,
+	.zaza-header__cart {
+		font-size: 0.78rem;
+	}
+}
+
+@media (min-width: 901px) and (max-width: 1180px) {
+	.zaza-header__brand-name {
+		display: none;
+	}
+
+	.zaza-header__inner {
+		gap: 18px;
+	}
+
+	.zaza-nav-menu {
+		gap: 8px;
 	}
 }
