@@ -3490,3 +3490,188 @@ body.zaza-storefront-page,
 		gap: 8px;
 	}
 }
+
+/* Final mobile nav containment: menu stays inside the hamburger panel, not over the hero. */
+@media (max-width: 900px) {
+	.zaza-header {
+		position: relative;
+		z-index: 80;
+		background: #242424;
+	}
+
+	.zaza-header::before {
+		background: #242424;
+	}
+
+	.zaza-header__inner {
+		display: grid;
+		grid-template-columns: 48px minmax(0, 1fr) 48px;
+		width: 100%;
+		min-height: 96px;
+		margin: 0;
+		padding: 0 18px;
+		gap: 12px;
+	}
+
+	.zaza-nav-toggle {
+		order: 1;
+		width: 48px;
+		height: 48px;
+		border: 0;
+		border-radius: 0;
+		background: transparent;
+	}
+
+	.zaza-header__brand {
+		order: 2;
+		justify-self: center;
+		min-width: 0;
+		gap: 10px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 64px;
+		height: 64px;
+	}
+
+	.zaza-header__brand-name {
+		max-width: none;
+		font-size: 1.05rem;
+		text-overflow: clip;
+	}
+
+	.zaza-header__cart {
+		order: 3;
+		justify-self: end;
+		width: 48px;
+		min-width: 48px;
+		height: 48px;
+		min-height: 48px;
+		padding: 0;
+		border-color: rgba(255, 255, 255, 0.18);
+		background: rgba(255, 255, 255, 0.04);
+		font-size: 0;
+	}
+
+	.zaza-nav {
+		position: absolute;
+		top: 100%;
+		right: 0;
+		left: 0;
+		z-index: 90;
+		display: block;
+		grid-column: auto;
+		max-height: 0;
+		margin: 0;
+		padding: 0;
+		background: #242424;
+		box-shadow: 0 24px 46px rgba(0, 0, 0, 0.38);
+		opacity: 0;
+		visibility: hidden;
+		overflow: hidden;
+		pointer-events: none;
+		transition: max-height 220ms ease, opacity 160ms ease, visibility 160ms ease;
+	}
+
+	.zaza-header.is-open .zaza-nav {
+		max-height: calc(100vh - 96px);
+		opacity: 1;
+		visibility: visible;
+		overflow-y: auto;
+		pointer-events: auto;
+	}
+
+	.zaza-nav-menu {
+		display: grid;
+		width: 100%;
+		max-width: none;
+		margin: 0;
+		padding: 12px 18px 20px;
+		gap: 0;
+		background: #242424;
+	}
+
+	.zaza-nav-menu > li {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 42px;
+		align-items: center;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+	}
+
+	.zaza-nav-menu > li:not(.menu-item-has-children) {
+		grid-template-columns: 1fr;
+	}
+
+	.zaza-nav-menu a,
+	.zaza-nav-menu > li:not(.menu-item-has-children) > a {
+		width: 100%;
+		min-height: 48px;
+		padding: 0;
+		border: 0;
+		outline: 0;
+		background: transparent;
+		color: #ffffff;
+		font-family: "Arial Narrow", "Roboto Condensed", "Helvetica Neue", Arial, sans-serif;
+		font-size: 0.96rem;
+		font-weight: 900;
+		line-height: 1;
+		text-transform: uppercase;
+	}
+
+	.zaza-nav-menu a:hover,
+	.zaza-nav-menu a:focus-visible,
+	.zaza-nav-menu > li.is-open > a {
+		background: transparent;
+		color: #ffb72f;
+	}
+
+	.zaza-dropdown-toggle {
+		position: static;
+		width: 42px;
+		height: 42px;
+		margin: 0;
+		border: 0;
+		border-radius: 50%;
+		background: transparent;
+	}
+
+	.zaza-nav-menu .sub-menu {
+		grid-column: 1 / -1;
+		width: 100%;
+		max-height: 0;
+		padding: 0;
+		background: rgba(0, 0, 0, 0.2);
+	}
+
+	.zaza-nav-menu li.is-open > .sub-menu {
+		max-height: 420px;
+		padding: 8px 14px;
+	}
+
+	.zaza-nav-menu .sub-menu a {
+		min-height: 40px;
+		padding: 0;
+		color: rgba(255, 255, 255, 0.82);
+		font-size: 0.86rem;
+	}
+}
+
+@media (max-width: 600px) {
+	.zaza-header__inner {
+		min-height: 92px;
+		padding: 0 16px;
+	}
+
+	.zaza-header__brand-logo {
+		width: 58px;
+		height: 58px;
+	}
+
+	.zaza-header__brand-name {
+		font-size: 0.98rem;
+	}
+
+	.zaza-header.is-open .zaza-nav {
+		max-height: calc(100vh - 92px);
+	}
+}

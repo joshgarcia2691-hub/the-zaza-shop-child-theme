@@ -183,6 +183,18 @@
 			});
 		});
 
+		Array.prototype.forEach.call(navRoot.querySelectorAll('.zaza-nav-menu a'), function (link) {
+			link.addEventListener('click', function () {
+				navRoot.classList.remove('is-open');
+
+				if (navToggle) {
+					navToggle.setAttribute('aria-expanded', 'false');
+				}
+
+				closeDropdowns();
+			});
+		});
+
 		document.addEventListener('click', function (event) {
 			if (!navRoot.contains(event.target)) {
 				navRoot.classList.remove('is-open');
