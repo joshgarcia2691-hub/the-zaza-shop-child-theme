@@ -4,12 +4,15 @@ body.zaza-modal-lock {
 
 html:has(.zaza-header),
 body:has(.zaza-header),
-body:has(.zaza-header) .wp-site-blocks {
+body:has(.zaza-header) .wp-site-blocks,
+body.zaza-commerce-page,
+body.zaza-commerce-page .wp-site-blocks {
 	margin: 0;
 	background: #050706;
 }
 
-body:has(.zaza-header) .wp-site-blocks {
+body:has(.zaza-header) .wp-site-blocks,
+body.zaza-commerce-page .wp-site-blocks {
 	padding-top: 0;
 }
 
@@ -19,7 +22,14 @@ body:has(.zaza-header) .wp-site-blocks > .wp-block-template-part:first-child,
 body:has(.zaza-header) .wp-site-blocks > .wp-block-group:first-child:has(.wp-block-site-title),
 body:has(.zaza-header) .wp-block-site-title,
 body:has(.zaza-header) .wp-block-site-title a,
-body:has(.zaza-header) .wp-block-post-title:first-child {
+body:has(.zaza-header) .wp-block-post-title:first-child,
+body.zaza-commerce-page > header:not(.zaza-header),
+body.zaza-commerce-page .wp-site-blocks > header:not(.zaza-header),
+body.zaza-commerce-page .wp-site-blocks > .wp-block-template-part:first-child,
+body.zaza-commerce-page .wp-site-blocks > .wp-block-group:first-child:has(.wp-block-site-title),
+body.zaza-commerce-page .wp-block-site-title,
+body.zaza-commerce-page .wp-block-site-title a,
+body.zaza-commerce-page .wp-block-post-title:first-child {
 	display: none !important;
 	visibility: hidden !important;
 }
@@ -1371,7 +1381,7 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 	text-decoration: none;
 }
 
-.wp-site-blocks,
+body.zaza-commerce-page .wp-site-blocks,
 .zaza-header + .zaza-home,
 .zaza-home > .zaza-hero:first-child {
 	margin-top: 0;

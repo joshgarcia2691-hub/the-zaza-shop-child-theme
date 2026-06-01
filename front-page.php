@@ -557,33 +557,7 @@ get_header();
 	</div>
 </div>
 
-<header class="zaza-header" data-zaza-nav>
-	<div class="zaza-header__inner">
-		<a class="zaza-header__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr__( 'The Zaza Club home', 'child-theme' ); ?>">
-			<img class="zaza-header__brand-logo" src="<?php echo esc_url( 'https://thezazaclub.com/wp-content/uploads/2026/05/logo.jpeg' ); ?>" alt="" width="42" height="42">
-			<span class="zaza-header__brand-copy">
-				<span class="zaza-header__brand-name"><?php echo esc_html__( 'The Zaza Club', 'child-theme' ); ?></span>
-			</span>
-		</a>
-
-		<button class="zaza-nav-toggle" type="button" data-zaza-nav-toggle aria-expanded="false" aria-controls="zaza-home-nav-menu">
-			<span class="zaza-nav-toggle__bar"></span>
-			<span class="zaza-nav-toggle__bar"></span>
-			<span class="zaza-nav-toggle__bar"></span>
-			<span class="zaza-sr-only"><?php echo esc_html__( 'Toggle navigation', 'child-theme' ); ?></span>
-		</button>
-
-		<?php if ( function_exists( 'wc_get_cart_url' ) ) : ?>
-			<a class="zaza-header__cart" href="<?php echo esc_url( zaza_home_cart_url() ); ?>" aria-label="<?php echo esc_attr__( 'View cart', 'child-theme' ); ?>">
-				<span aria-hidden="true"><?php echo esc_html__( 'Cart', 'child-theme' ); ?></span>
-			</a>
-		<?php endif; ?>
-
-		<nav id="zaza-home-nav-menu" class="zaza-nav" data-zaza-nav-panel aria-label="<?php echo esc_attr__( 'Homepage product navigation', 'child-theme' ); ?>">
-			<?php zaza_home_render_canonical_nav(); ?>
-		</nav>
-	</div>
-</header>
+<?php zaza_render_custom_header(); ?>
 
 <main id="primary" class="zaza-home">
 	<section class="zaza-hero" data-zaza-carousel aria-label="<?php echo esc_attr__( 'Homepage banner carousel', 'child-theme' ); ?>">
