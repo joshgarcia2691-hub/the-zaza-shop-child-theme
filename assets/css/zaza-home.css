@@ -36,10 +36,8 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 	--zaza-accent: #b7f16f;
 	--zaza-rose: #f2b8a2;
 	--zaza-shadow: 0 18px 50px rgba(17, 20, 19, 0.14);
-	--zaza-body-font: Arial, Helvetica, sans-serif;
-	--zaza-display-font: Impact, Haettenschweiler, "Arial Narrow Bold", "Arial Black", sans-serif;
 	color: var(--zaza-ink);
-	font-family: var(--zaza-body-font);
+	font-family: inherit;
 	letter-spacing: 0;
 }
 
@@ -95,8 +93,8 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 	display: flex;
 	align-items: center;
 	gap: 24px;
-	width: min(1780px, calc(100% - 64px));
-	min-height: 92px;
+	width: min(1280px, calc(100% - 32px));
+	min-height: 86px;
 	margin: 0 auto;
 }
 
@@ -138,10 +136,9 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 }
 
 .zaza-header__brand-name {
-	font-family: var(--zaza-display-font);
-	font-size: 1.05rem;
+	font-size: 0.95rem;
 	font-weight: 900;
-	line-height: 0.95;
+	line-height: 1.1;
 	text-transform: uppercase;
 }
 
@@ -178,10 +175,9 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 	min-height: 44px;
 	padding: 0 10px;
 	color: rgba(255, 255, 255, 0.86);
-	font-family: var(--zaza-display-font);
-	font-size: 0.86rem;
-	font-weight: 900;
-	line-height: 1;
+	font-size: 0.76rem;
+	font-weight: 800;
+	line-height: 1.2;
 	text-decoration: none;
 	text-transform: uppercase;
 	white-space: nowrap;
@@ -227,7 +223,7 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 	padding: 0 12px;
 	border-radius: 5px;
 	color: rgba(255, 255, 255, 0.78);
-	font-size: 0.82rem;
+	font-size: 0.78rem;
 }
 
 .zaza-nav-menu .sub-menu a:hover,
@@ -310,16 +306,14 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	min-height: 44px;
-	padding: 0 24px;
+	min-height: 48px;
+	padding: 0 22px;
 	border: 1px solid transparent;
-	border-radius: 5px;
-	font-family: var(--zaza-body-font);
-	font-size: 0.88rem;
-	font-weight: 900;
+	border-radius: 6px;
+	font-size: 0.96rem;
+	font-weight: 700;
 	line-height: 1;
 	text-decoration: none;
-	text-transform: uppercase;
 	cursor: pointer;
 	transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease, color 180ms ease, border-color 180ms ease;
 }
@@ -351,9 +345,8 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 .zaza-modal__eyebrow {
 	margin: 0 0 12px;
 	color: var(--zaza-muted);
-	font-family: var(--zaza-display-font);
 	font-size: 0.82rem;
-	font-weight: 900;
+	font-weight: 800;
 	text-transform: uppercase;
 }
 
@@ -544,7 +537,7 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	max-width: 760px;
+	max-width: 680px;
 	margin: 0 auto;
 	padding: 18px 0;
 }
@@ -556,13 +549,10 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 
 .zaza-hero__headline {
 	margin: 0;
-	color: #07100c;
-	font-family: var(--zaza-display-font);
-	font-size: 4.75rem;
+	color: #ffffff;
+	font-size: 5rem;
 	font-weight: 900;
-	line-height: 0.9;
-	text-transform: uppercase;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.28);
+	line-height: 0.98;
 }
 
 .zaza-hero__button {
@@ -654,11 +644,8 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 .zaza-promo__title {
 	margin: 0;
 	color: var(--zaza-ink);
-	font-family: var(--zaza-display-font);
-	font-size: 2.8rem;
-	font-weight: 900;
-	line-height: 0.95;
-	text-transform: uppercase;
+	font-size: 2.6rem;
+	line-height: 1.05;
 }
 
 .zaza-section__link {
@@ -810,11 +797,9 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 }
 
 .zaza-category-card__title {
-	font-family: var(--zaza-display-font);
-	font-size: 1.75rem;
+	font-size: 1.65rem;
 	font-weight: 900;
-	line-height: 0.95;
-	text-transform: uppercase;
+	line-height: 1.05;
 }
 
 .zaza-category-card__cta {
@@ -948,11 +933,10 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 	max-width: none;
 	margin: 0;
 	color: var(--zaza-ink);
-	font-family: var(--zaza-display-font);
-	font-size: 3.1rem;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: clamp(2.35rem, 4vw, 3.8rem);
 	font-weight: 900;
-	line-height: 0.95;
-	text-transform: uppercase;
+	line-height: 1.02;
 }
 
 .zaza-review-grid {
@@ -1481,37 +1465,21 @@ body:has(.zaza-header) .wp-block-post-title:first-child {
 
 @media (min-width: 901px) {
 	.zaza-header__inner {
-		gap: 20px;
+		gap: 16px;
 	}
 
 	.zaza-header__brand {
-		min-width: 200px;
+		min-width: 178px;
 	}
 
 	.zaza-nav-menu a {
-		padding: 0 9px;
-		font-size: 0.82rem;
+		padding: 0 8px;
+		font-size: 0.72rem;
 	}
 
 	.zaza-product-grid {
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 		gap: 16px;
-	}
-}
-
-@media (min-width: 901px) and (max-width: 1280px) {
-	.zaza-header__inner {
-		gap: 12px;
-		width: min(1280px, calc(100% - 28px));
-	}
-
-	.zaza-header__brand {
-		min-width: 168px;
-	}
-
-	.zaza-nav-menu a {
-		padding: 0 6px;
-		font-size: 0.72rem;
 	}
 }
 
