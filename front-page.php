@@ -484,7 +484,7 @@ if ( ! function_exists( 'zaza_home_render_category_card' ) ) {
 			<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url("%s");', esc_url_raw( $image_url ) ) ); ?>"></span>
 			<span class="zaza-category-card__body">
 				<span class="zaza-category-card__title"><?php echo esc_html( $term->name ); ?></span>
-				<span class="zaza-category-card__cta" aria-hidden="true">&nearr;</span>
+				<span class="zaza-category-card__cta" aria-hidden="true"></span>
 			</span>
 		</a>
 		<?php
@@ -533,6 +533,7 @@ get_header();
 <div class="zaza-entry-popups" aria-live="polite">
 	<div class="zaza-modal zaza-age-modal" data-zaza-age-modal role="dialog" aria-modal="true" aria-labelledby="zaza-age-title" hidden>
 		<div class="zaza-modal__panel zaza-modal__panel--age">
+			<img class="zaza-modal__logo" src="<?php echo esc_url( 'https://thezazaclub.com/wp-content/uploads/2026/05/logo.jpeg' ); ?>" alt="<?php echo esc_attr__( 'The Zaza Club', 'child-theme' ); ?>">
 			<p class="zaza-modal__eyebrow"><?php echo esc_html__( 'Age Verification', 'child-theme' ); ?></p>
 			<h2 id="zaza-age-title" class="zaza-modal__title"><?php echo esc_html__( 'Adults 21+ Only', 'child-theme' ); ?></h2>
 			<p class="zaza-modal__copy"><?php echo esc_html__( 'Please confirm you are at least 21 years old to continue browsing The Zaza Club.', 'child-theme' ); ?></p>
@@ -547,6 +548,7 @@ get_header();
 	<div class="zaza-modal zaza-email-modal" data-zaza-email-modal role="dialog" aria-modal="true" aria-labelledby="zaza-email-title" hidden>
 		<div class="zaza-modal__panel zaza-modal__panel--email">
 			<button class="zaza-modal__close" type="button" aria-label="<?php echo esc_attr__( 'Close discount signup', 'child-theme' ); ?>" data-zaza-email-dismiss>&times;</button>
+			<img class="zaza-modal__logo" src="<?php echo esc_url( 'https://thezazaclub.com/wp-content/uploads/2026/05/logo.jpeg' ); ?>" alt="<?php echo esc_attr__( 'The Zaza Club', 'child-theme' ); ?>">
 			<p class="zaza-modal__eyebrow"><?php echo esc_html__( 'Welcome Offer', 'child-theme' ); ?></p>
 			<h2 id="zaza-email-title" class="zaza-modal__title"><?php echo esc_html__( 'Get First Access to Drops', 'child-theme' ); ?></h2>
 			<p class="zaza-modal__copy"><?php echo esc_html__( 'Join the list for launch updates, rotating bundles, and limited-time offers.', 'child-theme' ); ?></p>
