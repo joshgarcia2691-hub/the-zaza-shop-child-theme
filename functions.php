@@ -22,6 +22,39 @@ function zaza_child_register_menus() {
 }
 add_action( 'after_setup_theme', 'zaza_child_register_menus' );
 
+if ( ! function_exists( 'zaza_child_favicon_url' ) ) {
+	/**
+	 * Return the Media Library logo URL used for the browser tab favicon.
+	 *
+	 * @return string
+	 */
+	function zaza_child_favicon_url() {
+		return 'https://thezazaclub.com/wp-content/uploads/2026/05/logo.jpeg';
+	}
+}
+
+if ( ! function_exists( 'zaza_child_render_favicon_links' ) ) {
+	/**
+	 * Print favicon links for public, login, and admin browser tabs.
+	 */
+	function zaza_child_render_favicon_links() {
+		$favicon_url = zaza_child_favicon_url();
+
+		if ( ! $favicon_url ) {
+			return;
+		}
+		?>
+		<link rel="icon" href="<?php echo esc_url( $favicon_url ); ?>" sizes="32x32" type="image/jpeg">
+		<link rel="icon" href="<?php echo esc_url( $favicon_url ); ?>" sizes="192x192" type="image/jpeg">
+		<link rel="apple-touch-icon" href="<?php echo esc_url( $favicon_url ); ?>">
+		<meta name="msapplication-TileImage" content="<?php echo esc_url( $favicon_url ); ?>">
+		<?php
+	}
+}
+add_action( 'wp_head', 'zaza_child_render_favicon_links', 1 );
+add_action( 'login_head', 'zaza_child_render_favicon_links', 1 );
+add_action( 'admin_head', 'zaza_child_render_favicon_links', 1 );
+
 /**
  * Register a shop filter area for WooCommerce archive pages.
  */
