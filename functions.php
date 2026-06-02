@@ -423,6 +423,32 @@ function zaza_child_render_global_footer() {
 add_action( 'wp_footer', 'zaza_child_render_global_footer', 5 );
 
 /**
+ * Replace the parent block theme footer template part with the Zaza footer.
+ *
+ * @param string $block_content Rendered block HTML.
+ * @param array  $block         Parsed block data.
+ * @return string
+ */
+function zaza_child_replace_parent_footer_template_part( $block_content, $block ) {
+	if ( ! zaza_child_is_public_storefront_page() || empty( $block['blockName'] ) || 'core/template-part' !== $block['blockName'] ) {
+		return $block_content;
+	}
+
+	$attrs = isset( $block['attrs'] ) && is_array( $block['attrs'] ) ? $block['attrs'] : array();
+	$slug  = isset( $attrs['slug'] ) ? sanitize_key( $attrs['slug'] ) : '';
+
+	if ( 'footer' !== $slug ) {
+		return $block_content;
+	}
+
+	ob_start();
+	zaza_render_custom_footer();
+
+	return ob_get_clean();
+}
+add_filter( 'render_block', 'zaza_child_replace_parent_footer_template_part', 20, 2 );
+
+/**
  * Add scoped body classes for the Zaza ecommerce shell.
  *
  * @param string[] $classes Body classes.
