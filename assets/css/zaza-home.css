@@ -5317,3 +5317,38 @@ body.single-product.zaza-storefront-page .cross-sells ul.products li.product .wo
 		font-size: clamp(2rem, 10vw, 2.85rem);
 	}
 }
+
+/* Final small nav readability bump. Font family stays unchanged. */
+@media (min-width: 901px) {
+	body.zaza-storefront-page .zaza-nav-menu > li > a {
+		font-size: clamp(1.16rem, 1.05vw, 1.32rem);
+	}
+
+	body.zaza-storefront-page .zaza-header__cart {
+		font-size: clamp(1.08rem, 1vw, 1.18rem);
+	}
+
+	body.zaza-storefront-page .zaza-dropdown-toggle::before {
+		font-size: 1.08rem;
+	}
+}
+
+@media (min-width: 901px) and (max-width: 1380px) {
+	body.zaza-storefront-page .zaza-nav-menu > li > a,
+	body.zaza-storefront-page .zaza-header__cart {
+		font-size: clamp(1rem, 0.96vw, 1.1rem);
+	}
+}
+
+@media (min-width: 901px) and (max-width: 1120px) {
+	body.zaza-storefront-page .zaza-nav-menu > li > a,
+	body.zaza-storefront-page .zaza-header__cart {
+		font-size: clamp(0.92rem, 0.9vw, 1rem);
+	}
+}
+
+@media (max-width: 900px) {
+	body.zaza-storefront-page .zaza-nav-menu > li > a {
+		font-size: 1.1rem;
+	}
+}
