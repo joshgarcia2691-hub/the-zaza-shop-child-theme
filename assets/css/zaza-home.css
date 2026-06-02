@@ -5352,3 +5352,446 @@ body.single-product.zaza-storefront-page .cross-sells ul.products li.product .wo
 		font-size: 1.1rem;
 	}
 }
+
+/* Deterministic nav fit: centered desktop, compact before wrapping/cutting. */
+@media (min-width: 1281px) {
+	body.zaza-storefront-page .zaza-header {
+		overflow: visible;
+		background: #242424;
+	}
+
+	body.zaza-storefront-page .zaza-header__inner {
+		display: grid;
+		grid-template-columns: minmax(146px, 220px) minmax(0, 1fr) minmax(92px, 132px);
+		align-items: center;
+		width: 100%;
+		max-width: none;
+		min-height: 100px;
+		padding: 0 clamp(24px, 2.4vw, 46px);
+		gap: clamp(16px, 2vw, 34px);
+	}
+
+	body.zaza-storefront-page .zaza-header__brand {
+		justify-self: start;
+		min-width: 0;
+	}
+
+	body.zaza-storefront-page .zaza-header__brand-logo {
+		width: 76px;
+		height: 76px;
+	}
+
+	body.zaza-storefront-page .zaza-header__brand-name {
+		font-size: 18px;
+		line-height: 1;
+		white-space: nowrap;
+	}
+
+	body.zaza-storefront-page .zaza-nav {
+		position: static;
+		display: flex;
+		justify-content: center;
+		justify-self: center;
+		width: 100%;
+		min-width: 0;
+		max-height: none;
+		padding: 0;
+		overflow: visible;
+		background: transparent;
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-wrap: nowrap;
+		width: auto;
+		max-width: 100%;
+		margin: 0 auto;
+		gap: clamp(12px, 1vw, 22px);
+		white-space: nowrap;
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu > li {
+		display: inline-flex;
+		align-items: center;
+		flex: 0 0 auto;
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu > li > a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		padding: 0;
+		font-size: 17px;
+		line-height: 1;
+		white-space: nowrap;
+	}
+
+	body.zaza-storefront-page .zaza-header__cart {
+		justify-self: end;
+		min-height: 48px;
+		padding: 0 24px;
+		font-size: 16px;
+		line-height: 1;
+		white-space: nowrap;
+	}
+
+	body.zaza-storefront-page .zaza-dropdown-toggle {
+		position: static;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		flex: 0 0 18px;
+		width: 18px;
+		height: 28px;
+		margin: 0 0 0 3px;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: #ffffff;
+	}
+
+	body.zaza-storefront-page .zaza-dropdown-toggle::before {
+		content: "";
+		width: 7px;
+		height: 7px;
+		border-right: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		font-size: 0;
+		transform: rotate(45deg) translate(-1px, -1px);
+		transition: transform 160ms ease;
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu li.is-open > .zaza-dropdown-toggle::before {
+		transform: rotate(225deg) translate(-1px, -1px);
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu .sub-menu a {
+		font-family: var(--zaza-body-font);
+		font-size: 14px;
+		font-weight: 700;
+		letter-spacing: 0;
+		line-height: 1.25;
+		text-transform: none;
+	}
+}
+
+@media (min-width: 1281px) and (max-width: 1540px) {
+	body.zaza-storefront-page .zaza-header__inner {
+		grid-template-columns: minmax(76px, 96px) minmax(0, 1fr) minmax(84px, 116px);
+		min-height: 92px;
+		padding-right: 22px;
+		padding-left: 22px;
+		gap: 14px;
+	}
+
+	body.zaza-storefront-page .zaza-header__brand-name {
+		display: none;
+	}
+
+	body.zaza-storefront-page .zaza-header__brand-logo {
+		width: 64px;
+		height: 64px;
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu {
+		gap: clamp(8px, 0.72vw, 14px);
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu > li > a {
+		font-size: 16px;
+	}
+
+	body.zaza-storefront-page .zaza-header__cart {
+		min-height: 44px;
+		padding: 0 18px;
+		font-size: 15px;
+	}
+}
+
+@media (min-width: 1281px) {
+	body.zaza-storefront-page .zaza-header.is-compact-nav .zaza-header__inner {
+		grid-template-columns: auto auto minmax(0, 1fr) auto;
+		min-height: 92px;
+	}
+
+	body.zaza-storefront-page .zaza-header.is-compact-nav .zaza-nav-toggle {
+		display: inline-flex;
+		grid-column: 1;
+		grid-row: 1;
+	}
+
+	body.zaza-storefront-page .zaza-header.is-compact-nav .zaza-header__brand {
+		grid-column: 2;
+		grid-row: 1;
+		justify-self: start;
+	}
+
+	body.zaza-storefront-page .zaza-header.is-compact-nav .zaza-header__cart {
+		grid-column: 4;
+		grid-row: 1;
+		justify-self: end;
+	}
+
+	body.zaza-storefront-page .zaza-header.is-compact-nav .zaza-nav {
+		position: absolute;
+		top: 100%;
+		right: clamp(18px, 3vw, 46px);
+		left: clamp(18px, 3vw, 46px);
+		z-index: 40;
+		display: grid;
+		max-height: 0;
+		padding: 0;
+		overflow: hidden;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+		background: #242424;
+		box-shadow: 0 24px 42px rgba(0, 0, 0, 0.28);
+		transition: max-height 180ms ease, padding 180ms ease;
+	}
+
+	body.zaza-storefront-page .zaza-header.is-compact-nav.is-open .zaza-nav {
+		max-height: min(76vh, 680px);
+		padding: 16px;
+		overflow: auto;
+	}
+
+	body.zaza-storefront-page .zaza-header.is-compact-nav .zaza-nav-menu {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		width: 100%;
+		max-width: none;
+		margin: 0;
+		gap: 0 20px;
+	}
+
+	body.zaza-storefront-page .zaza-header.is-compact-nav .zaza-nav-menu > li {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 42px;
+		align-items: center;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	body.zaza-storefront-page .zaza-header.is-compact-nav .zaza-nav-menu > li:not(.menu-item-has-children) {
+		grid-template-columns: 1fr;
+	}
+
+	body.zaza-storefront-page .zaza-header.is-compact-nav .zaza-nav-menu > li > a {
+		min-height: 48px;
+		font-size: 20px;
+		white-space: normal;
+	}
+
+	body.zaza-storefront-page .zaza-header.is-compact-nav .zaza-nav-menu .sub-menu {
+		grid-column: 1 / -1;
+		width: 100%;
+		max-height: 0;
+		padding: 0;
+		overflow: hidden;
+		background: rgba(0, 0, 0, 0.18);
+	}
+
+	body.zaza-storefront-page .zaza-header.is-compact-nav .zaza-nav-menu li.is-open > .sub-menu {
+		max-height: 420px;
+		padding: 8px 14px;
+	}
+}
+
+@media (min-width: 1281px) and (max-width: 1540px) {
+	body.zaza-storefront-page .zaza-header.is-compact-nav .zaza-nav-menu {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 1280px) {
+	body.zaza-storefront-page .zaza-header {
+		position: relative;
+		overflow: visible;
+		background: #242424;
+	}
+
+	body.zaza-storefront-page .zaza-header__inner {
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr) auto;
+		align-items: center;
+		width: 100%;
+		max-width: none;
+		min-height: 86px;
+		padding: 0 clamp(14px, 3vw, 28px);
+		gap: clamp(12px, 2vw, 18px);
+	}
+
+	body.zaza-storefront-page .zaza-nav-toggle {
+		display: inline-flex;
+		grid-column: 1;
+		grid-row: 1;
+	}
+
+	body.zaza-storefront-page .zaza-header__brand {
+		grid-column: 2;
+		grid-row: 1;
+		justify-self: center;
+		min-width: 0;
+	}
+
+	body.zaza-storefront-page .zaza-header__brand-logo {
+		width: 62px;
+		height: 62px;
+	}
+
+	body.zaza-storefront-page .zaza-header__brand-name {
+		display: inline;
+		font-size: clamp(18px, 2.2vw, 24px);
+		line-height: 1;
+		white-space: nowrap;
+	}
+
+	body.zaza-storefront-page .zaza-header__cart {
+		grid-column: 3;
+		grid-row: 1;
+		justify-self: end;
+		min-height: 48px;
+		padding: 0 18px;
+		font-size: 16px;
+		line-height: 1;
+	}
+
+	body.zaza-storefront-page .zaza-nav {
+		position: absolute;
+		top: 100%;
+		right: clamp(12px, 3vw, 28px);
+		left: clamp(12px, 3vw, 28px);
+		z-index: 40;
+		display: grid;
+		max-height: 0;
+		padding: 0;
+		overflow: hidden;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+		background: #242424;
+		box-shadow: 0 24px 42px rgba(0, 0, 0, 0.28);
+		transition: max-height 180ms ease, padding 180ms ease;
+	}
+
+	body.zaza-storefront-page .zaza-header.is-open .zaza-nav {
+		max-height: min(76vh, 680px);
+		padding: 14px;
+		overflow: auto;
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		width: 100%;
+		max-width: none;
+		margin: 0;
+		gap: 0 18px;
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu > li {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 42px;
+		align-items: center;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu > li:not(.menu-item-has-children) {
+		grid-template-columns: 1fr;
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu > li > a {
+		min-width: 0;
+		min-height: 48px;
+		padding: 0;
+		font-size: 20px;
+		line-height: 1;
+		white-space: normal;
+	}
+
+	body.zaza-storefront-page .zaza-dropdown-toggle {
+		position: static;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 42px;
+		height: 42px;
+		margin: 0;
+		border: 0;
+		background: transparent;
+		color: #ffffff;
+	}
+
+	body.zaza-storefront-page .zaza-dropdown-toggle::before {
+		content: "";
+		width: 8px;
+		height: 8px;
+		border-right: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		transform: rotate(45deg) translate(-1px, -1px);
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu li.is-open > .zaza-dropdown-toggle::before {
+		transform: rotate(225deg) translate(-1px, -1px);
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu .sub-menu {
+		grid-column: 1 / -1;
+		width: 100%;
+		max-height: 0;
+		padding: 0;
+		overflow: hidden;
+		background: rgba(0, 0, 0, 0.18);
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu li.is-open > .sub-menu {
+		max-height: 420px;
+		padding: 8px 14px;
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu .sub-menu a {
+		min-height: 38px;
+		padding: 0;
+		font-family: var(--zaza-body-font);
+		font-size: 14px;
+		font-weight: 700;
+		letter-spacing: 0;
+		text-transform: none;
+	}
+}
+
+@media (max-width: 600px) {
+	body.zaza-storefront-page .zaza-header__inner {
+		min-height: 82px;
+		padding-right: 12px;
+		padding-left: 12px;
+		gap: 10px;
+	}
+
+	body.zaza-storefront-page .zaza-header__brand {
+		gap: 10px;
+	}
+
+	body.zaza-storefront-page .zaza-header__brand-logo {
+		width: 58px;
+		height: 58px;
+	}
+
+	body.zaza-storefront-page .zaza-header__brand-name {
+		font-size: clamp(18px, 5.2vw, 22px);
+	}
+
+	body.zaza-storefront-page .zaza-header__cart {
+		min-width: 58px;
+		min-height: 48px;
+		padding: 0 12px;
+		font-size: 15px;
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu {
+		grid-template-columns: 1fr;
+		gap: 0;
+	}
+
+	body.zaza-storefront-page .zaza-nav-menu > li > a {
+		font-size: 21px;
+	}
+}
