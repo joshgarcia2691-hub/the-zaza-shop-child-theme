@@ -354,6 +354,47 @@ if ( ! function_exists( 'zaza_render_custom_header' ) ) {
 	}
 }
 
+if ( ! function_exists( 'zaza_render_custom_footer' ) ) {
+	/**
+	 * Render the canonical custom Zaza footer once per request.
+	 *
+	 * @return void
+	 */
+	function zaza_render_custom_footer() {
+		if ( ! empty( $GLOBALS['zaza_child_footer_rendered'] ) ) {
+			return;
+		}
+
+		$GLOBALS['zaza_child_footer_rendered'] = true;
+		?>
+		<footer class="zaza-footer" aria-label="<?php echo esc_attr__( 'Site footer', 'the-zaza-shop-child' ); ?>">
+			<div class="zaza-footer__inner">
+				<div class="zaza-footer__top">
+					<a class="zaza-footer__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php echo esc_attr__( 'The Zaza Club home', 'the-zaza-shop-child' ); ?>">
+						<img class="zaza-footer__logo" src="<?php echo esc_url( 'https://thezazaclub.com/wp-content/uploads/2026/05/logo.jpeg' ); ?>" alt="" width="58" height="58">
+						<span><?php echo esc_html__( 'The Zaza Club', 'the-zaza-shop-child' ); ?></span>
+					</a>
+
+					<nav class="zaza-footer__nav" aria-label="<?php echo esc_attr__( 'Footer product links', 'the-zaza-shop-child' ); ?>">
+						<a href="<?php echo esc_url( zaza_get_product_category_url( 'flower' ) ); ?>"><?php echo esc_html__( 'Flower', 'the-zaza-shop-child' ); ?></a>
+						<a href="<?php echo esc_url( zaza_get_product_category_url( 'edibles' ) ); ?>"><?php echo esc_html__( 'Edibles', 'the-zaza-shop-child' ); ?></a>
+						<a href="<?php echo esc_url( zaza_get_product_category_url( 'smalls' ) ); ?>"><?php echo esc_html__( 'Smalls', 'the-zaza-shop-child' ); ?></a>
+						<a href="<?php echo esc_url( zaza_get_product_category_url( 'thc-vape' ) ); ?>"><?php echo esc_html__( 'THC Vape', 'the-zaza-shop-child' ); ?></a>
+						<a href="<?php echo esc_url( zaza_get_product_category_url( 'accessories' ) ); ?>"><?php echo esc_html__( 'Accessories', 'the-zaza-shop-child' ); ?></a>
+					</nav>
+				</div>
+
+				<div class="zaza-footer__meta">
+					<span><?php echo esc_html__( 'Adults 21+ where permitted.', 'the-zaza-shop-child' ); ?></span>
+					<span><?php echo esc_html__( 'Secure checkout.', 'the-zaza-shop-child' ); ?></span>
+					<span><?php echo esc_html__( 'Shipping rules apply.', 'the-zaza-shop-child' ); ?></span>
+				</div>
+			</div>
+		</footer>
+		<?php
+	}
+}
+
 /**
  * Add the custom Zaza header to public storefront surfaces.
  *
@@ -367,6 +408,19 @@ function zaza_child_render_custom_archive_header() {
 	zaza_render_custom_header();
 }
 add_action( 'wp_body_open', 'zaza_child_render_custom_archive_header', 20 );
+
+/**
+ * Add the custom Zaza footer on public storefront pages that use parent block
+ * templates instead of the child theme footer.php.
+ */
+function zaza_child_render_global_footer() {
+	if ( ! zaza_child_is_public_storefront_page() ) {
+		return;
+	}
+
+	zaza_render_custom_footer();
+}
+add_action( 'wp_footer', 'zaza_child_render_global_footer', 5 );
 
 /**
  * Add scoped body classes for the Zaza ecommerce shell.

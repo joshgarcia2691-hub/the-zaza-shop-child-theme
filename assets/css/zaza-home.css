@@ -2380,6 +2380,22 @@ body.zaza-commerce-page .wp-site-blocks,
 	}
 }
 
+/* Global storefront footer enforcement. */
+body.zaza-storefront-page footer.wp-block-template-part:not(.zaza-footer),
+body.zaza-storefront-page .wp-site-blocks > footer.wp-block-template-part:not(.zaza-footer) {
+	display: none !important;
+}
+
+body.zaza-storefront-page .zaza-footer {
+	display: block;
+	clear: both;
+	width: 100vw;
+	margin-right: 0;
+	margin-left: calc(50% - 50vw);
+	background: #050706;
+	color: #ffffff;
+}
+
 /* Quick visual correction: readable nav, clear dropdown chevrons, cleaner cards/promo. */
 @media (min-width: 901px) {
 	.zaza-header__inner {
