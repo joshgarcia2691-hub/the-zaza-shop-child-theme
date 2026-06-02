@@ -484,7 +484,7 @@ if ( ! function_exists( 'zaza_home_render_category_card' ) ) {
 			<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url("%s");', esc_url_raw( $image_url ) ) ); ?>"></span>
 			<span class="zaza-category-card__body">
 				<span class="zaza-category-card__title"><?php echo esc_html( $term->name ); ?></span>
-				<span class="zaza-category-card__cta" aria-hidden="true">&gt;</span>
+				<span class="zaza-category-card__cta" aria-hidden="true">&nearr;</span>
 			</span>
 		</a>
 		<?php
