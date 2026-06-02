@@ -775,3 +775,67 @@ body.zaza-product-archive-page .wc-block-product .wc-block-components-product-bu
 		padding: 0 12px;
 	}
 }
+
+/* Final archive typography: Bebas titles/buttons, DM Sans supporting text. */
+body.zaza-product-archive-page :where(
+	.woocommerce,
+	.woocommerce-breadcrumb,
+	.woocommerce-result-count,
+	.woocommerce-ordering,
+	.woocommerce-ordering select,
+	.zaza-shop-intro__description,
+	.term-description,
+	.zaza-shop-filter__link,
+	.zaza-shop-filter__label,
+	.zaza-shop-filter__count,
+	.zaza-shop-price-filter label,
+	.zaza-shop-price-filter input,
+	.price,
+	.amount,
+	.star-rating,
+	.wc-block-components-product-price
+) {
+	font-family: var(--zaza-shop-body-font);
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+body.zaza-product-archive-page :where(
+	.woocommerce-products-header__title.page-title,
+	h1.page-title,
+	.wp-block-query-title,
+	.zaza-shop-title,
+	.zaza-shop-filter__title,
+	.woocommerce-loop-product__title,
+	.wc-block-product .wp-block-post-title,
+	.wc-block-product .wp-block-post-title a,
+	.woocommerce ul.products li.product .button,
+	.wc-block-product .wp-block-button__link,
+	.wc-block-product .wc-block-components-product-button__button,
+	.woocommerce nav.woocommerce-pagination ul li a,
+	.woocommerce nav.woocommerce-pagination ul li span
+) {
+	font-family: var(--zaza-shop-display-font);
+	font-weight: 400;
+	letter-spacing: 0.035em;
+	text-transform: uppercase;
+}
+
+body.zaza-product-archive-page .woocommerce ul.products li.product .woocommerce-loop-product__title,
+body.zaza-product-archive-page .wc-block-product .wp-block-post-title,
+body.zaza-product-archive-page .wc-block-product .wp-block-post-title a {
+	font-size: clamp(1.05rem, 1.12vw, 1.22rem);
+	line-height: 1.04;
+}
+
+body.zaza-product-archive-page .woocommerce ul.products li.product .price,
+body.zaza-product-archive-page .wc-block-product .wp-block-woocommerce-product-price,
+body.zaza-product-archive-page .wc-block-product .wc-block-components-product-price {
+	font-size: 0.94rem;
+	font-weight: 800;
+}
+
+body.zaza-product-archive-page .zaza-shop-filter__title {
+	font-size: clamp(1.55rem, 2vw, 2rem);
+	line-height: 1;
+}

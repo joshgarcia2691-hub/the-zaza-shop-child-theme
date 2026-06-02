@@ -5178,3 +5178,142 @@ body.zaza-storefront-page,
 		font-size: 1rem;
 	}
 }
+
+/* Actual final typography lock: Bebas Neue display, DM Sans body text. */
+body.zaza-storefront-page,
+.zaza-home,
+.zaza-header {
+	--zaza-display-font: "Bebas Neue", "Arial Narrow", "Roboto Condensed", sans-serif;
+	--zaza-body-font: "DM Sans", Arial, Helvetica, sans-serif;
+}
+
+body.zaza-storefront-page,
+body.zaza-storefront-page :where(
+	p,
+	li,
+	dl,
+	dt,
+	dd,
+	label,
+	input,
+	select,
+	textarea,
+	table,
+	th,
+	td,
+	.price,
+	.amount,
+	.woocommerce-breadcrumb,
+	.product_meta,
+	.woocommerce-product-details__short-description,
+	.woocommerce-Tabs-panel,
+	.woocommerce-product-attributes,
+	.woocommerce-product-attributes-item__label,
+	.woocommerce-product-attributes-item__value,
+	.woocommerce-result-count,
+	.woocommerce-ordering,
+	.woocommerce-ordering select,
+	.zaza-product-card__price,
+	.zaza-review p,
+	.zaza-footer,
+	.zaza-footer__meta,
+	.zaza-footer__nav a,
+	.zaza-nav-menu .sub-menu a
+) {
+	font-family: var(--zaza-body-font);
+	letter-spacing: 0;
+}
+
+body.zaza-storefront-page :where(
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	.page-title,
+	.entry-title,
+	.product_title,
+	.woocommerce-loop-product__title,
+	.wp-block-post-title,
+	.related > h2,
+	.upsells > h2,
+	.cross-sells > h2,
+	.woocommerce-tabs ul.tabs li a,
+	.zaza-header__brand-name,
+	.zaza-nav-menu > li > a,
+	.zaza-header__cart,
+	.zaza-section__eyebrow,
+	.zaza-section__title,
+	.zaza-product-card__title,
+	.zaza-category-card__title,
+	.zaza-shop-title,
+	.zaza-shop-filter__title,
+	.button,
+	button,
+	input[type="submit"]
+) {
+	font-family: var(--zaza-display-font);
+	font-weight: 400;
+	letter-spacing: 0.035em;
+	text-transform: uppercase;
+}
+
+body.single-product.zaza-storefront-page .product_title.entry-title {
+	font-family: var(--zaza-display-font);
+	font-size: clamp(2.25rem, 4vw, 4.1rem);
+	font-weight: 400;
+	line-height: 0.96;
+	letter-spacing: 0.025em;
+	text-transform: uppercase;
+}
+
+body.single-product.zaza-storefront-page .woocommerce div.product p.price,
+body.single-product.zaza-storefront-page .woocommerce div.product span.price {
+	font-family: var(--zaza-body-font);
+	font-size: clamp(1.05rem, 1.5vw, 1.35rem);
+	font-weight: 800;
+	letter-spacing: 0;
+}
+
+body.single-product.zaza-storefront-page .woocommerce div.product form.cart .variations label,
+body.single-product.zaza-storefront-page .woocommerce div.product form.cart select,
+body.single-product.zaza-storefront-page .woocommerce div.product form.cart .quantity .qty,
+body.single-product.zaza-storefront-page .woocommerce-product-attributes th,
+body.single-product.zaza-storefront-page .woocommerce-product-attributes td,
+body.single-product.zaza-storefront-page .product_meta,
+body.single-product.zaza-storefront-page .woocommerce-product-details__short-description {
+	font-family: var(--zaza-body-font);
+	font-size: 0.94rem;
+	letter-spacing: 0;
+	line-height: 1.6;
+	text-transform: none;
+}
+
+body.single-product.zaza-storefront-page .woocommerce-tabs .panel > h2,
+body.single-product.zaza-storefront-page .related > h2,
+body.single-product.zaza-storefront-page .upsells > h2 {
+	font-family: var(--zaza-display-font);
+	font-size: clamp(1.55rem, 2.4vw, 2.3rem);
+	font-weight: 400;
+	line-height: 1;
+	letter-spacing: 0.035em;
+	text-transform: uppercase;
+}
+
+body.single-product.zaza-storefront-page .related ul.products li.product .woocommerce-loop-product__title,
+body.single-product.zaza-storefront-page .upsells ul.products li.product .woocommerce-loop-product__title,
+body.single-product.zaza-storefront-page .cross-sells ul.products li.product .woocommerce-loop-product__title {
+	font-family: var(--zaza-display-font);
+	font-size: clamp(1rem, 1.1vw, 1.16rem);
+	font-weight: 400;
+	line-height: 1.05;
+	letter-spacing: 0.025em;
+	text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+	body.single-product.zaza-storefront-page .product_title.entry-title {
+		font-size: clamp(2rem, 10vw, 2.85rem);
+	}
+}
