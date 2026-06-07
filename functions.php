@@ -55,6 +55,20 @@ add_action( 'wp_head', 'zaza_child_render_favicon_links', 1 );
 add_action( 'login_head', 'zaza_child_render_favicon_links', 1 );
 add_action( 'admin_head', 'zaza_child_render_favicon_links', 1 );
 
+/**
+ * Keep WooCommerce email headers as plain brand text.
+ *
+ * The email-improvements header links the text logo when no logo image is set.
+ * On the live mailbox that linked text is arriving with an unclosed inlined
+ * style attribute, which causes PrivateEmail to swallow the order body.
+ *
+ * @return string
+ */
+function zaza_child_disable_woocommerce_email_header_link() {
+	return '';
+}
+add_filter( 'woocommerce_email_header_image_url', 'zaza_child_disable_woocommerce_email_header_link', 20 );
+
 if ( ! function_exists( 'zaza_child_email_improvements_enabled' ) ) {
 	/**
 	 * Check whether WooCommerce's email-improvements feature is enabled.
