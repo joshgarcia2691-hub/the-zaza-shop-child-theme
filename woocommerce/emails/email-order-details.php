@@ -122,131 +122,124 @@ endif;
 			$text_align       = is_rtl() ? 'right' : 'left';
 			$number_align     = is_rtl() ? 'left' : 'right';
 			$item_cell_style  = 'color: #414141; border: 0; font-family: Helvetica Neue, Helvetica, Roboto, Arial, sans-serif; padding: 10px 12px; padding-left: 0; vertical-align: top; word-wrap: break-word;';
-			$number_style     = 'color: #414141; border: 0; font-family: Helvetica Neue, Helvetica, Roboto, Arial, sans-serif; padding: 10px 12px; vertical-align: top; white-space: nowrap;';
-			$price_cell_style = 'color: #414141; border: 0; font-family: Helvetica Neue, Helvetica, Roboto, Arial, sans-serif; padding: 10px 0 10px 12px; vertical-align: top; white-space: nowrap;';
-			$total_cell_style = 'color: #414141; border: 0; border-top: 1px solid rgba(30, 30, 30, 0.2); font-family: Helvetica Neue, Helvetica, Roboto, Arial, sans-serif; padding: 10px 12px; vertical-align: top;';
-
-			foreach ( $order->get_items() as $item_id => $item ) {
-				$product       = $item->get_product();
-				$sku           = '';
-				$purchase_note = '';
-
-				if ( ! apply_filters( 'woocommerce_order_item_visible', true, $item ) ) {
-					continue;
-				}
-
-				if ( is_object( $product ) ) {
-					$sku           = $product->get_sku();
-					$purchase_note = $product->get_purchase_note();
-				}
-				?>
-			<tr class="<?php echo esc_attr( apply_filters( 'woocommerce_order_item_class', 'order_item', $item, $order ) ); ?>">
-				<td class="td font-family text-align-<?php echo esc_attr( $text_align ); ?>" style="<?php echo esc_attr( $item_cell_style ); ?>" align="<?php echo esc_attr( $text_align ); ?>">
-					<strong style="color: #111111; font-weight: 700;"><?php echo wp_kses_post( apply_filters( 'woocommerce_order_item_name', $item->get_name(), $item, false ) ); ?></strong>
+			$line_style       = 'border-bottom: 1px solid rgba(30, 30, 30, 0.12); padding: 10px 0;';
+			$label_style      = 'color: #636363; font-size: 12px; text-transform: uppercase;';
+			$amount_style     = 'color: #111111; font-weight: 700;';
+			?>
+			<tr class="order_item zaza-order-items-summary">
+				<td class="td font-family text-align-<?php echo esc_attr( $text_align ); ?>" colspan="3" style="<?php echo esc_attr( $item_cell_style ); ?>" align="<?php echo esc_attr( $text_align ); ?>">
 					<?php
-					if ( $sent_to_admin && $sku ) {
-						echo wp_kses_post( '<br><span style="color: #636363;">#' . esc_html( $sku ) . '</span>' );
+
+					foreach ( $order->get_items() as $item_id => $item ) {
+						$product       = $item->get_product();
+						$sku           = '';
+						$purchase_note = '';
+
+						if ( ! apply_filters( 'woocommerce_order_item_visible', true, $item ) ) {
+							continue;
+						}
+
+						if ( is_object( $product ) ) {
+							$sku           = $product->get_sku();
+							$purchase_note = $product->get_purchase_note();
+						}
+
+						$qty          = $item->get_quantity();
+						$refunded_qty = $order->get_qty_refunded_for_item( $item_id );
+
+						if ( $refunded_qty ) {
+							$qty_display = '<del>' . esc_html( $qty ) . '</del> <ins>' . esc_html( $qty - ( $refunded_qty * -1 ) ) . '</ins>';
+						} else {
+							$qty_display = esc_html( $qty );
+						}
+
+						$qty_display = apply_filters( 'woocommerce_email_order_item_quantity', $qty_display, $item );
+						?>
+					<div class="<?php echo esc_attr( apply_filters( 'woocommerce_order_item_class', 'order_item', $item, $order ) ); ?>" style="<?php echo esc_attr( $line_style ); ?>">
+						<strong style="color: #111111; font-weight: 700;"><?php echo wp_kses_post( apply_filters( 'woocommerce_order_item_name', $item->get_name(), $item, false ) ); ?></strong>
+						<?php
+						if ( $sent_to_admin && $sku ) {
+							echo wp_kses_post( '<br><span style="color: #636363;">#' . esc_html( $sku ) . '</span>' );
+						}
+
+						do_action( 'woocommerce_order_item_meta_start', $item_id, $item, $order, $plain_text );
+
+						$item_meta = wc_display_item_meta(
+							$item,
+							array(
+								'before'       => '<div class="email-order-item-meta" style="color: #636363; font-size: 13px; line-height: 1.45; margin-top: 4px;">',
+								'after'        => '</div>',
+								'separator'    => '<br>',
+								'echo'         => false,
+								'label_before' => '<span style="font-weight: 700;">',
+								'label_after'  => ':</span> ',
+							)
+						);
+
+						echo wp_kses_post( $item_meta );
+
+						do_action( 'woocommerce_order_item_meta_end', $item_id, $item, $order, $plain_text );
+						?>
+						<br><span style="<?php echo esc_attr( $label_style ); ?>"><?php esc_html_e( 'Quantity', 'woocommerce' ); ?>:</span> <?php echo wp_kses_post( $qty_display ); ?>
+						<br><span style="<?php echo esc_attr( $label_style ); ?>"><?php esc_html_e( 'Price', 'woocommerce' ); ?>:</span> <span style="<?php echo esc_attr( $amount_style ); ?>"><?php echo wp_kses_post( $order->get_formatted_line_subtotal( $item ) ); ?></span>
+						<?php if ( ! $sent_to_admin && $order->is_paid() && $purchase_note ) : ?>
+							<div style="margin-top: 8px;"><?php echo wp_kses_post( wpautop( do_shortcode( $purchase_note ) ) ); ?></div>
+						<?php endif; ?>
+					</div>
+						<?php
 					}
 
-					do_action( 'woocommerce_order_item_meta_start', $item_id, $item, $order, $plain_text );
+					$item_totals = $order->get_order_item_totals();
 
-					$item_meta = wc_display_item_meta(
-						$item,
-						array(
-							'before'       => '<div class="email-order-item-meta" style="color: #636363; font-size: 13px; line-height: 1.45; margin-top: 4px;">',
-							'after'        => '</div>',
-							'separator'    => '<br>',
-							'echo'         => false,
-							'label_before' => '<span style="font-weight: 700;">',
-							'label_after'  => ':</span> ',
-						)
-					);
+					if ( ! $item_totals ) {
+						$item_totals = array(
+							array(
+								'label' => __( 'Subtotal:', 'woocommerce' ),
+								'value' => $order->get_subtotal_to_display(),
+								'type'  => 'cart_subtotal',
+							),
+						);
 
-					echo wp_kses_post( $item_meta );
+						if ( $order->get_shipping_method() || (float) $order->get_shipping_total() > 0 ) {
+							$item_totals[] = array(
+								'label' => __( 'Shipping:', 'woocommerce' ),
+								'value' => $order->get_shipping_to_display(),
+								'type'  => 'shipping',
+							);
+						}
 
-					do_action( 'woocommerce_order_item_meta_end', $item_id, $item, $order, $plain_text );
-					?>
-				</td>
-				<td class="td font-family text-align-<?php echo esc_attr( $number_align ); ?>" style="<?php echo esc_attr( $number_style ); ?>" align="<?php echo esc_attr( $number_align ); ?>">
-					<?php
-					$qty          = $item->get_quantity();
-					$refunded_qty = $order->get_qty_refunded_for_item( $item_id );
+						if ( $order->get_payment_method_title() ) {
+							$item_totals[] = array(
+								'label' => __( 'Payment method:', 'woocommerce' ),
+								'value' => wp_kses_post( $order->get_payment_method_title() ),
+								'type'  => 'payment_method',
+							);
+						}
 
-					if ( $refunded_qty ) {
-						$qty_display = '<del>' . esc_html( $qty ) . '</del> <ins>' . esc_html( $qty - ( $refunded_qty * -1 ) ) . '</ins>';
-					} else {
-						$qty_display = esc_html( $qty );
+						$item_totals[] = array(
+							'label' => __( 'Total:', 'woocommerce' ),
+							'value' => $order->get_formatted_order_total(),
+							'type'  => 'total',
+						);
 					}
 
-					echo wp_kses_post( apply_filters( 'woocommerce_email_order_item_quantity', $qty_display, $item ) );
-					?>
-				</td>
-				<td class="td font-family text-align-<?php echo esc_attr( $number_align ); ?>" style="<?php echo esc_attr( $price_cell_style ); ?>" align="<?php echo esc_attr( $number_align ); ?>">
-					<?php echo wp_kses_post( $order->get_formatted_line_subtotal( $item ) ); ?>
-				</td>
-			</tr>
-				<?php if ( ! $sent_to_admin && $order->is_paid() && $purchase_note ) : ?>
-			<tr>
-				<td colspan="3" class="font-family text-align-<?php echo esc_attr( $text_align ); ?>" style="<?php echo esc_attr( $item_cell_style ); ?>" align="<?php echo esc_attr( $text_align ); ?>">
-					<?php echo wp_kses_post( wpautop( do_shortcode( $purchase_note ) ) ); ?>
-				</td>
-			</tr>
-				<?php endif; ?>
-				<?php
-			}
-
-			$item_totals = $order->get_order_item_totals();
-
-			if ( ! $item_totals ) {
-				$item_totals = array(
-					array(
-						'label' => __( 'Subtotal:', 'woocommerce' ),
-						'value' => $order->get_subtotal_to_display(),
-						'type'  => 'cart_subtotal',
-					),
-				);
-
-				if ( $order->get_shipping_method() || (float) $order->get_shipping_total() > 0 ) {
-					$item_totals[] = array(
-						'label' => __( 'Shipping:', 'woocommerce' ),
-						'value' => $order->get_shipping_to_display(),
-						'type'  => 'shipping',
-					);
-				}
-
-				if ( $order->get_payment_method_title() ) {
-					$item_totals[] = array(
-						'label' => __( 'Payment method:', 'woocommerce' ),
-						'value' => wp_kses_post( $order->get_payment_method_title() ),
-						'type'  => 'payment_method',
-					);
-				}
-
-				$item_totals[] = array(
-					'label' => __( 'Total:', 'woocommerce' ),
-					'value' => $order->get_formatted_order_total(),
-					'type'  => 'total',
-				);
-			}
-
-			foreach ( $item_totals as $total ) {
-				?>
-			<tr class="order-totals order-totals-<?php echo esc_attr( $total['type'] ?? 'unknown' ); ?>">
-				<th class="td font-family text-align-<?php echo esc_attr( $text_align ); ?>" colspan="2" scope="row" style="<?php echo esc_attr( $total_cell_style ); ?>" align="<?php echo esc_attr( $text_align ); ?>">
-					<?php echo wp_kses_post( $total['label'] ); ?>
-					<?php
-					if ( isset( $total['meta'] ) ) {
-						echo wp_kses_post( $total['meta'] );
+					foreach ( $item_totals as $total ) {
+						?>
+					<div class="order-totals order-totals-<?php echo esc_attr( $total['type'] ?? 'unknown' ); ?>" style="padding: 8px 0;">
+						<span style="<?php echo esc_attr( $label_style ); ?>"><?php echo wp_kses_post( $total['label'] ); ?></span>
+						<?php
+						if ( isset( $total['meta'] ) ) {
+							echo wp_kses_post( $total['meta'] );
+						}
+						?>
+						<br><span style="<?php echo esc_attr( $amount_style ); ?>"><?php echo wp_kses_post( $total['value'] ); ?></span>
+					</div>
+						<?php
 					}
 					?>
-				</th>
-				<td class="td font-family text-align-<?php echo esc_attr( $number_align ); ?>" style="<?php echo esc_attr( $total_cell_style ); ?>" align="<?php echo esc_attr( $number_align ); ?>">
-					<?php echo wp_kses_post( $total['value'] ); ?>
 				</td>
 			</tr>
-				<?php
-			}
-
+			<?php
 			if ( $order->get_customer_note() && ! $email_improvements_enabled ) {
 				?>
 			<tr>
