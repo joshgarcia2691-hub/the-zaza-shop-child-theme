@@ -130,23 +130,16 @@ endif;
 					'sent_to_admin' => $sent_to_admin,
 				)
 			);
-			?>
-		</tbody>
-	</table>
-	<?php if ( $display_section_divider ) : ?>
-		<hr style="border: 0; border-top: 1px solid #1E1E1E; border-top-color: rgba(30, 30, 30, 0.2); margin: 20px 0;">
-	<?php endif; ?>
-	<table class="td font-family <?php echo esc_attr( $order_table_class ); ?>" cellspacing="0" cellpadding="6" style="width: 100%;" border="1">
-		<?php
-		$item_totals       = $order->get_order_item_totals();
-		$item_totals_count = count( $item_totals );
 
-		if ( $item_totals ) {
-			$i = 0;
-			foreach ( $item_totals as $total ) {
-				++$i;
-				$last_class = ( $i === $item_totals_count ) ? ' order-totals-last' : '';
-				?>
+			$item_totals       = $order->get_order_item_totals();
+			$item_totals_count = count( $item_totals );
+
+			if ( $item_totals ) {
+				$i = 0;
+				foreach ( $item_totals as $total ) {
+					++$i;
+					$last_class = ( $i === $item_totals_count ) ? ' order-totals-last' : '';
+					?>
 				<tr class="order-totals order-totals-<?php echo esc_attr( $total['type'] ?? 'unknown' ); ?><?php echo esc_attr( $last_class ); ?>">
 					<th class="td text-align-left" scope="row" colspan="2" style="<?php echo ( 1 === $i ) ? 'border-top-width: 4px;' : ''; ?>">
 						<?php
@@ -158,18 +151,20 @@ endif;
 					</th>
 					<td class="td text-align-<?php echo esc_attr( $order_total_text_align ); ?>" style="<?php echo ( 1 === $i ) ? 'border-top-width: 4px;' : ''; ?>"><?php echo wp_kses_post( $total['value'] ); ?></td>
 				</tr>
-				<?php
+					<?php
+				}
 			}
-		}
-		if ( $order->get_customer_note() && ! $email_improvements_enabled ) {
-			?>
+
+			if ( $order->get_customer_note() && ! $email_improvements_enabled ) {
+				?>
 			<tr>
 				<th class="td text-align-left" scope="row" colspan="2"><?php esc_html_e( 'Note:', 'woocommerce' ); ?></th>
 				<td class="td text-align-left"><?php echo wp_kses( nl2br( wc_wptexturize_order_note( $order->get_customer_note() ) ), array() ); ?></td>
 			</tr>
-			<?php
-		}
-		?>
+				<?php
+			}
+			?>
+		</tbody>
 	</table>
 	<?php if ( $order->get_customer_note() && $email_improvements_enabled ) : ?>
 		<?php if ( $display_section_divider ) : ?>
