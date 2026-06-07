@@ -107,23 +107,14 @@ endif;
 ?>
 
 <div style="margin-bottom: <?php echo $email_improvements_enabled ? '24px' : '40px'; ?>;">
-	<table class="td font-family <?php echo esc_attr( $order_table_class ); ?>" cellspacing="0" cellpadding="6" style="width: 100%;" border="1">
-		<?php if ( ! $block_email_editor_enabled ) : ?>
-		<thead>
-			<tr>
-				<th class="td text-align-left" scope="col"><?php esc_html_e( 'Product', 'woocommerce' ); ?></th>
-				<th class="td text-align-<?php echo esc_attr( $order_quantity_text_align ); ?>" scope="col"><?php esc_html_e( 'Quantity', 'woocommerce' ); ?></th>
-				<th class="td text-align-<?php echo esc_attr( $order_total_text_align ); ?>" scope="col"><?php esc_html_e( 'Price', 'woocommerce' ); ?></th>
-			</tr>
-		</thead>
-		<?php endif; ?>
+	<table class="td font-family <?php echo esc_attr( $order_table_class ); ?>" cellspacing="0" cellpadding="6" style="width: 100%;" border="0" role="presentation">
 		<tbody>
 			<?php
 			$text_align       = is_rtl() ? 'right' : 'left';
 			$item_cell_style  = 'color: #414141; border: 0; font-family: Helvetica Neue, Helvetica, Roboto, Arial, sans-serif; padding: 10px 12px; padding-left: 0; vertical-align: top; word-wrap: break-word;';
 			?>
 			<tr class="zaza-order-items-summary">
-				<td class="td font-family text-align-<?php echo esc_attr( $text_align ); ?>" colspan="3" style="<?php echo esc_attr( $item_cell_style ); ?>" align="<?php echo esc_attr( $text_align ); ?>">
+				<td class="td font-family text-align-<?php echo esc_attr( $text_align ); ?>" style="<?php echo esc_attr( $item_cell_style ); ?>" align="<?php echo esc_attr( $text_align ); ?>">
 					<?php
 
 					foreach ( $order->get_items() as $item_id => $item ) {
@@ -190,11 +181,14 @@ endif;
 					$shipping_text = html_entity_decode( wp_strip_all_tags( $order->get_shipping_to_display() ), ENT_QUOTES, get_bloginfo( 'charset' ) );
 					$total_text    = html_entity_decode( wp_strip_all_tags( $order->get_formatted_order_total() ), ENT_QUOTES, get_bloginfo( 'charset' ) );
 					?>
-					<p>
-						<strong><?php esc_html_e( 'Order totals:', 'woocommerce' ); ?></strong>
-						<?php esc_html_e( 'Subtotal:', 'woocommerce' ); ?> <?php echo esc_html( $subtotal_text ); ?>;
-						<?php esc_html_e( 'Shipping:', 'woocommerce' ); ?> <?php echo esc_html( $shipping_text ); ?>;
-						<?php esc_html_e( 'Order total:', 'woocommerce' ); ?> <?php echo esc_html( $total_text ); ?>
+					<p style="margin: 18px 0 0;">
+						<strong><?php esc_html_e( 'Subtotal:', 'woocommerce' ); ?></strong> <?php echo esc_html( $subtotal_text ); ?>
+					</p>
+					<p style="margin: 4px 0 0;">
+						<strong><?php esc_html_e( 'Shipping:', 'woocommerce' ); ?></strong> <?php echo esc_html( $shipping_text ); ?>
+					</p>
+					<p style="margin: 4px 0 0;">
+						<strong><?php esc_html_e( 'Total:', 'woocommerce' ); ?></strong> <?php echo esc_html( $total_text ); ?>
 					</p>
 				</td>
 			</tr>
