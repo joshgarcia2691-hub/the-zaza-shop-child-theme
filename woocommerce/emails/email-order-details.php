@@ -1,9 +1,9 @@
 <?php
 /**
- * Order details table for WooCommerce emails.
+ * Order details table shown in emails.
  *
- * This shared override fixes Product / Quantity / Price rendering across
- * WooCommerce email templates that call WC_Emails::order_details().
+ * Keeps WooCommerce's native email item loop while allowing a light child-theme
+ * override for the surrounding order table.
  *
  * @see https://woocommerce.com/document/template-structure/
  * @package TheZazaShopChild\WooCommerce\Emails
@@ -14,4 +14,142 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-zaza_child_email_render_order_details( $order, $sent_to_admin, $plain_text, $email );
+$text_align = zaza_child_email_text_align();
+
+$email_improvements_enabled = zaza_child_email_improvements_enabled();
+$heading_class              = $email_improvements_enabled ? 'email-order-detail-heading' : '';
+$order_table_class          = $email_improvements_enabled ? 'email-order-details' : '';
+$order_total_text_align     = $email_improvements_enabled ? 'right' : 'left';
+$order_quantity_text_align  = $email_improvements_enabled ? 'right' : 'left';
+
+if ( $email_improvements_enabled ) {
+	add_filter( 'woocommerce_order_shipping_to_display_shipped_via', '__return_false' );
+}
+
+/**
+ * Action hook to add custom content before order details in email.
+ *
+ * @param WC_Order $order Order object.
+ * @param bool     $sent_to_admin Whether it's sent to admin or customer.
+ * @param bool     $plain_text Whether it's a plain text email.
+ * @param WC_Email $email Email object.
+ * @since 2.5.0
+ */
+do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plain_text, $email );
+?>
+
+<h2 class="<?php echo esc_attr( $heading_class ); ?>">
+	<?php
+	if ( $email_improvements_enabled ) {
+		echo wp_kses_post( __( 'Order summary', 'woocommerce' ) );
+	}
+	if ( $sent_to_admin ) {
+		$before = '<a class="link" href="' . esc_url( $order->get_edit_order_url() ) . '">';
+		$after  = '</a>';
+	} else {
+		$before = '';
+		$after  = '';
+	}
+	if ( $email_improvements_enabled ) {
+		echo '<br><span>';
+	}
+	/* translators: %s: Order ID. */
+	$order_number_string = __( '[Order #%s]', 'woocommerce' );
+	if ( $email_improvements_enabled ) {
+		/* translators: %s: Order ID. */
+		$order_number_string = __( 'Order #%s', 'woocommerce' );
+	}
+	echo wp_kses_post( $before . sprintf( $order_number_string . $after . ' (<time datetime="%s">%s</time>)', $order->get_order_number(), $order->get_date_created()->format( 'c' ), wc_format_datetime( $order->get_date_created() ) ) );
+	if ( $email_improvements_enabled ) {
+		echo '</span>';
+	}
+	?>
+</h2>
+
+<div style="margin-bottom: <?php echo $email_improvements_enabled ? '24px' : '40px'; ?>;">
+	<table class="td font-family <?php echo esc_attr( $order_table_class ); ?>" cellspacing="0" cellpadding="6" style="width: 100%;" border="1">
+		<thead>
+			<tr>
+				<th class="td" scope="col" style="text-align:<?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Product', 'woocommerce' ); ?></th>
+				<th class="td" scope="col" style="text-align:<?php echo esc_attr( $order_quantity_text_align ); ?>;"><?php esc_html_e( 'Quantity', 'woocommerce' ); ?></th>
+				<th class="td" scope="col" style="text-align:<?php echo esc_attr( $order_total_text_align ); ?>;"><?php esc_html_e( 'Price', 'woocommerce' ); ?></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php
+			$image_size = $email_improvements_enabled ? 48 : 32;
+			echo wc_get_email_order_items(
+				$order,
+				array(
+					'show_sku'      => $sent_to_admin,
+					'show_image'    => $email_improvements_enabled,
+					'image_size'    => array( $image_size, $image_size ),
+					'plain_text'    => $plain_text,
+					'sent_to_admin' => $sent_to_admin,
+				)
+			);
+			?>
+		</tbody>
+	</table>
+	<table class="td font-family <?php echo esc_attr( $order_table_class ); ?>" cellspacing="0" cellpadding="6" style="width: 100%;" border="1">
+		<?php
+		$item_totals       = $order->get_order_item_totals();
+		$item_totals_count = count( $item_totals );
+
+		if ( $item_totals ) {
+			$i = 0;
+			foreach ( $item_totals as $total ) {
+				++$i;
+				$last_class = ( $i === $item_totals_count ) ? ' order-totals-last' : '';
+				?>
+				<tr class="order-totals order-totals-<?php echo esc_attr( $total['type'] ?? 'unknown' ); ?><?php echo esc_attr( $last_class ); ?>">
+					<th class="td text-align-left" scope="row" colspan="2" style="<?php echo ( 1 === $i ) ? 'border-top-width: 4px;' : ''; ?>">
+						<?php
+						echo wp_kses_post( $total['label'] ) . ' ';
+						if ( $email_improvements_enabled ) {
+							echo isset( $total['meta'] ) ? wp_kses_post( $total['meta'] ) : '';
+						}
+						?>
+					</th>
+					<td class="td text-align-<?php echo esc_attr( $order_total_text_align ); ?>" style="<?php echo ( 1 === $i ) ? 'border-top-width: 4px;' : ''; ?>"><?php echo wp_kses_post( $total['value'] ); ?></td>
+				</tr>
+				<?php
+			}
+		}
+		if ( $order->get_customer_note() && ! $email_improvements_enabled ) {
+			?>
+			<tr>
+				<th class="td text-align-left" scope="row" colspan="2"><?php esc_html_e( 'Note:', 'woocommerce' ); ?></th>
+				<td class="td text-align-left"><?php echo wp_kses( nl2br( wc_wptexturize_order_note( $order->get_customer_note() ) ), array() ); ?></td>
+			</tr>
+			<?php
+		}
+		?>
+	</table>
+	<?php if ( $order->get_customer_note() && $email_improvements_enabled ) : ?>
+		<table class="td font-family <?php echo esc_attr( $order_table_class ); ?>" cellspacing="0" cellpadding="6" style="width: 100%;" border="1" role="presentation">
+			<tr class="order-customer-note">
+				<td class="td text-align-left">
+					<b><?php esc_html_e( 'Customer note', 'woocommerce' ); ?></b><br>
+					<?php echo wp_kses( nl2br( wc_wptexturize_order_note( $order->get_customer_note() ) ), array( 'br' => array() ) ); ?>
+				</td>
+			</tr>
+		</table>
+	<?php endif; ?>
+</div>
+
+<?php
+if ( $email_improvements_enabled ) {
+	remove_filter( 'woocommerce_order_shipping_to_display_shipped_via', '__return_false' );
+}
+
+/**
+ * Action hook to add custom content after order details in email.
+ *
+ * @param WC_Order $order Order object.
+ * @param bool     $sent_to_admin Whether it's sent to admin or customer.
+ * @param bool     $plain_text Whether it's a plain text email.
+ * @param WC_Email $email Email object.
+ * @since 2.5.0
+ */
+do_action( 'woocommerce_email_after_order_table', $order, $sent_to_admin, $plain_text, $email );

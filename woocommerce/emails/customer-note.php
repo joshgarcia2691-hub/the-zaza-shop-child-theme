@@ -24,7 +24,7 @@ if ( ! empty( $customer_note ) ) {
 
 echo $email_improvements_enabled ? '</div>' : '';
 
-zaza_child_email_render_order_details( $order, $sent_to_admin, $plain_text, $email );
+do_action( 'woocommerce_email_order_details', $order, $sent_to_admin, $plain_text, $email );
 
 do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, $email );
 
