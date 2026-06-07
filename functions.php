@@ -152,65 +152,66 @@ if ( ! function_exists( 'zaza_child_email_render_order_table' ) ) {
 		}
 
 		$text_align = zaza_child_email_text_align();
-		?>
-		<table cellspacing="0" cellpadding="8" border="1" width="100%" style="width: 100%; border-collapse: collapse; border: 1px solid #dcdcdc; table-layout: fixed;" role="presentation">
-			<thead>
-				<tr>
-					<th scope="col" style="width: 58%; border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Product', 'woocommerce' ); ?></th>
-					<th scope="col" style="width: 16%; border: 1px solid #dcdcdc; text-align: center;"><?php esc_html_e( 'Quantity', 'woocommerce' ); ?></th>
-					<th scope="col" style="width: 26%; border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Price', 'woocommerce' ); ?></th>
-				</tr>
-			</thead>
-			<tbody>
-				<?php foreach ( $order->get_items() as $item ) : ?>
-					<?php
-					if ( ! is_object( $item ) || ! method_exists( $item, 'get_name' ) ) {
-						continue;
-					}
+		$items      = $order->get_items( 'line_item' );
 
-					$product    = method_exists( $item, 'get_product' ) ? $item->get_product() : false;
-					$item_meta  = function_exists( 'wc_display_item_meta' ) ? wc_display_item_meta(
-						$item,
-						array(
-							'before'    => '<div style="margin-top: 6px; color: #666; font-size: 12px;">',
-							'after'     => '</div>',
-							'separator' => '<br>',
-							'echo'      => false,
-						)
-					) : '';
-					$line_price = zaza_child_email_get_line_price_html( $order, $item );
-					?>
-					<tr>
-						<td style="border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>; vertical-align: top; word-break: break-word;">
-							<strong><?php echo esc_html( $item->get_name() ); ?></strong>
-							<?php if ( $product && method_exists( $product, 'get_sku' ) && $product->get_sku() ) : ?>
-								<div style="margin-top: 4px; color: #666; font-size: 12px;">
-									<?php echo esc_html( sprintf( '%s: %s', __( 'SKU', 'woocommerce' ), $product->get_sku() ) ); ?>
-								</div>
-							<?php endif; ?>
-							<?php echo wp_kses_post( $item_meta ); ?>
-						</td>
-						<td style="border: 1px solid #dcdcdc; text-align: center; vertical-align: top;">
-							<?php echo esc_html( method_exists( $item, 'get_quantity' ) ? $item->get_quantity() : '' ); ?>
-						</td>
-						<td style="border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>; vertical-align: top; white-space: nowrap;">
-							<?php echo wp_kses_post( $line_price ); ?>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-			</tbody>
-			<tfoot>
-				<?php foreach ( $order->get_order_item_totals() as $total ) : ?>
-					<tr>
-						<th scope="row" colspan="2" style="border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>;">
-							<?php echo wp_kses_post( $total['label'] ); ?>
-						</th>
-						<td style="border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>;">
-							<?php echo wp_kses_post( $total['value'] ); ?>
-						</td>
-					</tr>
-				<?php endforeach; ?>
-			</tfoot>
+		if ( empty( $items ) ) {
+			$items = $order->get_items();
+		}
+		?>
+		<table cellspacing="0" cellpadding="0" border="0" width="100%" style="width: 100%; border-collapse: collapse; border: 1px solid #dcdcdc;" role="presentation">
+			<tr>
+				<td width="58%" style="width: 58%; padding: 10px; border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>; font-weight: bold;"><?php esc_html_e( 'Product', 'woocommerce' ); ?></td>
+				<td width="16%" style="width: 16%; padding: 10px; border: 1px solid #dcdcdc; text-align: center; font-weight: bold;"><?php esc_html_e( 'Quantity', 'woocommerce' ); ?></td>
+				<td width="26%" style="width: 26%; padding: 10px; border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>; font-weight: bold;"><?php esc_html_e( 'Price', 'woocommerce' ); ?></td>
+			</tr>
+			<?php foreach ( $items as $item ) : ?>
+				<?php
+				if ( ! is_object( $item ) ) {
+					continue;
+				}
+
+				$product    = method_exists( $item, 'get_product' ) ? $item->get_product() : false;
+				$item_name  = method_exists( $item, 'get_name' ) ? $item->get_name() : __( 'Order item', 'woocommerce' );
+				$item_qty   = method_exists( $item, 'get_quantity' ) ? $item->get_quantity() : '';
+				$item_meta  = function_exists( 'wc_display_item_meta' ) ? wc_display_item_meta(
+					$item,
+					array(
+						'before'    => '<div style="margin-top: 6px; color: #666666; font-size: 12px; line-height: 1.4;">',
+						'after'     => '</div>',
+						'separator' => '<br>',
+						'echo'      => false,
+					)
+				) : '';
+				$line_price = zaza_child_email_get_line_price_html( $order, $item );
+				?>
+				<tr>
+					<td width="58%" style="width: 58%; padding: 10px; border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>; vertical-align: top; word-break: break-word;">
+						<strong><?php echo esc_html( $item_name ); ?></strong>
+						<?php if ( $product && method_exists( $product, 'get_sku' ) && $product->get_sku() ) : ?>
+							<div style="margin-top: 4px; color: #666666; font-size: 12px; line-height: 1.4;">
+								<?php echo esc_html( sprintf( '%s: %s', __( 'SKU', 'woocommerce' ), $product->get_sku() ) ); ?>
+							</div>
+						<?php endif; ?>
+						<?php echo wp_kses_post( $item_meta ); ?>
+					</td>
+					<td width="16%" style="width: 16%; padding: 10px; border: 1px solid #dcdcdc; text-align: center; vertical-align: top;">
+						<?php echo esc_html( $item_qty ); ?>
+					</td>
+					<td width="26%" style="width: 26%; padding: 10px; border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>; vertical-align: top; white-space: nowrap;">
+						<?php echo wp_kses_post( $line_price ); ?>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+			<?php foreach ( $order->get_order_item_totals() as $total ) : ?>
+				<tr>
+					<td colspan="2" width="74%" style="width: 74%; padding: 10px; border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>; font-weight: bold;">
+						<?php echo wp_kses_post( $total['label'] ); ?>
+					</td>
+					<td width="26%" style="width: 26%; padding: 10px; border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>;">
+						<?php echo wp_kses_post( $total['value'] ); ?>
+					</td>
+				</tr>
+			<?php endforeach; ?>
 		</table>
 		<?php
 	}
