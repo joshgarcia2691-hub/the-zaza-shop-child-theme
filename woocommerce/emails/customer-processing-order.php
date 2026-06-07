@@ -89,6 +89,23 @@ do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plai
 			<?php
 			$product      = $item->get_product();
 			$product_name = $item->get_name();
+			$line_total   = (float) $item->get_total();
+			$line_tax     = (float) $item->get_total_tax();
+
+			if ( 0.0 === $line_total && '' !== $item->get_subtotal() ) {
+				$line_total = (float) $item->get_subtotal();
+			}
+
+			if ( 'incl' === get_option( 'woocommerce_tax_display_cart' ) ) {
+				$line_total += $line_tax;
+			}
+
+			$line_price = wc_price(
+				$line_total,
+				array(
+					'currency' => $order->get_currency(),
+				)
+			);
 			$item_meta    = wc_display_item_meta(
 				$item,
 				array(
@@ -112,8 +129,8 @@ do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plai
 				<td style="border: 1px solid #dcdcdc; text-align: center; vertical-align: top;">
 					<?php echo esc_html( $item->get_quantity() ); ?>
 				</td>
-				<td style="border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>; vertical-align: top;">
-					<?php echo wp_kses_post( $order->get_formatted_line_subtotal( $item ) ); ?>
+				<td style="border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>; vertical-align: top; white-space: nowrap;">
+					<?php echo wp_kses_post( $line_price ); ?>
 				</td>
 			</tr>
 		<?php endforeach; ?>
