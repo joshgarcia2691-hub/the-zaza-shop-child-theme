@@ -1,6 +1,6 @@
 <?php
 /**
- * Customer processing order email.
+ * Admin failed order email.
  *
  * @see https://woocommerce.com/document/template-structure/
  * @package TheZazaShopChild\WooCommerce\Emails
@@ -11,18 +11,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$email_improvements_enabled = zaza_child_email_improvements_enabled();
-
 do_action( 'woocommerce_email_header', $email_heading, $email );
-
-echo $email_improvements_enabled ? '<div class="email-introduction">' : '';
-zaza_child_email_render_greeting( $order );
 ?>
-<p><?php esc_html_e( 'Just to let you know - we have received your order, and it is now being processed.', 'woocommerce' ); ?></p>
-<p><?php esc_html_e( 'Here is a reminder of what you ordered:', 'woocommerce' ); ?></p>
-<?php
-echo $email_improvements_enabled ? '</div>' : '';
 
+<p>
+<?php
+printf(
+	/* translators: 1: Order number, 2: Customer billing full name. */
+	esc_html__( 'Payment for order #%1$s from %2$s has failed. The order was as follows:', 'woocommerce' ),
+	esc_html( $order->get_order_number() ),
+	esc_html( $order->get_formatted_billing_full_name() )
+);
+?>
+</p>
+
+<?php
 zaza_child_email_render_order_details( $order, $sent_to_admin, $plain_text, $email );
 
 do_action( 'woocommerce_email_order_meta', $order, $sent_to_admin, $plain_text, $email );

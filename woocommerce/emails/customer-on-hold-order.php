@@ -1,6 +1,6 @@
 <?php
 /**
- * Customer processing order email.
+ * Customer on-hold order email.
  *
  * @see https://woocommerce.com/document/template-structure/
  * @package TheZazaShopChild\WooCommerce\Emails
@@ -18,7 +18,7 @@ do_action( 'woocommerce_email_header', $email_heading, $email );
 echo $email_improvements_enabled ? '<div class="email-introduction">' : '';
 zaza_child_email_render_greeting( $order );
 ?>
-<p><?php esc_html_e( 'Just to let you know - we have received your order, and it is now being processed.', 'woocommerce' ); ?></p>
+<p><?php esc_html_e( 'Thanks for your order. It is currently on hold until payment is confirmed.', 'woocommerce' ); ?></p>
 <p><?php esc_html_e( 'Here is a reminder of what you ordered:', 'woocommerce' ); ?></p>
 <?php
 echo $email_improvements_enabled ? '</div>' : '';

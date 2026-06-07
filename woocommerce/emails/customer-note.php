@@ -1,6 +1,6 @@
 <?php
 /**
- * Customer processing order email.
+ * Customer note email.
  *
  * @see https://woocommerce.com/document/template-structure/
  * @package TheZazaShopChild\WooCommerce\Emails
@@ -17,10 +17,11 @@ do_action( 'woocommerce_email_header', $email_heading, $email );
 
 echo $email_improvements_enabled ? '<div class="email-introduction">' : '';
 zaza_child_email_render_greeting( $order );
-?>
-<p><?php esc_html_e( 'Just to let you know - we have received your order, and it is now being processed.', 'woocommerce' ); ?></p>
-<p><?php esc_html_e( 'Here is a reminder of what you ordered:', 'woocommerce' ); ?></p>
-<?php
+
+if ( ! empty( $customer_note ) ) {
+	echo wp_kses_post( wpautop( wptexturize( $customer_note ) ) );
+}
+
 echo $email_improvements_enabled ? '</div>' : '';
 
 zaza_child_email_render_order_details( $order, $sent_to_admin, $plain_text, $email );

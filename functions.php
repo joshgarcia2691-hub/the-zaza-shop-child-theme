@@ -55,6 +55,264 @@ add_action( 'wp_head', 'zaza_child_render_favicon_links', 1 );
 add_action( 'login_head', 'zaza_child_render_favicon_links', 1 );
 add_action( 'admin_head', 'zaza_child_render_favicon_links', 1 );
 
+if ( ! function_exists( 'zaza_child_email_improvements_enabled' ) ) {
+	/**
+	 * Check whether WooCommerce's email-improvements feature is enabled.
+	 *
+	 * @return bool
+	 */
+	function zaza_child_email_improvements_enabled() {
+		return class_exists( '\Automattic\WooCommerce\Utilities\FeaturesUtil' )
+			&& \Automattic\WooCommerce\Utilities\FeaturesUtil::feature_is_enabled( 'email_improvements' );
+	}
+}
+
+if ( ! function_exists( 'zaza_child_email_text_align' ) ) {
+	/**
+	 * Return the current email text alignment.
+	 *
+	 * @return string
+	 */
+	function zaza_child_email_text_align() {
+		return is_rtl() ? 'right' : 'left';
+	}
+}
+
+if ( ! function_exists( 'zaza_child_email_render_greeting' ) ) {
+	/**
+	 * Render a simple WooCommerce customer greeting.
+	 *
+	 * @param WC_Order $order Order object.
+	 */
+	function zaza_child_email_render_greeting( $order ) {
+		if ( ! is_a( $order, 'WC_Order' ) ) {
+			return;
+		}
+		?>
+		<p>
+		<?php
+		if ( ! empty( $order->get_billing_first_name() ) ) {
+			printf(
+				/* translators: %s: Customer first name. */
+				esc_html__( 'Hi %s,', 'woocommerce' ),
+				esc_html( $order->get_billing_first_name() )
+			);
+		} else {
+			esc_html_e( 'Hi,', 'woocommerce' );
+		}
+		?>
+		</p>
+		<?php
+	}
+}
+
+if ( ! function_exists( 'zaza_child_email_get_line_price_html' ) ) {
+	/**
+	 * Format an order item line total directly from stored order data.
+	 *
+	 * @param WC_Order              $order Order object.
+	 * @param WC_Order_Item_Product $item  Order item object.
+	 * @return string
+	 */
+	function zaza_child_email_get_line_price_html( $order, $item ) {
+		$line_total_raw = is_object( $item ) && method_exists( $item, 'get_total' ) ? $item->get_total() : '';
+
+		if ( '' === $line_total_raw || null === $line_total_raw ) {
+			$line_total_raw = is_object( $item ) && method_exists( $item, 'get_subtotal' ) ? $item->get_subtotal() : 0;
+		}
+
+		$line_total = (float) $line_total_raw;
+
+		if ( function_exists( 'wc_tax_enabled' ) && wc_tax_enabled() && 'incl' === get_option( 'woocommerce_tax_display_cart' ) && is_object( $item ) && method_exists( $item, 'get_total_tax' ) ) {
+			$line_total += (float) $item->get_total_tax();
+		}
+
+		if ( function_exists( 'wc_price' ) && is_a( $order, 'WC_Order' ) ) {
+			return wc_price(
+				$line_total,
+				array(
+					'currency' => $order->get_currency(),
+				)
+			);
+		}
+
+		return esc_html( number_format_i18n( $line_total, 2 ) );
+	}
+}
+
+if ( ! function_exists( 'zaza_child_email_render_order_table' ) ) {
+	/**
+	 * Render a compact email-safe Product / Quantity / Price table.
+	 *
+	 * @param WC_Order $order Order object.
+	 */
+	function zaza_child_email_render_order_table( $order ) {
+		if ( ! is_a( $order, 'WC_Order' ) ) {
+			return;
+		}
+
+		$text_align = zaza_child_email_text_align();
+		?>
+		<table cellspacing="0" cellpadding="8" border="1" width="100%" style="width: 100%; border-collapse: collapse; border: 1px solid #dcdcdc; table-layout: fixed;" role="presentation">
+			<thead>
+				<tr>
+					<th scope="col" style="width: 58%; border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Product', 'woocommerce' ); ?></th>
+					<th scope="col" style="width: 16%; border: 1px solid #dcdcdc; text-align: center;"><?php esc_html_e( 'Quantity', 'woocommerce' ); ?></th>
+					<th scope="col" style="width: 26%; border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>;"><?php esc_html_e( 'Price', 'woocommerce' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $order->get_items() as $item ) : ?>
+					<?php
+					if ( ! is_object( $item ) || ! method_exists( $item, 'get_name' ) ) {
+						continue;
+					}
+
+					$product    = method_exists( $item, 'get_product' ) ? $item->get_product() : false;
+					$item_meta  = function_exists( 'wc_display_item_meta' ) ? wc_display_item_meta(
+						$item,
+						array(
+							'before'    => '<div style="margin-top: 6px; color: #666; font-size: 12px;">',
+							'after'     => '</div>',
+							'separator' => '<br>',
+							'echo'      => false,
+						)
+					) : '';
+					$line_price = zaza_child_email_get_line_price_html( $order, $item );
+					?>
+					<tr>
+						<td style="border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>; vertical-align: top; word-break: break-word;">
+							<strong><?php echo esc_html( $item->get_name() ); ?></strong>
+							<?php if ( $product && method_exists( $product, 'get_sku' ) && $product->get_sku() ) : ?>
+								<div style="margin-top: 4px; color: #666; font-size: 12px;">
+									<?php echo esc_html( sprintf( '%s: %s', __( 'SKU', 'woocommerce' ), $product->get_sku() ) ); ?>
+								</div>
+							<?php endif; ?>
+							<?php echo wp_kses_post( $item_meta ); ?>
+						</td>
+						<td style="border: 1px solid #dcdcdc; text-align: center; vertical-align: top;">
+							<?php echo esc_html( method_exists( $item, 'get_quantity' ) ? $item->get_quantity() : '' ); ?>
+						</td>
+						<td style="border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>; vertical-align: top; white-space: nowrap;">
+							<?php echo wp_kses_post( $line_price ); ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+			<tfoot>
+				<?php foreach ( $order->get_order_item_totals() as $total ) : ?>
+					<tr>
+						<th scope="row" colspan="2" style="border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>;">
+							<?php echo wp_kses_post( $total['label'] ); ?>
+						</th>
+						<td style="border: 1px solid #dcdcdc; text-align: <?php echo esc_attr( $text_align ); ?>;">
+							<?php echo wp_kses_post( $total['value'] ); ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</tfoot>
+		</table>
+		<?php
+	}
+}
+
+if ( ! function_exists( 'zaza_child_email_render_order_details' ) ) {
+	/**
+	 * Render the order table with WooCommerce before/after hooks preserved.
+	 *
+	 * @param WC_Order $order         Order object.
+	 * @param bool     $sent_to_admin Whether this email is sent to admin.
+	 * @param bool     $plain_text    Whether this email is plain text.
+	 * @param WC_Email $email         Email object.
+	 */
+	function zaza_child_email_render_order_details( $order, $sent_to_admin, $plain_text, $email ) {
+		if ( ! is_a( $order, 'WC_Order' ) ) {
+			return;
+		}
+
+		$text_align = zaza_child_email_text_align();
+
+		do_action( 'woocommerce_email_before_order_table', $order, $sent_to_admin, $plain_text, $email );
+		?>
+		<h2 style="margin: 24px 0 12px; text-align: <?php echo esc_attr( $text_align ); ?>;">
+			<?php esc_html_e( 'Order summary', 'woocommerce' ); ?>
+			<span style="display: block; margin-top: 4px; font-size: 13px; font-weight: normal;">
+				<?php
+				printf(
+					/* translators: 1: Order number, 2: Order date. */
+					esc_html__( 'Order #%1$s (%2$s)', 'woocommerce' ),
+					esc_html( $order->get_order_number() ),
+					esc_html( wc_format_datetime( $order->get_date_created() ) )
+				);
+				?>
+			</span>
+		</h2>
+		<?php
+		zaza_child_email_render_order_table( $order );
+		do_action( 'woocommerce_email_after_order_table', $order, $sent_to_admin, $plain_text, $email );
+	}
+}
+
+if ( ! function_exists( 'zaza_child_email_render_customer_addresses' ) ) {
+	/**
+	 * Render billing and shipping addresses in a separate email-safe table.
+	 *
+	 * @param WC_Order $order Order object.
+	 */
+	function zaza_child_email_render_customer_addresses( $order ) {
+		if ( ! is_a( $order, 'WC_Order' ) ) {
+			return;
+		}
+
+		$text_align       = zaza_child_email_text_align();
+		$billing_address  = $order->get_formatted_billing_address() ? $order->get_formatted_billing_address() : esc_html__( 'N/A', 'woocommerce' );
+		$shipping_address = $order->get_formatted_shipping_address() ? $order->get_formatted_shipping_address() : $billing_address;
+		?>
+		<table cellspacing="0" cellpadding="0" border="0" width="100%" style="width: 100%; margin-top: 28px;" role="presentation">
+			<tr>
+				<td width="50%" style="width: 50%; padding: 0 12px 0 0; vertical-align: top; text-align: <?php echo esc_attr( $text_align ); ?>;">
+					<h2 style="margin: 0 0 10px;"><?php esc_html_e( 'Billing address', 'woocommerce' ); ?></h2>
+					<address style="font-style: normal; line-height: 1.6;">
+						<?php echo wp_kses_post( $billing_address ); ?>
+						<?php if ( $order->get_billing_phone() ) : ?>
+							<br><?php echo esc_html( $order->get_billing_phone() ); ?>
+						<?php endif; ?>
+						<?php if ( $order->get_billing_email() ) : ?>
+							<br><?php echo esc_html( $order->get_billing_email() ); ?>
+						<?php endif; ?>
+					</address>
+				</td>
+				<td width="50%" style="width: 50%; padding: 0 0 0 12px; vertical-align: top; text-align: <?php echo esc_attr( $text_align ); ?>;">
+					<h2 style="margin: 0 0 10px;"><?php esc_html_e( 'Shipping address', 'woocommerce' ); ?></h2>
+					<address style="font-style: normal; line-height: 1.6;">
+						<?php echo wp_kses_post( $shipping_address ); ?>
+					</address>
+				</td>
+			</tr>
+		</table>
+		<?php
+	}
+}
+
+if ( ! function_exists( 'zaza_child_email_render_additional_content' ) ) {
+	/**
+	 * Render configured WooCommerce email additional content.
+	 *
+	 * @param string $additional_content Additional content from settings.
+	 */
+	function zaza_child_email_render_additional_content( $additional_content ) {
+		if ( ! $additional_content ) {
+			return;
+		}
+
+		$email_improvements_enabled = zaza_child_email_improvements_enabled();
+
+		echo $email_improvements_enabled ? '<table border="0" cellpadding="0" cellspacing="0" width="100%" role="presentation"><tr><td class="email-additional-content">' : '';
+		echo wp_kses_post( wpautop( wptexturize( $additional_content ) ) );
+		echo $email_improvements_enabled ? '</td></tr></table>' : '';
+	}
+}
+
 /**
  * Register a shop filter area for WooCommerce archive pages.
  */
