@@ -120,13 +120,9 @@ endif;
 		<tbody>
 			<?php
 			$text_align       = is_rtl() ? 'right' : 'left';
-			$number_align     = is_rtl() ? 'left' : 'right';
 			$item_cell_style  = 'color: #414141; border: 0; font-family: Helvetica Neue, Helvetica, Roboto, Arial, sans-serif; padding: 10px 12px; padding-left: 0; vertical-align: top; word-wrap: break-word;';
-			$line_style       = 'border-bottom: 1px solid rgba(30, 30, 30, 0.12); padding: 10px 0;';
-			$label_style      = 'color: #636363; font-size: 12px; text-transform: uppercase;';
-			$amount_style     = 'color: #111111; font-weight: 700;';
 			?>
-			<tr class="order_item zaza-order-items-summary">
+			<tr class="zaza-order-items-summary">
 				<td class="td font-family text-align-<?php echo esc_attr( $text_align ); ?>" colspan="3" style="<?php echo esc_attr( $item_cell_style ); ?>" align="<?php echo esc_attr( $text_align ); ?>">
 					<?php
 
@@ -155,11 +151,11 @@ endif;
 
 						$qty_display = apply_filters( 'woocommerce_email_order_item_quantity', $qty_display, $item );
 						?>
-					<div class="<?php echo esc_attr( apply_filters( 'woocommerce_order_item_class', 'order_item', $item, $order ) ); ?>" style="<?php echo esc_attr( $line_style ); ?>">
-						<strong style="color: #111111; font-weight: 700;"><?php echo wp_kses_post( apply_filters( 'woocommerce_order_item_name', $item->get_name(), $item, false ) ); ?></strong>
+					<p>
+						<strong><?php echo wp_kses_post( apply_filters( 'woocommerce_order_item_name', $item->get_name(), $item, false ) ); ?></strong>
 						<?php
 						if ( $sent_to_admin && $sku ) {
-							echo wp_kses_post( '<br><span style="color: #636363;">#' . esc_html( $sku ) . '</span>' );
+							echo wp_kses_post( '<br>#' . esc_html( $sku ) );
 						}
 
 						do_action( 'woocommerce_order_item_meta_start', $item_id, $item, $order, $plain_text );
@@ -167,12 +163,12 @@ endif;
 						$item_meta = wc_display_item_meta(
 							$item,
 							array(
-								'before'       => '<div class="email-order-item-meta" style="color: #636363; font-size: 13px; line-height: 1.45; margin-top: 4px;">',
-								'after'        => '</div>',
+								'before'       => '<br>',
+								'after'        => '',
 								'separator'    => '<br>',
 								'echo'         => false,
-								'label_before' => '<span style="font-weight: 700;">',
-								'label_after'  => ':</span> ',
+								'label_before' => '<strong>',
+								'label_after'  => ':</strong> ',
 							)
 						);
 
@@ -180,12 +176,12 @@ endif;
 
 						do_action( 'woocommerce_order_item_meta_end', $item_id, $item, $order, $plain_text );
 						?>
-						<br><span style="<?php echo esc_attr( $label_style ); ?>"><?php esc_html_e( 'Quantity', 'woocommerce' ); ?>:</span> <?php echo wp_kses_post( $qty_display ); ?>
-						<br><span style="<?php echo esc_attr( $label_style ); ?>"><?php esc_html_e( 'Price', 'woocommerce' ); ?>:</span> <span style="<?php echo esc_attr( $amount_style ); ?>"><?php echo wp_kses_post( $order->get_formatted_line_subtotal( $item ) ); ?></span>
+						<br><strong><?php esc_html_e( 'Quantity', 'woocommerce' ); ?>:</strong> <?php echo wp_kses_post( $qty_display ); ?>
+						<br><strong><?php esc_html_e( 'Price', 'woocommerce' ); ?>:</strong> <?php echo wp_kses_post( $order->get_formatted_line_subtotal( $item ) ); ?>
 						<?php if ( ! $sent_to_admin && $order->is_paid() && $purchase_note ) : ?>
-							<div style="margin-top: 8px;"><?php echo wp_kses_post( wpautop( do_shortcode( $purchase_note ) ) ); ?></div>
+							<br><?php echo wp_kses_post( wpautop( do_shortcode( $purchase_note ) ) ); ?>
 						<?php endif; ?>
-					</div>
+					</p>
 						<?php
 					}
 
@@ -225,15 +221,15 @@ endif;
 
 					foreach ( $item_totals as $total ) {
 						?>
-					<div class="order-totals order-totals-<?php echo esc_attr( $total['type'] ?? 'unknown' ); ?>" style="padding: 8px 0;">
-						<span style="<?php echo esc_attr( $label_style ); ?>"><?php echo wp_kses_post( $total['label'] ); ?></span>
+					<p>
+						<strong><?php echo wp_kses_post( $total['label'] ); ?></strong>
 						<?php
 						if ( isset( $total['meta'] ) ) {
 							echo wp_kses_post( $total['meta'] );
 						}
 						?>
-						<br><span style="<?php echo esc_attr( $amount_style ); ?>"><?php echo wp_kses_post( $total['value'] ); ?></span>
-					</div>
+						<br><?php echo wp_kses_post( $total['value'] ); ?>
+					</p>
 						<?php
 					}
 					?>
