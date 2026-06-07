@@ -222,7 +222,7 @@ endif;
 					foreach ( $item_totals as $total ) {
 						?>
 					<p>
-						<strong><?php echo wp_kses_post( $total['label'] ); ?></strong>
+						<?php echo esc_html( wp_strip_all_tags( $total['label'] ) ); ?>
 						<?php
 						if ( isset( $total['meta'] ) ) {
 							echo wp_kses_post( $total['meta'] );
