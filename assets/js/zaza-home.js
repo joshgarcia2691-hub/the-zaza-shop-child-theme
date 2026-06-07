@@ -468,9 +468,181 @@
 		startTimer();
 	}
 
+	function initCartFeedback() {
+		var config = window.zazaCartData || {};
+		var toast = null;
+		var toastTimer = null;
+
+		function getLabel(key, fallback) {
+			return config[key] || fallback;
+		}
+
+		function ensureToast() {
+			var closeButton;
+			var checkoutLink;
+			var message;
+			var srText;
+
+			if (toast) {
+				return toast;
+			}
+
+			toast = document.querySelector('[data-zaza-cart-toast]');
+
+			if (toast) {
+				return toast;
+			}
+
+			toast = document.createElement('aside');
+			toast.className = 'zaza-cart-toast';
+			toast.setAttribute('data-zaza-cart-toast', '');
+			toast.setAttribute('role', 'status');
+			toast.setAttribute('aria-live', 'polite');
+			toast.hidden = true;
+
+			message = document.createElement('span');
+			message.className = 'zaza-cart-toast__message';
+			message.textContent = getLabel('addedLabel', 'Added to cart');
+
+			checkoutLink = document.createElement('a');
+			checkoutLink.className = 'zaza-cart-toast__checkout';
+			checkoutLink.href = config.checkoutUrl || config.cartUrl || '/cart/';
+			checkoutLink.textContent = getLabel('checkoutLabel', 'Checkout now');
+
+			closeButton = document.createElement('button');
+			closeButton.className = 'zaza-cart-toast__close';
+			closeButton.type = 'button';
+			closeButton.setAttribute('aria-label', 'Dismiss cart notice');
+
+			srText = document.createElement('span');
+			srText.className = 'zaza-sr-only';
+			srText.textContent = 'Dismiss cart notice';
+			closeButton.appendChild(srText);
+
+			closeButton.addEventListener('click', hideToast);
+
+			toast.appendChild(message);
+			toast.appendChild(checkoutLink);
+			toast.appendChild(closeButton);
+			document.body.appendChild(toast);
+
+			return toast;
+		}
+
+		function hideToast() {
+			if (!toast) {
+				return;
+			}
+
+			window.clearTimeout(toastTimer);
+			toast.classList.remove('is-visible');
+
+			window.setTimeout(function () {
+				if (!toast.classList.contains('is-visible')) {
+					toast.hidden = true;
+				}
+			}, 220);
+		}
+
+		function showToast() {
+			var notice = ensureToast();
+
+			window.clearTimeout(toastTimer);
+			notice.hidden = false;
+
+			window.requestAnimationFrame(function () {
+				notice.classList.add('is-visible');
+			});
+
+			toastTimer = window.setTimeout(hideToast, 7200);
+		}
+
+		function replaceHeaderCart(html) {
+			var currentCart;
+			var nextCart;
+			var template;
+
+			if (!html) {
+				return false;
+			}
+
+			template = document.createElement('template');
+			template.innerHTML = html.trim();
+			nextCart = template.content.querySelector('.zaza-header__cart');
+			currentCart = document.querySelector('.zaza-header__cart');
+
+			if (!currentCart || !nextCart) {
+				return false;
+			}
+
+			currentCart.replaceWith(nextCart);
+			return true;
+		}
+
+		function updateHeaderCartCount(quantity) {
+			var cart = document.querySelector('.zaza-header__cart');
+			var countEl;
+			var currentCount;
+			var nextCount;
+
+			if (!cart) {
+				return;
+			}
+
+			countEl = cart.querySelector('.zaza-header__cart-count');
+			currentCount = parseInt(cart.getAttribute('data-cart-count') || (countEl ? countEl.textContent : '0'), 10);
+			nextCount = (isNaN(currentCount) ? 0 : currentCount) + quantity;
+
+			cart.setAttribute('data-cart-count', String(nextCount));
+			cart.setAttribute('aria-label', 'View cart, ' + nextCount + (nextCount === 1 ? ' item in cart' : ' items in cart'));
+
+			if (countEl) {
+				countEl.textContent = String(nextCount);
+			}
+		}
+
+		function getButtonQuantity(button) {
+			var element = button && button.jquery ? button[0] : button;
+			var quantity;
+
+			if (!element || !element.getAttribute) {
+				return 1;
+			}
+
+			quantity = parseInt(element.getAttribute('data-quantity') || '1', 10);
+
+			return isNaN(quantity) || quantity < 1 ? 1 : quantity;
+		}
+
+		if (window.jQuery) {
+			window.jQuery(document.body).on('added_to_cart', function (event, fragments, cartHash, button) {
+				var replaced = false;
+
+				if (fragments && fragments['.zaza-header__cart']) {
+					replaced = replaceHeaderCart(fragments['.zaza-header__cart']);
+				}
+
+				if (!replaced) {
+					updateHeaderCartCount(getButtonQuantity(button));
+				}
+
+				showToast();
+			});
+
+			window.jQuery(document.body).on('wc_fragments_refreshed removed_from_cart', function () {
+				var headerCart = document.querySelector('.zaza-header__cart');
+
+				if (headerCart) {
+					headerCart.classList.remove('is-busy');
+				}
+			});
+		}
+	}
+
 	document.addEventListener('DOMContentLoaded', function () {
 		initNavigation();
 		initEntryPopups();
 		initCarousel();
+		initCartFeedback();
 	});
 })();

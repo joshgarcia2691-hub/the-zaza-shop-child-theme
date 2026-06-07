@@ -302,6 +302,68 @@ if ( ! function_exists( 'zaza_home_cart_url' ) ) {
 	}
 }
 
+if ( ! function_exists( 'zaza_home_checkout_url' ) ) {
+	/**
+	 * Resolve the WooCommerce checkout URL with a fallback.
+	 *
+	 * @return string
+	 */
+	function zaza_home_checkout_url() {
+		if ( function_exists( 'wc_get_checkout_url' ) ) {
+			return wc_get_checkout_url();
+		}
+
+		return home_url( '/checkout/' );
+	}
+}
+
+if ( ! function_exists( 'zaza_home_get_cart_count' ) ) {
+	/**
+	 * Return the current WooCommerce cart quantity.
+	 *
+	 * @return int
+	 */
+	function zaza_home_get_cart_count() {
+		if ( function_exists( 'WC' ) ) {
+			$woocommerce = WC();
+
+			if ( $woocommerce && $woocommerce->cart ) {
+				return absint( $woocommerce->cart->get_cart_contents_count() );
+			}
+		}
+
+		return 0;
+	}
+}
+
+if ( ! function_exists( 'zaza_home_get_header_cart_link_html' ) ) {
+	/**
+	 * Build the custom header cart link.
+	 *
+	 * @return string
+	 */
+	function zaza_home_get_header_cart_link_html() {
+		$count      = zaza_home_get_cart_count();
+		$item_label = 1 === $count
+			? esc_html__( '1 item in cart', 'the-zaza-shop-child' )
+			: sprintf(
+				/* translators: %d: Cart item quantity. */
+				esc_html__( '%d items in cart', 'the-zaza-shop-child' ),
+				$count
+			);
+
+		ob_start();
+		?>
+		<a class="zaza-header__cart" href="<?php echo esc_url( zaza_home_cart_url() ); ?>" aria-label="<?php echo esc_attr( sprintf( '%s, %s', __( 'View cart', 'the-zaza-shop-child' ), $item_label ) ); ?>" data-zaza-cart data-cart-count="<?php echo esc_attr( $count ); ?>">
+			<span class="zaza-header__cart-icon" aria-hidden="true"></span>
+			<span class="zaza-header__cart-label" aria-hidden="true"><?php echo esc_html__( 'Cart', 'the-zaza-shop-child' ); ?></span>
+			<span class="zaza-header__cart-count" aria-hidden="true"><?php echo esc_html( $count ); ?></span>
+		</a>
+		<?php
+		return trim( ob_get_clean() );
+	}
+}
+
 if ( ! function_exists( 'zaza_get_product_category_url' ) ) {
 	/**
 	 * Resolve a WooCommerce product category URL by slug.
@@ -483,11 +545,11 @@ if ( ! function_exists( 'zaza_render_custom_header' ) ) {
 					<span class="zaza-sr-only"><?php echo esc_html__( 'Toggle navigation', 'the-zaza-shop-child' ); ?></span>
 				</button>
 
-				<?php if ( function_exists( 'wc_get_cart_url' ) ) : ?>
-					<a class="zaza-header__cart" href="<?php echo esc_url( zaza_home_cart_url() ); ?>" aria-label="<?php echo esc_attr__( 'View cart', 'the-zaza-shop-child' ); ?>">
-						<span aria-hidden="true"><?php echo esc_html__( 'Cart', 'the-zaza-shop-child' ); ?></span>
-					</a>
-				<?php endif; ?>
+				<?php
+				if ( function_exists( 'wc_get_cart_url' ) ) {
+					echo zaza_home_get_header_cart_link_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				}
+				?>
 
 				<nav id="zaza-home-nav-menu" class="zaza-nav" data-zaza-nav-panel aria-label="<?php echo esc_attr__( 'Product navigation', 'the-zaza-shop-child' ); ?>">
 					<?php zaza_home_render_canonical_nav(); ?>
@@ -497,6 +559,19 @@ if ( ! function_exists( 'zaza_render_custom_header' ) ) {
 		<?php
 	}
 }
+
+/**
+ * Keep the custom header cart link in WooCommerce AJAX cart fragments.
+ *
+ * @param array<string,string> $fragments Existing fragments.
+ * @return array<string,string>
+ */
+function zaza_child_refresh_header_cart_fragment( $fragments ) {
+	$fragments['.zaza-header__cart'] = zaza_home_get_header_cart_link_html();
+
+	return $fragments;
+}
+add_filter( 'woocommerce_add_to_cart_fragments', 'zaza_child_refresh_header_cart_fragment' );
 
 if ( ! function_exists( 'zaza_render_custom_footer' ) ) {
 	/**
@@ -685,9 +760,20 @@ function zaza_child_enqueue_home_assets() {
 	wp_enqueue_script(
 		'zaza-home',
 		$theme_uri . '/assets/js/zaza-home.js',
-		array(),
+		array( 'jquery' ),
 		file_exists( $home_js_path ) ? filemtime( $home_js_path ) : '1.0.0',
 		true
+	);
+
+	wp_localize_script(
+		'zaza-home',
+		'zazaCartData',
+		array(
+			'cartUrl'       => zaza_home_cart_url(),
+			'checkoutUrl'   => zaza_home_checkout_url(),
+			'addedLabel'    => __( 'Added to cart', 'the-zaza-shop-child' ),
+			'checkoutLabel' => __( 'Checkout now', 'the-zaza-shop-child' ),
+		)
 	);
 }
 add_action( 'wp_enqueue_scripts', 'zaza_child_enqueue_home_assets', 20 );
