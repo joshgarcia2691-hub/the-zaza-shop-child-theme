@@ -354,7 +354,7 @@ if ( ! function_exists( 'zaza_home_get_header_cart_link_html' ) ) {
 
 		ob_start();
 		?>
-		<a class="zaza-header__cart" href="<?php echo esc_url( zaza_home_cart_url() ); ?>" aria-label="<?php echo esc_attr( sprintf( '%s, %s', __( 'View cart', 'the-zaza-shop-child' ), $item_label ) ); ?>" data-zaza-cart data-cart-count="<?php echo esc_attr( $count ); ?>">
+		<a class="zaza-header__cart" href="<?php echo esc_url( zaza_home_cart_url() ); ?>" aria-label="<?php echo esc_attr( sprintf( '%s, %s', __( 'View cart', 'the-zaza-shop-child' ), $item_label ) ); ?>" data-zaza-cart data-cart-count="<?php echo esc_attr( $count ); ?>" data-cart-url="<?php echo esc_url( zaza_home_cart_url() ); ?>" data-checkout-url="<?php echo esc_url( zaza_home_checkout_url() ); ?>">
 			<span class="zaza-header__cart-icon" aria-hidden="true"></span>
 			<span class="zaza-header__cart-label" aria-hidden="true"><?php echo esc_html__( 'Cart', 'the-zaza-shop-child' ); ?></span>
 			<span class="zaza-header__cart-count" aria-hidden="true"><?php echo esc_html( $count ); ?></span>

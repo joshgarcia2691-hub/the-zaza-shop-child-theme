@@ -477,6 +477,16 @@
 			return config[key] || fallback;
 		}
 
+		function getHeaderCartAttribute(name) {
+			var headerCart = document.querySelector('.zaza-header__cart');
+
+			return headerCart ? headerCart.getAttribute(name) : '';
+		}
+
+		function getCheckoutUrl() {
+			return getHeaderCartAttribute('data-checkout-url') || config.checkoutUrl || (window.location.origin + '/checkout/');
+		}
+
 		function ensureToast() {
 			var closeButton;
 			var checkoutLink;
@@ -506,7 +516,7 @@
 
 			checkoutLink = document.createElement('a');
 			checkoutLink.className = 'zaza-cart-toast__checkout';
-			checkoutLink.href = config.checkoutUrl || config.cartUrl || '/cart/';
+			checkoutLink.href = getCheckoutUrl();
 			checkoutLink.textContent = getLabel('checkoutLabel', 'Checkout now');
 
 			closeButton = document.createElement('button');
