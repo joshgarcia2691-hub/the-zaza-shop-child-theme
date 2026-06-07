@@ -18,6 +18,7 @@ $number_align     = is_rtl() ? 'left' : 'right';
 $item_cell_style  = 'color: #414141; border: 0; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; padding: 10px 12px; padding-left: 0; vertical-align: top; word-wrap: break-word;';
 $number_style     = 'color: #414141; border: 0; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; padding: 10px 12px; vertical-align: top; white-space: nowrap;';
 $price_cell_style = 'color: #414141; border: 0; font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; padding: 10px 0 10px 12px; vertical-align: top; white-space: nowrap;';
+$total_cell_style = 'color: #414141; border: 0; border-top: 1px solid rgba(30, 30, 30, 0.2); font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif; padding: 10px 12px; vertical-align: top;';
 
 foreach ( $items as $item_id => $item ) :
 	$product       = $item->get_product();
@@ -89,4 +90,54 @@ foreach ( $items as $item_id => $item ) :
 			</td>
 		</tr>
 	<?php endif; ?>
+<?php endforeach; ?>
+<?php
+$item_totals = $order->get_order_item_totals();
+
+if ( ! $item_totals ) {
+	$item_totals = array(
+		array(
+			'label' => __( 'Subtotal:', 'woocommerce' ),
+			'value' => $order->get_subtotal_to_display(),
+			'type'  => 'cart_subtotal',
+		),
+	);
+
+	if ( $order->get_shipping_method() || (float) $order->get_shipping_total() > 0 ) {
+		$item_totals[] = array(
+			'label' => __( 'Shipping:', 'woocommerce' ),
+			'value' => $order->get_shipping_to_display(),
+			'type'  => 'shipping',
+		);
+	}
+
+	if ( $order->get_payment_method_title() ) {
+		$item_totals[] = array(
+			'label' => __( 'Payment method:', 'woocommerce' ),
+			'value' => wp_kses_post( $order->get_payment_method_title() ),
+			'type'  => 'payment_method',
+		);
+	}
+
+	$item_totals[] = array(
+		'label' => __( 'Total:', 'woocommerce' ),
+		'value' => $order->get_formatted_order_total(),
+		'type'  => 'total',
+	);
+}
+?>
+<?php foreach ( $item_totals as $total ) : ?>
+	<tr class="order-totals order-totals-<?php echo esc_attr( $total['type'] ?? 'unknown' ); ?>">
+		<th class="td font-family text-align-<?php echo esc_attr( $text_align ); ?>" colspan="2" scope="row" style="<?php echo esc_attr( $total_cell_style ); ?>" align="<?php echo esc_attr( $text_align ); ?>">
+			<?php echo wp_kses_post( $total['label'] ); ?>
+			<?php
+			if ( isset( $total['meta'] ) ) {
+				echo wp_kses_post( $total['meta'] );
+			}
+			?>
+		</th>
+		<td class="td font-family text-align-<?php echo esc_attr( $number_align ); ?>" style="<?php echo esc_attr( $total_cell_style ); ?>" align="<?php echo esc_attr( $number_align ); ?>">
+			<?php echo wp_kses_post( $total['value'] ); ?>
+		</td>
+	</tr>
 <?php endforeach; ?>

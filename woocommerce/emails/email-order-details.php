@@ -131,63 +131,6 @@ endif;
 				)
 			);
 
-			$item_totals = $order->get_order_item_totals();
-
-			if ( ! $item_totals ) {
-				$item_totals = array(
-					array(
-						'label' => __( 'Subtotal:', 'woocommerce' ),
-						'value' => $order->get_subtotal_to_display(),
-						'type'  => 'cart_subtotal',
-					),
-				);
-
-				if ( $order->get_shipping_method() || (float) $order->get_shipping_total() > 0 ) {
-					$item_totals[] = array(
-						'label' => __( 'Shipping:', 'woocommerce' ),
-						'value' => $order->get_shipping_to_display(),
-						'type'  => 'shipping',
-					);
-				}
-
-				if ( $order->get_payment_method_title() ) {
-					$item_totals[] = array(
-						'label' => __( 'Payment method:', 'woocommerce' ),
-						'value' => wp_kses_post( $order->get_payment_method_title() ),
-						'type'  => 'payment_method',
-					);
-				}
-
-				$item_totals[] = array(
-					'label' => __( 'Total:', 'woocommerce' ),
-					'value' => $order->get_formatted_order_total(),
-					'type'  => 'total',
-				);
-			}
-
-			$item_totals_count = count( $item_totals );
-
-			if ( $item_totals ) {
-				$i = 0;
-				foreach ( $item_totals as $total ) {
-					++$i;
-					$last_class = ( $i === $item_totals_count ) ? ' order-totals-last' : '';
-					?>
-				<tr class="order-totals order-totals-<?php echo esc_attr( $total['type'] ?? 'unknown' ); ?><?php echo esc_attr( $last_class ); ?>">
-					<th class="td text-align-left" scope="row" colspan="2" style="<?php echo ( 1 === $i ) ? 'border-top-width: 4px;' : ''; ?>">
-						<?php
-						echo wp_kses_post( $total['label'] ) . ' ';
-						if ( $email_improvements_enabled ) {
-							echo isset( $total['meta'] ) ? wp_kses_post( $total['meta'] ) : '';
-						}
-						?>
-					</th>
-					<td class="td text-align-<?php echo esc_attr( $order_total_text_align ); ?>" style="<?php echo ( 1 === $i ) ? 'border-top-width: 4px;' : ''; ?>"><?php echo wp_kses_post( $total['value'] ); ?></td>
-				</tr>
-					<?php
-				}
-			}
-
 			if ( $order->get_customer_note() && ! $email_improvements_enabled ) {
 				?>
 			<tr>
