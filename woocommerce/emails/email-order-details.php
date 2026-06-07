@@ -185,54 +185,13 @@ endif;
 						<?php
 					}
 
-					$item_totals = $order->get_order_item_totals();
-
-					if ( ! $item_totals ) {
-						$item_totals = array(
-							array(
-								'label' => __( 'Subtotal:', 'woocommerce' ),
-								'value' => $order->get_subtotal_to_display(),
-								'type'  => 'cart_subtotal',
-							),
-						);
-
-						if ( $order->get_shipping_method() || (float) $order->get_shipping_total() > 0 ) {
-							$item_totals[] = array(
-								'label' => __( 'Shipping:', 'woocommerce' ),
-								'value' => $order->get_shipping_to_display(),
-								'type'  => 'shipping',
-							);
-						}
-
-						if ( $order->get_payment_method_title() ) {
-							$item_totals[] = array(
-								'label' => __( 'Payment method:', 'woocommerce' ),
-								'value' => wp_kses_post( $order->get_payment_method_title() ),
-								'type'  => 'payment_method',
-							);
-						}
-
-						$item_totals[] = array(
-							'label' => __( 'Total:', 'woocommerce' ),
-							'value' => $order->get_formatted_order_total(),
-							'type'  => 'total',
-						);
-					}
-
-					foreach ( $item_totals as $total ) {
-						?>
-					<p>
-						<?php echo esc_html( wp_strip_all_tags( $total['label'] ) ); ?>
-						<?php
-						if ( isset( $total['meta'] ) ) {
-							echo wp_kses_post( $total['meta'] );
-						}
-						?>
-						<br><?php echo esc_html( wp_strip_all_tags( $total['value'] ) ); ?>
-					</p>
-						<?php
-					}
+					$subtotal_text = html_entity_decode( wp_strip_all_tags( $order->get_subtotal_to_display() ), ENT_QUOTES, get_bloginfo( 'charset' ) );
+					$shipping_text = html_entity_decode( wp_strip_all_tags( $order->get_shipping_to_display() ), ENT_QUOTES, get_bloginfo( 'charset' ) );
+					$total_text    = html_entity_decode( wp_strip_all_tags( $order->get_formatted_order_total() ), ENT_QUOTES, get_bloginfo( 'charset' ) );
 					?>
+					<br><?php esc_html_e( 'Subtotal:', 'woocommerce' ); ?> <?php echo esc_html( $subtotal_text ); ?>
+					<br><?php esc_html_e( 'Shipping:', 'woocommerce' ); ?> <?php echo esc_html( $shipping_text ); ?>
+					<br><?php esc_html_e( 'Total:', 'woocommerce' ); ?> <?php echo esc_html( $total_text ); ?>
 				</td>
 			</tr>
 			<?php
