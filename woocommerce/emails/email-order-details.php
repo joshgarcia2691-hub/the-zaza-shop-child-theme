@@ -228,7 +228,7 @@ endif;
 							echo wp_kses_post( $total['meta'] );
 						}
 						?>
-						<br><?php echo wp_kses_post( $total['value'] ); ?>
+						<br><?php echo esc_html( wp_strip_all_tags( $total['value'] ) ); ?>
 					</p>
 						<?php
 					}
