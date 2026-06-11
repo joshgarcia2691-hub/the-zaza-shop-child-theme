@@ -5,6 +5,9 @@
  * Configuration arrives via wp_localize_script as window.zazaChatData
  * (webhookUrl, title, subtitle, greeting); sensible fallbacks keep the
  * widget working if localization is missing.
+ *
+ * Each request includes the recent conversation history so the bot keeps
+ * context across turns (quantities, product under discussion, etc.).
  */
 (function () {
 	'use strict';
@@ -45,6 +48,8 @@
 		'.zaza-chat-window__msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}' +
 		'.zaza-chat-msg{max-width:84%;padding:9px 13px;border-radius:14px;font-size:14px;line-height:1.5;white-space:pre-wrap;overflow-wrap:break-word}' +
 		'.zaza-chat-msg--bot{background:#ffffff;color:' + ink + ';border:1px solid rgba(17,20,19,.12);border-bottom-left-radius:4px;align-self:flex-start}' +
+		'.zaza-chat-msg--bot a{color:' + ink + ';font-weight:700;text-decoration:underline;overflow-wrap:anywhere}' +
+		'.zaza-chat-msg--bot a.zaza-chat-checkout{display:inline-block;margin-top:4px;padding:8px 14px;background:' + lime + ';color:' + ink + ';border-radius:10px;text-decoration:none}' +
 		'.zaza-chat-msg--user{background:' + inkSoft + ';color:' + cream + ';border-bottom-right-radius:4px;align-self:flex-end}' +
 		'.zaza-chat-msg--typing{color:#626b66;font-style:italic}' +
 		'.zaza-chat-window__form{display:flex;border-top:1px solid rgba(17,20,19,.12);background:#ffffff}' +
@@ -52,6 +57,14 @@
 		'.zaza-chat-window__form button{border:none;background:' + lime + ';color:' + ink + ';font-weight:700;font-size:14px;padding:0 18px;cursor:pointer;font-family:' + bodyFont + '}' +
 		'.zaza-chat-window__form button:disabled{opacity:.4;cursor:default}' +
 		'@media (max-width:480px){.zaza-chat-window{bottom:88px;right:14px}}';
+
+	function escapeHtml(s) {
+		return String(s)
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;');
+	}
 
 	function init() {
 		if (document.querySelector('.zaza-chat-launcher')) {
@@ -104,11 +117,31 @@
 		document.body.appendChild(win);
 
 		var greeted = false;
+		var history = [];
+
+		function remember(role, content) {
+			history.push({ role: role, content: String(content).slice(0, 2000) });
+			if (history.length > 20) {
+				history = history.slice(-20);
+			}
+		}
 
 		function addMsg(text, variant) {
 			var el = document.createElement('div');
 			el.className = 'zaza-chat-msg zaza-chat-msg--' + variant;
-			el.textContent = text;
+			if (variant === 'bot') {
+				// Strip stray markdown bold, then linkify URLs. Checkout links
+				// become a tappable button so ordering is one click.
+				var clean = String(text || '').replace(/\*\*/g, '');
+				el.innerHTML = escapeHtml(clean).replace(/(https?:\/\/[^\s<]+[^\s<.,!?')])/g, function (url) {
+					if (url.indexOf('add-to-cart') > -1) {
+						return '<a class="zaza-chat-checkout" href="' + url + '" target="_blank" rel="noopener">🛒 Tap here to complete your order</a>';
+					}
+					return '<a href="' + url + '" target="_blank" rel="noopener">' + url + '</a>';
+				});
+			} else {
+				el.textContent = text;
+			}
 			msgs.appendChild(el);
 			msgs.scrollTop = msgs.scrollHeight;
 			return el;
@@ -120,6 +153,7 @@
 				if (!greeted) {
 					greeted = true;
 					addMsg(greeting, 'bot');
+					remember('assistant', greeting);
 				}
 				input.focus();
 			}
@@ -132,6 +166,12 @@
 				return;
 			}
 			addMsg(text, 'user');
+			var payload = JSON.stringify({
+				conversation_id: conversationId,
+				message: text,
+				history: history.slice(-12)
+			});
+			remember('user', text);
 			input.value = '';
 			send.disabled = true;
 			var typing = addMsg('typing...', 'bot');
@@ -140,7 +180,7 @@
 			fetch(webhookUrl, {
 				method: 'POST',
 				headers: { 'content-type': 'application/json' },
-				body: JSON.stringify({ conversation_id: conversationId, message: text })
+				body: payload
 			})
 				.then(function (r) {
 					if (!r.ok) {
@@ -150,7 +190,9 @@
 				})
 				.then(function (data) {
 					typing.remove();
-					addMsg(data.reply || 'Sorry, something went wrong. Please try again.', 'bot');
+					var reply = data.reply || 'Sorry, something went wrong. Please try again.';
+					addMsg(reply, 'bot');
+					remember('assistant', reply);
 				})
 				.catch(function () {
 					typing.remove();
