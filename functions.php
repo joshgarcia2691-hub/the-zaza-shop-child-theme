@@ -984,3 +984,37 @@ function zaza_child_hide_parent_theme_title() {
 	<?php
 }
 add_action( 'wp_head', 'zaza_child_hide_parent_theme_title', 5 );
+
+/**
+ * Enqueue the Zaza AI chat widget on public storefront pages.
+ *
+ * The widget talks to the n8n order chatbot webhook and renders its own
+ * floating launcher, so it loads standalone with no style dependencies.
+ */
+function zaza_child_enqueue_chat_widget() {
+	if ( ! zaza_child_is_public_storefront_page() ) {
+		return;
+	}
+
+	$chat_js_path = get_stylesheet_directory() . '/assets/js/zaza-chat-widget.js';
+
+	wp_enqueue_script(
+		'zaza-chat-widget',
+		get_stylesheet_directory_uri() . '/assets/js/zaza-chat-widget.js',
+		array(),
+		file_exists( $chat_js_path ) ? filemtime( $chat_js_path ) : '1.0.0',
+		true
+	);
+
+	wp_localize_script(
+		'zaza-chat-widget',
+		'zazaChatData',
+		array(
+			'webhookUrl' => 'https://thezazaclub.app.n8n.cloud/webhook/zaza-chat',
+			'title'      => __( 'The Zaza Club', 'the-zaza-shop-child' ),
+			'subtitle'   => __( 'Ask about products, orders, and delivery', 'the-zaza-shop-child' ),
+			'greeting'   => __( 'Hey! Welcome to The Zaza Club. How can I help you today?', 'the-zaza-shop-child' ),
+		)
+	);
+}
+add_action( 'wp_enqueue_scripts', 'zaza_child_enqueue_chat_widget', 30 );
