@@ -1018,3 +1018,129 @@ function zaza_child_enqueue_chat_widget() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'zaza_child_enqueue_chat_widget', 30 );
+
+
+/**
+ * Shipping label automation (placeholder courier).
+ *
+ * Uses the free "PDF Invoices & Packing Slips for WooCommerce" plugin to
+ * generate the packing slip PDF, then emails it to the fulfilment operator so
+ * they can print, stick, and mark the order complete. The carrier is a swappable
+ * placeholder until a real (compliant) courier is connected.
+ */
+
+if ( ! defined( 'ZAZA_SHIPPING_OPERATOR_EMAIL' ) ) {
+	// Placeholder operator inbox - change to a dedicated shipping address anytime.
+	define( 'ZAZA_SHIPPING_OPERATOR_EMAIL', 'support@thezazaclub.com' );
+}
+
+if ( ! defined( 'ZAZA_PLACEHOLDER_CARRIER' ) ) {
+	define( 'ZAZA_PLACEHOLDER_CARRIER', 'Zaza Courier (placeholder)' );
+}
+
+if ( ! function_exists( 'zaza_packing_slip_add_carrier_line' ) ) {
+	/**
+	 * Print a placeholder carrier line on the packing slip.
+	 *
+	 * @param string   $document_type Document being rendered.
+	 * @param WC_Order $order         Order object.
+	 */
+	function zaza_packing_slip_add_carrier_line( $document_type, $order ) {
+		if ( 'packing-slip' !== $document_type ) {
+			return;
+		}
+		?>
+		<div class="zaza-carrier-line" style="margin-top:10px;font-size:12px;">
+			<strong><?php echo esc_html__( 'Carrier:', 'the-zaza-shop-child' ); ?></strong>
+			<?php echo esc_html( ZAZA_PLACEHOLDER_CARRIER ); ?>
+		</div>
+		<?php
+	}
+}
+add_action( 'wpo_wcpdf_after_order_data', 'zaza_packing_slip_add_carrier_line', 10, 2 );
+
+if ( ! function_exists( 'zaza_email_packing_slip_to_operator' ) ) {
+	/**
+	 * Generate the packing slip PDF for a paid order and email it to the operator.
+	 *
+	 * Hooked on the "processing" status (payment received / ready to ship). Guards
+	 * against duplicate sends and never throws into the checkout flow.
+	 *
+	 * @param int           $order_id Order ID.
+	 * @param WC_Order|null $order    Order object (passed by WooCommerce).
+	 */
+	function zaza_email_packing_slip_to_operator( $order_id, $order = null ) {
+		if ( ! function_exists( 'wcpdf_get_document' ) ) {
+			return; // PDF plugin not active.
+		}
+
+		if ( ! $order instanceof WC_Order ) {
+			$order = wc_get_order( $order_id );
+		}
+		if ( ! $order instanceof WC_Order ) {
+			return;
+		}
+
+		// Only send once per order.
+		if ( 'yes' === $order->get_meta( '_zaza_label_emailed' ) ) {
+			return;
+		}
+
+		try {
+			$document = wcpdf_get_document( 'packing-slip', $order, true );
+			if ( ! $document || ! method_exists( $document, 'get_pdf' ) ) {
+				return;
+			}
+
+			$pdf_data = $document->get_pdf();
+			if ( empty( $pdf_data ) ) {
+				return;
+			}
+
+			$upload = wp_upload_dir();
+			$dir    = trailingslashit( $upload['basedir'] ) . 'zaza-labels';
+			if ( ! file_exists( $dir ) ) {
+				wp_mkdir_p( $dir );
+			}
+
+			$filename = 'packing-slip-order-' . $order->get_order_number() . '.pdf';
+			$path     = trailingslashit( $dir ) . $filename;
+
+			if ( false === file_put_contents( $path, $pdf_data ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+				return;
+			}
+
+			$customer = trim( $order->get_formatted_billing_full_name() );
+			$address  = $order->get_formatted_shipping_address() ? $order->get_formatted_shipping_address() : $order->get_formatted_billing_address();
+			$address  = wp_strip_all_tags( str_replace( '<br/>', ', ', (string) $address ) );
+
+			$subject = sprintf( 'New order to ship - #%s', $order->get_order_number() );
+			$body    = "A new order is ready to ship.\n\n"
+				. 'Order: #' . $order->get_order_number() . "\n"
+				. 'Customer: ' . $customer . "\n"
+				. 'Ship to: ' . $address . "\n"
+				. 'Carrier: ' . ZAZA_PLACEHOLDER_CARRIER . "\n\n"
+				. "The packing slip / shipping label is attached. Print it, stick it on the package, and mark the order complete.\n";
+
+			$headers = array( 'Content-Type: text/plain; charset=UTF-8' );
+
+			$sent = wp_mail( ZAZA_SHIPPING_OPERATOR_EMAIL, $subject, $body, $headers, array( $path ) );
+
+			if ( $sent ) {
+				$order->update_meta_data( '_zaza_label_emailed', 'yes' );
+				$order->save();
+			}
+
+			// Clean up the temp file.
+			if ( file_exists( $path ) ) {
+				wp_delete_file( $path );
+			}
+		} catch ( \Throwable $e ) {
+			// Never break the order flow because of label generation.
+			return;
+		}
+	}
+}
+add_action( 'woocommerce_order_status_processing', 'zaza_email_packing_slip_to_operator', 20, 2 );
+add_action( 'woocommerce_order_status_completed', 'zaza_email_packing_slip_to_operator', 20, 2 );
+
