@@ -38,9 +38,9 @@
 	}
 
 	var css =
-		'.zaza-chat-launcher{position:fixed;bottom:22px;right:22px;width:58px;height:58px;border-radius:50%;border:2px solid ' + lime + ';cursor:pointer;background:' + ink + ';color:' + lime + ';font-size:24px;line-height:1;box-shadow:0 10px 30px rgba(17,20,19,.35);z-index:99998;transition:transform .15s ease}' +
+		'.zaza-chat-launcher{position:fixed;bottom:22px;right:22px;width:58px;height:58px;border-radius:50%;border:2px solid ' + lime + ';cursor:pointer;background:' + ink + ';color:' + lime + ';font-size:24px;line-height:1;box-shadow:0 10px 30px rgba(17,20,19,.35);z-index:2147483646;transition:transform .15s ease}' +
 		'.zaza-chat-launcher:hover{transform:scale(1.07)}' +
-		'.zaza-chat-window{position:fixed;bottom:92px;right:22px;width:360px;max-width:calc(100vw - 28px);height:520px;max-height:calc(100vh - 120px);display:none;flex-direction:column;background:' + cream + ';border:1px solid rgba(17,20,19,.16);border-radius:18px;box-shadow:0 18px 50px rgba(17,20,19,.3);overflow:hidden;z-index:99999;font-family:' + bodyFont + '}' +
+		'.zaza-chat-window{position:fixed;bottom:92px;right:22px;width:360px;max-width:calc(100vw - 28px);height:520px;max-height:calc(100vh - 120px);display:none;flex-direction:column;background:' + cream + ';border:1px solid rgba(17,20,19,.16);border-radius:18px;box-shadow:0 18px 50px rgba(17,20,19,.3);overflow:hidden;z-index:2147483647;font-family:' + bodyFont + '}' +
 		'.zaza-chat-window.is-open{display:flex}' +
 		'.zaza-chat-window__head{background:' + ink + ';color:' + cream + ';padding:14px 18px}' +
 		'.zaza-chat-window__head h3{margin:0;font-size:16px;font-weight:700;color:' + lime + ';font-family:' + bodyFont + '}' +
@@ -56,7 +56,7 @@
 		'.zaza-chat-window__form input{flex:1;border:none;outline:none;padding:14px;font-size:14px;font-family:' + bodyFont + ';background:transparent;color:' + ink + '}' +
 		'.zaza-chat-window__form button{border:none;background:' + lime + ';color:' + ink + ';font-weight:700;font-size:14px;padding:0 18px;cursor:pointer;font-family:' + bodyFont + '}' +
 		'.zaza-chat-window__form button:disabled{opacity:.4;cursor:default}' +
-		'@media (max-width:480px){.zaza-chat-window{bottom:88px;right:14px}}';
+		'@media (max-width:480px){.zaza-chat-launcher{bottom:76px;right:14px}.zaza-chat-window{top:72px;bottom:12px;right:10px;left:10px;width:auto;max-width:none;height:auto;max-height:none;border-radius:14px}}';
 
 	function escapeHtml(s) {
 		return String(s)
@@ -130,8 +130,6 @@
 			var el = document.createElement('div');
 			el.className = 'zaza-chat-msg zaza-chat-msg--' + variant;
 			if (variant === 'bot') {
-				// Strip stray markdown bold, then linkify URLs. Checkout links
-				// become a tappable button so ordering is one click.
 				var clean = String(text || '').replace(/\*\*/g, '');
 				el.innerHTML = escapeHtml(clean).replace(/(https?:\/\/[^\s<]+[^\s<.,!?')])/g, function (url) {
 					if (url.indexOf('add-to-cart') > -1) {
@@ -211,3 +209,4 @@
 		init();
 	}
 })();
+
