@@ -1059,88 +1059,38 @@ if ( ! function_exists( 'zaza_packing_slip_add_carrier_line' ) ) {
 }
 add_action( 'wpo_wcpdf_after_order_data', 'zaza_packing_slip_add_carrier_line', 10, 2 );
 
-if ( ! function_exists( 'zaza_email_packing_slip_to_operator' ) ) {
+if ( ! function_exists( 'zaza_attach_packing_slip_to_order_emails' ) ) {
 	/**
-	 * Generate the packing slip PDF for a paid order and email it to the operator.
+	 * Attach the packing slip PDF to the "New order" admin email so the operator
+	 * receives a print-ready label on every order. Delegates PDF generation to
+	 * the PDF plugin's own attachment flow (reliable, runs at email-send time).
 	 *
-	 * Hooked on the "processing" status (payment received / ready to ship). Guards
-	 * against duplicate sends and never throws into the checkout flow.
+	 * Handles both filter signatures: a flat list of document types for the
+	 * given $email_id, or an array keyed by email id.
 	 *
-	 * @param int           $order_id Order ID.
-	 * @param WC_Order|null $order    Order object (passed by WooCommerce).
+	 * @param array  $documents Attachable document types.
+	 * @param string $email_id  The email being sent (optional).
+	 * @return array
 	 */
-	function zaza_email_packing_slip_to_operator( $order_id, $order = null ) {
-		if ( ! function_exists( 'wcpdf_get_document' ) ) {
-			return; // PDF plugin not active.
+	function zaza_attach_packing_slip_to_order_emails( $documents, $email_id = '' ) {
+		if ( ! is_array( $documents ) ) {
+			return $documents;
 		}
 
-		if ( ! $order instanceof WC_Order ) {
-			$order = wc_get_order( $order_id );
-		}
-		if ( ! $order instanceof WC_Order ) {
-			return;
-		}
-
-		// Only send once per order.
-		if ( 'yes' === $order->get_meta( '_zaza_label_emailed' ) ) {
-			return;
+		if ( '' !== $email_id ) {
+			// Flat array of document types for this specific email.
+			if ( 'new_order' === $email_id ) {
+				$documents[] = 'packing-slip';
+				$documents   = array_values( array_unique( $documents ) );
+			}
+			return $documents;
 		}
 
-		try {
-			$document = wcpdf_get_document( 'packing-slip', $order, true );
-			if ( ! $document || ! method_exists( $document, 'get_pdf' ) ) {
-				return;
-			}
-
-			$pdf_data = $document->get_pdf();
-			if ( empty( $pdf_data ) ) {
-				return;
-			}
-
-			$upload = wp_upload_dir();
-			$dir    = trailingslashit( $upload['basedir'] ) . 'zaza-labels';
-			if ( ! file_exists( $dir ) ) {
-				wp_mkdir_p( $dir );
-			}
-
-			$filename = 'packing-slip-order-' . $order->get_order_number() . '.pdf';
-			$path     = trailingslashit( $dir ) . $filename;
-
-			if ( false === file_put_contents( $path, $pdf_data ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
-				return;
-			}
-
-			$customer = trim( $order->get_formatted_billing_full_name() );
-			$address  = $order->get_formatted_shipping_address() ? $order->get_formatted_shipping_address() : $order->get_formatted_billing_address();
-			$address  = wp_strip_all_tags( str_replace( '<br/>', ', ', (string) $address ) );
-
-			$subject = sprintf( 'New order to ship - #%s', $order->get_order_number() );
-			$body    = "A new order is ready to ship.\n\n"
-				. 'Order: #' . $order->get_order_number() . "\n"
-				. 'Customer: ' . $customer . "\n"
-				. 'Ship to: ' . $address . "\n"
-				. 'Carrier: ' . ZAZA_PLACEHOLDER_CARRIER . "\n\n"
-				. "The packing slip / shipping label is attached. Print it, stick it on the package, and mark the order complete.\n";
-
-			$headers = array( 'Content-Type: text/plain; charset=UTF-8' );
-
-			$sent = wp_mail( ZAZA_SHIPPING_OPERATOR_EMAIL, $subject, $body, $headers, array( $path ) );
-
-			if ( $sent ) {
-				$order->update_meta_data( '_zaza_label_emailed', 'yes' );
-				$order->save();
-			}
-
-			// Clean up the temp file.
-			if ( file_exists( $path ) ) {
-				wp_delete_file( $path );
-			}
-		} catch ( \Throwable $e ) {
-			// Never break the order flow because of label generation.
-			return;
-		}
+		// Array keyed by email id.
+		$existing               = isset( $documents['new_order'] ) ? (array) $documents['new_order'] : array();
+		$existing[]             = 'packing-slip';
+		$documents['new_order'] = array_values( array_unique( $existing ) );
+		return $documents;
 	}
 }
-add_action( 'woocommerce_order_status_processing', 'zaza_email_packing_slip_to_operator', 20, 2 );
-add_action( 'woocommerce_order_status_completed', 'zaza_email_packing_slip_to_operator', 20, 2 );
-
+add_filter( 'wpo_wcpdf_attach_documents', 'zaza_attach_packing_slip_to_order_emails', 99, 2 );
