@@ -1018,3 +1018,79 @@ function zaza_child_enqueue_chat_widget() {
 	);
 }
 add_action( 'wp_enqueue_scripts', 'zaza_child_enqueue_chat_widget', 30 );
+
+
+/**
+ * Capture zazaRef query param from chat widget checkout links into WC session.
+ * This links a website chat session to the resulting WooCommerce order.
+ */
+function zaza_child_capture_chat_ref_in_session() {
+	if ( empty( $_GET['zazaRef'] ) ) {
+		return;
+	}
+	if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+		return;
+	}
+	$ref = sanitize_text_field( wp_unslash( $_GET['zazaRef'] ) );
+	WC()->session->set( 'zaza_session_id', $ref );
+}
+add_action( 'wp', 'zaza_child_capture_chat_ref_in_session' );
+
+/**
+ * Save the chat session ID onto the WooCommerce order on checkout.
+ *
+ * @param int $order_id WooCommerce order ID.
+ */
+function zaza_child_save_chat_session_to_order( $order_id ) {
+	if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+		return;
+	}
+	$session_id = WC()->session->get( 'zaza_session_id' );
+	if ( ! $session_id ) {
+		return;
+	}
+	$order = wc_get_order( $order_id );
+	if ( $order ) {
+		$order->update_meta_data( '_zaza_session_id', sanitize_text_field( $session_id ) );
+		$order->save();
+	}
+}
+add_action( 'woocommerce_checkout_order_created', 'zaza_child_save_chat_session_to_order' );
+
+
+/**
+ * Capture zazaRef query param from chat widget checkout links into WC session.
+ * This links a website chat session to the resulting WooCommerce order.
+ */
+function zaza_child_capture_chat_ref_in_session() {
+	if ( empty( $_GET['zazaRef'] ) ) {
+		return;
+	}
+	if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+		return;
+	}
+	$ref = sanitize_text_field( wp_unslash( $_GET['zazaRef'] ) );
+	WC()->session->set( 'zaza_session_id', $ref );
+}
+add_action( 'wp', 'zaza_child_capture_chat_ref_in_session' );
+
+/**
+ * Save the chat session ID onto the WooCommerce order on checkout.
+ *
+ * @param int $order_id WooCommerce order ID.
+ */
+function zaza_child_save_chat_session_to_order( $order_id ) {
+	if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+		return;
+	}
+	$session_id = WC()->session->get( 'zaza_session_id' );
+	if ( ! $session_id ) {
+		return;
+	}
+	$order = wc_get_order( $order_id );
+	if ( $order ) {
+		$order->update_meta_data( '_zaza_session_id', sanitize_text_field( $session_id ) );
+		$order->save();
+	}
+}
+add_action( 'woocommerce_checkout_order_created', 'zaza_child_save_chat_session_to_order' );
