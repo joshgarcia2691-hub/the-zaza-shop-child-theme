@@ -426,7 +426,7 @@ if ( ! function_exists( 'zaza_home_render_canonical_nav' ) ) {
 		$nav_items = array(
 			array(
 				'label' => esc_html__( 'Join The Club', 'the-zaza-shop-child' ),
-				'url'   => home_url( '/#join-the-club' ),
+				'url'   => home_url( '/subscriptions/' ),
 			),
 			array(
 				'label' => esc_html__( 'New Arrivals', 'the-zaza-shop-child' ),
