@@ -6402,3 +6402,140 @@ body.zaza-storefront-page a.added_to_cart.wc-forward {
 		font-size: 14px;
 	}
 }
+
+/* ── Subscription plans section ──────────────────────────────────────────── */
+.zaza-subscriptions {
+	background: #111413;
+	padding: 64px 24px;
+	text-align: center;
+}
+
+.zaza-subscriptions__header {
+	max-width: 680px;
+	margin: 0 auto 40px;
+}
+
+.zaza-subscriptions__header .zaza-eyebrow {
+	display: inline-block;
+	background: #b7f16f;
+	color: #111413;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	padding: 4px 14px;
+	border-radius: 99px;
+	margin-bottom: 16px;
+}
+
+.zaza-subscriptions__header .zaza-section__title {
+	color: #f7f8f2;
+	font-size: clamp(24px, 4vw, 36px);
+	margin: 0 0 12px;
+}
+
+.zaza-subscriptions__sub {
+	color: rgba(247,248,242,.7);
+	font-size: 15px;
+	line-height: 1.6;
+	margin: 0;
+}
+
+.zaza-plan-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	gap: 16px;
+	max-width: 960px;
+	margin: 0 auto 40px;
+}
+
+.zaza-plan-card {
+	background: #1c2120;
+	border: 1px solid rgba(247,248,242,.1);
+	border-radius: 16px;
+	padding: 28px 20px;
+	position: relative;
+	text-align: center;
+}
+
+.zaza-plan-card--featured {
+	border-color: #b7f16f;
+}
+
+.zaza-plan-card__badge {
+	position: absolute;
+	top: -12px;
+	left: 50%;
+	transform: translateX(-50%);
+	background: #b7f16f;
+	color: #111413;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: .06em;
+	text-transform: uppercase;
+	padding: 3px 12px;
+	border-radius: 99px;
+	white-space: nowrap;
+	margin: 0;
+}
+
+.zaza-plan-card__name {
+	color: #f7f8f2;
+	font-size: 14px;
+	font-weight: 700;
+	letter-spacing: .08em;
+	text-transform: uppercase;
+	margin: 0 0 12px;
+}
+
+.zaza-plan-card__price {
+	margin-bottom: 12px;
+}
+
+.zaza-plan-card__amount {
+	color: #f7f8f2;
+	font-size: 40px;
+	font-weight: 800;
+	line-height: 1;
+}
+
+.zaza-plan-card__period {
+	color: rgba(247,248,242,.6);
+	font-size: 14px;
+}
+
+.zaza-plan-card__detail {
+	color: rgba(247,248,242,.8);
+	font-size: 14px;
+	margin: 0 0 8px;
+}
+
+.zaza-plan-card__value {
+	display: inline-block;
+	background: #b7f16f;
+	color: #111413;
+	font-size: 11px;
+	font-weight: 700;
+	padding: 3px 10px;
+	border-radius: 99px;
+	margin: 0;
+}
+
+.zaza-subscriptions__cta {
+	text-align: center;
+}
+
+.zaza-subscriptions__btn {
+	display: inline-block;
+	padding: 14px 36px;
+	font-size: 14px;
+	font-weight: 700;
+	letter-spacing: .06em;
+	text-transform: uppercase;
+}
+
+@media (max-width: 600px) {
+	.zaza-plan-grid {
+		grid-template-columns: 1fr 1fr;
+	}
+}
