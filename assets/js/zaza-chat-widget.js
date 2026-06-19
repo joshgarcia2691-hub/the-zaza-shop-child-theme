@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Zaza AI chat widget.
  *
  * Floating storefront chat that talks to the n8n order chatbot webhook.
@@ -132,8 +132,8 @@
 			if (variant === 'bot') {
 				// Strip stray markdown bold, then linkify URLs. Checkout links
 				// become a tappable button so ordering is one click.
-				var clean = String(text || '').replace(/**/g, '');
-				el.innerHTML = escapeHtml(clean).replace(/(https?://[^s<]+[^s<.,!?')])/g, function (url) {
+				var clean = String(text || '').replace(/\*\*/g, '');
+				el.innerHTML = escapeHtml(clean).replace(/(https?:\/\/[^\s<]+[^\s<.,!?')])/g, function (url) {
 					if (url.indexOf('add-to-cart') > -1) {
 						return '<a class="zaza-chat-checkout" href="' + url + '" target="_blank" rel="noopener">🛒 Tap here to complete your order</a>';
 					}
