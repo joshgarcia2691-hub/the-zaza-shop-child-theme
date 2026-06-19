@@ -272,7 +272,7 @@ if ( ! function_exists( 'zaza_home_render_canonical_nav' ) ) {
 		$nav_items = array(
 			array(
 				'label' => esc_html__( 'Join The Club', 'child-theme' ),
-				'url'   => home_url( '/#join-the-club' ),
+				'url'   => home_url( '/subscriptions/' ),
 			),
 			array(
 				'label' => esc_html__( 'New Arrivals', 'child-theme' ),
@@ -481,7 +481,7 @@ if ( ! function_exists( 'zaza_home_render_category_card' ) ) {
 		}
 		?>
 		<a class="zaza-category-card" href="<?php echo esc_url( $term_link ); ?>">
-			<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url("%s");', esc_url_raw( $image_url ) ) ); ?>"></span>
+			<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url(\"%s\");', esc_url_raw( $image_url ) ) ); ?>"></span>
 			<span class="zaza-category-card__body">
 				<span class="zaza-category-card__title"><?php echo esc_html( $term->name ); ?></span>
 				<span class="zaza-category-card__cta" aria-hidden="true"></span>
@@ -547,18 +547,18 @@ get_header();
 
 	<div class="zaza-modal zaza-email-modal" data-zaza-email-modal role="dialog" aria-modal="true" aria-labelledby="zaza-email-title" hidden>
 		<div class="zaza-modal__panel zaza-modal__panel--email">
-			<button class="zaza-modal__close" type="button" aria-label="<?php echo esc_attr__( 'Close discount signup', 'child-theme' ); ?>" data-zaza-email-dismiss>&times;</button>
+			<button class="zaza-modal__close" type="button" aria-label="<?php echo esc_attr__( 'Close subscription signup', 'child-theme' ); ?>" data-zaza-email-dismiss>&times;</button>
 			<img class="zaza-modal__logo" src="<?php echo esc_url( 'https://thezazaclub.com/wp-content/uploads/2026/05/logo.jpeg' ); ?>" alt="<?php echo esc_attr__( 'The Zaza Club', 'child-theme' ); ?>">
-			<p class="zaza-modal__eyebrow"><?php echo esc_html__( 'Welcome Offer', 'child-theme' ); ?></p>
-			<h2 id="zaza-email-title" class="zaza-modal__title"><?php echo esc_html__( 'Get First Access to Drops', 'child-theme' ); ?></h2>
-			<p class="zaza-modal__copy"><?php echo esc_html__( 'Join the list for launch updates, rotating bundles, and limited-time offers.', 'child-theme' ); ?></p>
+			<p class="zaza-modal__eyebrow"><?php echo esc_html__( 'Weekly Drops', 'child-theme' ); ?></p>
+			<h2 id="zaza-email-title" class="zaza-modal__title"><?php echo esc_html__( 'Subscribe to The Zaza Club Weekly', 'child-theme' ); ?></h2>
+			<p class="zaza-modal__copy"><?php echo esc_html__( 'Get premium exotic flower delivered every week. Never run out. Cancel anytime.', 'child-theme' ); ?></p>
 			<form class="zaza-email-form" data-zaza-email-form>
 				<label class="zaza-sr-only" for="zaza-email-input"><?php echo esc_html__( 'Email address', 'child-theme' ); ?></label>
 				<input id="zaza-email-input" class="zaza-email-form__input" type="email" name="email" placeholder="<?php echo esc_attr__( 'Email address', 'child-theme' ); ?>" required>
-				<button class="zaza-button zaza-button--accent zaza-email-form__button" type="submit"><?php echo esc_html__( 'Send My Offer', 'child-theme' ); ?></button>
+				<button class="zaza-button zaza-button--accent zaza-email-form__button" type="submit"><?php echo esc_html__( 'Subscribe Now', 'child-theme' ); ?></button>
 			</form>
 			<button class="zaza-modal__secondary" type="button" data-zaza-email-dismiss><?php echo esc_html__( 'No thanks', 'child-theme' ); ?></button>
-			<p class="zaza-modal__success" data-zaza-email-success hidden><?php echo esc_html__( 'Thanks. You are on the list.', 'child-theme' ); ?></p>
+			<p class="zaza-modal__success" data-zaza-email-success hidden><?php echo esc_html__( 'You\'re in! Check your email for next steps.', 'child-theme' ); ?></p>
 		</div>
 	</div>
 </div>
@@ -572,7 +572,7 @@ get_header();
 				<?php
 				$is_active   = 0 === $index;
 				$slide_style = sprintf(
-					'--zaza-slide-image: url("%s");',
+					'--zaza-slide-image: url(\"%s\");',
 					esc_url_raw( $slide['image'] )
 				);
 				?>
@@ -601,6 +601,66 @@ get_header();
 				<?php endforeach; ?>
 			</div>
 			<button class="zaza-hero__arrow zaza-hero__arrow--next" type="button" data-zaza-next aria-label="<?php echo esc_attr__( 'Next slide', 'child-theme' ); ?>"></button>
+		</div>
+	</section>
+
+	<style>
+	.zaza-subscriptions{background:#f9f9f9;padding:64px 24px;text-align:center;color:#111413}
+	.zaza-subscriptions__header{max-width:680px;margin:0 auto 40px}
+	.zaza-subscriptions__header .zaza-eyebrow{display:inline-block;background:#b7f16f;color:#111413;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 14px;border-radius:100px;margin-bottom:16px}
+	.zaza-section__title{font-family:"Bebas Neue",sans-serif;font-size:clamp(32px,5vw,52px);line-height:1.05;margin:0 0 12px;color:#111413}
+	.zaza-subscriptions__sub{font-size:16px;line-height:1.6;color:#555;margin:0}
+	.zaza-plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;max-width:960px;margin:0 auto 40px}
+	.zaza-plan-card{background:#fff;border:1.5px solid #e2e5e2;border-radius:16px;padding:28px 20px 24px;position:relative;text-align:left}
+	.zaza-plan-card--featured{border-color:#b7f16f;border-width:2px}
+	.zaza-plan-card__badge{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#b7f16f;color:#111413;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:3px 14px;border-radius:100px;white-space:nowrap}
+	.zaza-plan-card__name{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#111413;margin:0 0 6px}
+	.zaza-plan-card__amount{font-size:40px;font-weight:800;line-height:1;color:#111413;margin:0}
+	.zaza-plan-card__amount span{font-size:18px;font-weight:500;color:#888}
+	.zaza-plan-card__qty{font-size:14px;color:#555;margin:6px 0 12px}
+	.zaza-plan-card__value{display:inline-block;background:rgba(183,241,111,.28);color:#3d6b00;font-size:12px;font-weight:700;padding:2px 10px;border-radius:6px;margin-bottom:10px}
+	.zaza-plan-card__desc{font-size:13px;line-height:1.5;color:#666;margin:0}
+	.zaza-subscriptions__cta{margin-top:8px}
+	.zaza-subscriptions__btn{display:inline-block;background:#111413;color:#f7f8f2;font-weight:700;font-size:15px;padding:14px 32px;border-radius:12px;text-decoration:none;transition:opacity .15s}
+	.zaza-subscriptions__btn:hover{opacity:.82}
+	@media(max-width:600px){.zaza-plan-grid{grid-template-columns:repeat(2,1fr)}}
+	</style>
+
+	<section class="zaza-section zaza-subscriptions" aria-labelledby="zaza-sub-title">
+		<div class="zaza-subscriptions__header">
+			<p class="zaza-eyebrow"><?php echo esc_html__( 'Subscribe &amp; Save up to 30%', 'child-theme' ); ?></p>
+			<h2 id="zaza-sub-title" class="zaza-section__title"><?php echo esc_html__( 'The Zaza Club Weekly Subscription', 'child-theme' ); ?></h2>
+			<p class="zaza-subscriptions__sub"><?php echo esc_html__( 'Never run out. Choose your plan, get exotic flower delivered every week, and save big versus buying one-time.', 'child-theme' ); ?></p>
+		</div>
+		<div class="zaza-plan-grid">
+			<div class="zaza-plan-card">
+				<h3 class="zaza-plan-card__name"><?php echo esc_html__( 'Light Smoker', 'child-theme' ); ?></h3>
+				<div class="zaza-plan-card__price"><span class="zaza-plan-card__amount">$20</span><span class="zaza-plan-card__period">/wk</span></div>
+				<p class="zaza-plan-card__detail"><?php echo esc_html__( '3.5g exotic flower', 'child-theme' ); ?></p>
+				<p class="zaza-plan-card__value"><?php echo esc_html__( 'Retail value $30+', 'child-theme' ); ?></p>
+			</div>
+			<div class="zaza-plan-card zaza-plan-card--featured">
+				<p class="zaza-plan-card__badge"><?php echo esc_html__( 'Most Popular', 'child-theme' ); ?></p>
+				<h3 class="zaza-plan-card__name"><?php echo esc_html__( 'Moderate Smoker', 'child-theme' ); ?></h3>
+				<div class="zaza-plan-card__price"><span class="zaza-plan-card__amount">$30</span><span class="zaza-plan-card__period">/wk</span></div>
+				<p class="zaza-plan-card__detail"><?php echo esc_html__( '7g exotic flower', 'child-theme' ); ?></p>
+				<p class="zaza-plan-card__value"><?php echo esc_html__( 'Retail value $50+', 'child-theme' ); ?></p>
+			</div>
+			<div class="zaza-plan-card">
+				<h3 class="zaza-plan-card__name"><?php echo esc_html__( 'Extreme Smoker', 'child-theme' ); ?></h3>
+				<div class="zaza-plan-card__price"><span class="zaza-plan-card__amount">$70</span><span class="zaza-plan-card__period">/wk</span></div>
+				<p class="zaza-plan-card__detail"><?php echo esc_html__( '14g exotic flower', 'child-theme' ); ?></p>
+				<p class="zaza-plan-card__value"><?php echo esc_html__( 'Retail value $95+', 'child-theme' ); ?></p>
+			</div>
+			<div class="zaza-plan-card">
+				<h3 class="zaza-plan-card__name"><?php echo esc_html__( 'The Stoner', 'child-theme' ); ?></h3>
+				<div class="zaza-plan-card__price"><span class="zaza-plan-card__amount">$70</span><span class="zaza-plan-card__period">/wk</span></div>
+				<p class="zaza-plan-card__detail"><?php echo esc_html__( '7g flower + 1x 2g disposable', 'child-theme' ); ?></p>
+				<p class="zaza-plan-card__value"><?php echo esc_html__( 'Retail value $90+', 'child-theme' ); ?></p>
+			</div>
+		</div>
+		<div class="zaza-subscriptions__cta">
+			<a class="zaza-button zaza-button--dark zaza-subscriptions__btn" href="<?php echo esc_url( home_url( '/subscriptions/' ) ); ?>"><?php echo esc_html__( 'View Plans &amp; Subscribe', 'child-theme' ); ?></a>
 		</div>
 	</section>
 
@@ -648,7 +708,7 @@ get_header();
 				?>
 				<?php foreach ( $zaza_placeholder_categories as $placeholder_category ) : ?>
 					<div class="zaza-category-card zaza-category-card--placeholder">
-							<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url("%s");', esc_url_raw( zaza_home_placeholder_image() ) ) ); ?>"></span>
+							<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url(\"%s\");', esc_url_raw( zaza_home_placeholder_image() ) ) ); ?>"></span>
 							<span class="zaza-category-card__body">
 								<span class="zaza-category-card__title"><?php echo esc_html( $placeholder_category ); ?></span>
 								<span class="zaza-category-card__cta"><?php echo esc_html__( 'Soon', 'child-theme' ); ?></span>
@@ -660,7 +720,7 @@ get_header();
 	</section>
 
 	<section class="zaza-promo" aria-labelledby="zaza-promo-title">
-		<div class="zaza-promo__media" style="<?php echo esc_attr( sprintf( 'background-image: url("%s");', esc_url_raw( $zaza_promo_img ) ) ); ?>"></div>
+		<div class="zaza-promo__media" style="<?php echo esc_attr( sprintf( 'background-image: url(\"%s\");', esc_url_raw( $zaza_promo_img ) ) ); ?>"></div>
 		<div class="zaza-promo__content">
 			<p class="zaza-eyebrow"><?php echo esc_html__( 'Bundle Drop', 'child-theme' ); ?></p>
 			<h2 id="zaza-promo-title" class="zaza-promo__title"><?php echo esc_html__( 'Bundle More, Browse Less', 'child-theme' ); ?></h2>
