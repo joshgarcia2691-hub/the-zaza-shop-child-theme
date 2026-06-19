@@ -481,7 +481,7 @@ if ( ! function_exists( 'zaza_home_render_category_card' ) ) {
 		}
 		?>
 		<a class="zaza-category-card" href="<?php echo esc_url( $term_link ); ?>">
-			<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url(\"%s\");', esc_url_raw( $image_url ) ) ); ?>"></span>
+			<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url("%s");', esc_url_raw( $image_url ) ) ); ?>"></span>
 			<span class="zaza-category-card__body">
 				<span class="zaza-category-card__title"><?php echo esc_html( $term->name ); ?></span>
 				<span class="zaza-category-card__cta" aria-hidden="true"></span>
@@ -572,7 +572,7 @@ get_header();
 				<?php
 				$is_active   = 0 === $index;
 				$slide_style = sprintf(
-					'--zaza-slide-image: url(\"%s\");',
+					'--zaza-slide-image: url("%s");',
 					esc_url_raw( $slide['image'] )
 				);
 				?>
@@ -708,7 +708,7 @@ get_header();
 				?>
 				<?php foreach ( $zaza_placeholder_categories as $placeholder_category ) : ?>
 					<div class="zaza-category-card zaza-category-card--placeholder">
-							<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url(\"%s\");', esc_url_raw( zaza_home_placeholder_image() ) ) ); ?>"></span>
+							<span class="zaza-category-card__media" style="<?php echo esc_attr( sprintf( 'background-image: url("%s");', esc_url_raw( zaza_home_placeholder_image() ) ) ); ?>"></span>
 							<span class="zaza-category-card__body">
 								<span class="zaza-category-card__title"><?php echo esc_html( $placeholder_category ); ?></span>
 								<span class="zaza-category-card__cta"><?php echo esc_html__( 'Soon', 'child-theme' ); ?></span>
@@ -720,7 +720,7 @@ get_header();
 	</section>
 
 	<section class="zaza-promo" aria-labelledby="zaza-promo-title">
-		<div class="zaza-promo__media" style="<?php echo esc_attr( sprintf( 'background-image: url(\"%s\");', esc_url_raw( $zaza_promo_img ) ) ); ?>"></div>
+		<div class="zaza-promo__media" style="<?php echo esc_attr( sprintf( 'background-image: url("%s");', esc_url_raw( $zaza_promo_img ) ) ); ?>"></div>
 		<div class="zaza-promo__content">
 			<p class="zaza-eyebrow"><?php echo esc_html__( 'Bundle Drop', 'child-theme' ); ?></p>
 			<h2 id="zaza-promo-title" class="zaza-promo__title"><?php echo esc_html__( 'Bundle More, Browse Less', 'child-theme' ); ?></h2>
