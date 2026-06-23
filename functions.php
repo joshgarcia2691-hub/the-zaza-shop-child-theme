@@ -1056,3 +1056,23 @@ function zaza_child_save_chat_session_to_order( $order_id ) {
 	}
 }
 add_action( 'woocommerce_checkout_order_created', 'zaza_child_save_chat_session_to_order' );
+
+// Allow NexaPay to display at checkout for subscription products (manual renewal via email link)
+add_filter( 'woocommerce_payment_gateway_supports', 'zaza_nexapay_subscription_support', 10, 3 );
+function zaza_nexapay_subscription_support( $supported, $feature, $gateway ) {
+    if ( 'nexapay' !== $gateway->id ) {
+        return $supported;
+    }
+    $sub_features = array(
+        'subscriptions',
+        'subscription_cancellation',
+        'subscription_suspension',
+        'subscription_reactivation',
+        'subscription_amount_changes',
+        'subscription_date_changes',
+    );
+    if ( in_array( $feature, $sub_features, true ) ) {
+        return true;
+    }
+    return $supported;
+}
